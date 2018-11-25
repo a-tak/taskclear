@@ -1,0 +1,12 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{user_id}/tasks/{id} {
+      allow read, write: if request.auth.uid == user_id;
+      allow create: if request.resource.data.estimateTime is number;
+      allow create: if request.resource.data.actualTime is number;
+    }
+    match /users/{user_id}/repeats/{id} {
+      allow read, write: if request.auth.uid == user_id;
+    }
+  }
+}
