@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "a-tak-test"
+    "default": "a-tak-test",
+    "release": "taskclear-63f2b"
   }
 }
