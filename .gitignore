@@ -23,3 +23,5 @@ yarn-error.log*
 *.sln
 *.sw*
 *.code-workspace
+firebase-debug.log
+.firebase/hosting.*.cache
