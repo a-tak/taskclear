@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from 'vue-property-decorator';
-import firebase,{ firestore } from 'firebase';
+import firebase, { firestore } from 'firebase';
 import uuid from 'uuid';
 import fb from '../util/FirebaseUtil';
 import ITask from '../ITask';
@@ -24,39 +24,40 @@ import Task from '../lib/Task';
 @Component
 export default class NewTask extends Vue {
 
-  @Emit('addedEvent')
-  addEnd(): void {}
+  public inputvalue_: string = '';
+  public canSubmit_: boolean = false;
 
-  inputvalue_: string = "";
-  canSubmit_: boolean = false;
+@Emit('addedEvent')
+  // tslint:disable-next-line:no-empty
+  public addEnd(): void {}
 
-  setCanSubmit() {
+  public setCanSubmit() {
     this.canSubmit_ = true;
   }
 
-  addTask() : void {
-    console.log("addtask cansubmit=" + this.canSubmit_);
-    if (this.inputvalue_.trim()=="" || this.canSubmit_ == false) return;
+  public addTask(): void {
+    console.log('addtask cansubmit=' + this.canSubmit_);
+    if (this.inputvalue_.trim() === '' || this.canSubmit_ === false) { return; }
 
-    //ここがタスクの追加部分
+    // ここがタスクの追加部分
     const d: Date = this.$store.getters.targetDate;
     // 一旦時間は0:00でセット。セクションを取り入れるときはここの時間をセクションの時間に変更する
-    const date = new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0);
-    let task:Task = new Task(date,this.inputvalue_);
-    this.$store.commit("addTask",task);
+    const date = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+    const task: Task = new Task(date, this.inputvalue_);
+    this.$store.commit('addTask', task);
 
-    fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.targetDate,this.$store.getters.taskCtrl);
+    fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.targetDate, this.$store.getters.taskCtrl);
 
-    this.inputvalue_ = "";
+    this.inputvalue_ = '';
     this.canSubmit_ = false;
 
-    //イベント発生
+    // イベント発生
     this.addEnd();
 
   }
 
 
-};
+}
 </script>
 
 <style>

@@ -1,40 +1,39 @@
 <template>
   <div id="Home">
-    <Login v-if="!isLogin" :loading_="loading_"></Login>
-    <TaskListMain v-if="isLogin"></TaskListMain>
+    <Login v-if="!isLogin_" :isLoading_="isLoading_"></Login>
+    <TaskListMain v-if="isLogin_"></TaskListMain>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Login from "@/components/Login.vue"
-import TaskListMain from "@/components/TaskListMain.vue"
-import firebase from "firebase"
+import Login from '@/components/Login.vue';
+import TaskListMain from '@/components/TaskListMain.vue';
+import firebase from 'firebase';
 
 @Component({
   components: {
     Login,
-    TaskListMain
+    TaskListMain,
   },
 })
 export default class Home extends Vue {
-  isLogin: boolean = false;
-  userData: firebase.User | null = null;
-  loading_: boolean = true;
+  private isLogin_: boolean = false;
+  private userData_: firebase.User | null = null;
+  private isLoading_: boolean = true;
 
-  created () : void {
-    firebase.auth().onAuthStateChanged(user => {
-    console.log(user);
-    this.loading_ = false;
+  private created(): void {
+    firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+    this.isLoading_ = false;
     if (user) {
-      this.isLogin = true;
-      this.$store.commit("setUser",user);
-      this.userData = user;
-    }else{
-      this.isLogin = false;
-      this.$store.commit("setUser",null);
-      this.userData = null;
-    };
+      this.isLogin_ = true;
+      this.$store.commit('setUser', user);
+      this.userData_ = user;
+    } else {
+      this.isLogin_ = false;
+      this.$store.commit('setUser', null);
+      this.userData_ = null;
+    }
   });
   }
 }

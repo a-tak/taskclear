@@ -1,22 +1,22 @@
-import firebase,{ firestore } from 'firebase';
+import { firestore } from 'firebase';
 import Task from './Task';
 import ITask from '@/ITask';
 
 // Taskオブジェクトを束ねるクラス
 export default class TaskController {
-    
+
     private tasks_: Task[] = [];
-    
-    get tasks(): Task[] { return this.tasks_ }
-    set tasks(value: Task[]) { this.tasks_ = value }
+
+    get tasks(): Task[] { return this.tasks_; }
+    set tasks(value: Task[]) { this.tasks_ = value; }
 
     /**
      * Firestore保存用のオブジェクトリテラルを取得する
      */
-    createFirestoreLiteral(): ITask[] {
-        let literals: ITask[] = []; 
+    public createFirestoreLiteral(): ITask[] {
+        const literals: ITask[] = [];
         for (const task of this.tasks_) {
-            let literal: ITask = {
+            const literal: ITask = {
                 id: task.id,
                 date: firestore.Timestamp.fromDate(task.date),
                 title: task.title,
@@ -26,41 +26,41 @@ export default class TaskController {
                 estimateTime: task.estimateTime,
                 actualTime: task.actualTime,
                 repeatId: task.repeatId,
-            }
-            if (task.startTime!=null) { literal.startTime = firestore.Timestamp.fromDate(task.startTime)};
-            if (task.endTime!=null) { literal.endTime = firestore.Timestamp.fromDate(task.endTime)};
+            };
+            if (task.startTime != null) { literal.startTime = firestore.Timestamp.fromDate(task.startTime); }
+            if (task.endTime != null) { literal.endTime = firestore.Timestamp.fromDate(task.endTime); }
 
             literals.push(literal);
         }
-       return literals;
+        return literals;
     }
 
     /**
      * Firestoreからのオブジェクト配列をTaskの配列に変換して自分にセットする
      * Firestoreからのデータ読み込み時に使用する
-     * @param fsObjs 
+     * @param fsObjs
      */
-    loadFirestoreLiteral(fsObjs: ITask[]) : void {
+    public loadFirestoreLiteral(fsObjs: ITask[]): void {
         this.tasks_ = [];
         for (const fsobj of fsObjs) {
-            let task = new Task(fsobj.date.toDate(),fsobj.title);
+            const task = new Task(fsobj.date.toDate(), fsobj.title);
             task.id = fsobj.id;
             task.isDoing = fsobj.isDoing;
-            //過去データでフィールドが無いものはundefinedが返る為の対策
-            if (fsobj.estimateTime == undefined) {
+            // 過去データでフィールドが無いものはundefinedが返る為の対策
+            if (fsobj.estimateTime === undefined) {
                 task.estimateTime = 0;
-            }else{
+            } else {
                 task.estimateTime = fsobj.estimateTime;
             }
 
-            if (fsobj.startTime !=null) {
+            if (fsobj.startTime != null) {
                 task.startTime = fsobj.startTime.toDate();
-            }else {
+            } else {
                 task.startTime = null;
             }
-            if (fsobj.endTime !=null) {
+            if (fsobj.endTime != null) {
                 task.endTime = fsobj.endTime.toDate();
-            }else {
+            } else {
                 task.endTime = null;
             }
             task.repeatId = fsobj.repeatId;
@@ -71,10 +71,10 @@ export default class TaskController {
     /**
      * 見積時間の合計(分)を返す
      */
-    getEstimateSum() : number {
-        let sum : number = 0;
+    public getEstimateSum(): number {
+        let sum: number = 0;
         for (const task of this.tasks_) {
-            //終了タスクの見積を含めると合計が何倍にもなるので除外する
+            // 終了タスクの見積を含めると合計が何倍にもなるので除外する
             if (task.endTime == null) {
                 sum = sum + task.estimateTime;
             }
@@ -82,11 +82,11 @@ export default class TaskController {
         return sum;
     }
 
-    sort() : void {
-        this.tasks_.sort(function(a: Task,b: Task){
+    public sort(): void {
+        this.tasks_.sort((a: Task, b: Task) => {
             if (a.startTime == null) {
                 return 1;
-            }else if(b.startTime == null) {
+            } else if (b.startTime == null) {
                 return -1;
             } else {
                 return a.startTime.getTime() - b.startTime.getTime();

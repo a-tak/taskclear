@@ -29,94 +29,94 @@
 <script lang="ts">
 import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
 import TaskController from '../lib/TaskController';
-import DateUtil from '../util/DateUtil';
 import FirebaseUtil from '../util/FirebaseUtil';
 import { firestore } from 'firebase';
+import Estimate from '../lib/Estimate';
 
 @Component
 export default class EstimateList extends Vue {
 
-    @Watch("targetDate")
-    onValueChange(newValue: string,oldValue: string): void {
-        //日付が変えられたときにリッスンを破棄
+    private estimates_: Estimate[] = [];
+    // 関数の配列!
+    // ()で関数を表し=>でvoid戻り値。それらを()で括って[]で配列と定義
+    private unsubscribes_: Array<() => void> = [];
+
+
+    @Watch('targetDate')
+    public onValueChange(newValue: string, oldValue: string): void {
+        // 日付が変えられたときにリッスンを破棄
         for (const unsubscribe of this.unsubscribes_) {
             unsubscribe();
         }
         this.display();
     }
 
-    public get targetDate() : Date {
+    public get targetDate(): Date {
         return this.$store.getters.targetDate;
-    }    
+    }
 
-    private estimates_: Estimate[]= [];
 
     get estimates(): Estimate[] {
         return this.estimates_;
     }
 
-    //関数の配列!
-    //()で関数を表し=>でvoid戻り値。それらを()で括って[]で配列と定義
-    private unsubscribes_: (() => void)[] = [];
-
-    created() : void {
+    public created(): void {
         this.display();
     }
 
-    display() : void {
-        let fsdsPromises: Promise<TaskController>[] = new Array(6);
+    public display(): void {
+        const fsdsPromises: Array<Promise<TaskController>> = new Array(6);
         this.estimates_ = [];
 
-        //見積時間の初期表示
-        for (let n=0; n<=6; n++) {
+        // 見積時間の初期表示
+        for (let n = 0; n <= 6; n++) {
             // 一日ずつ日付を進めてデータを取得
-            let tc: TaskController = new TaskController();
-            let targetDate: Date = new Date();
+            const targetDate: Date = new Date();
             targetDate.setDate(this.targetDate.getDate() + n);
 
-            //Promiseを配列に溜めておく
-            fsdsPromises[n] = FirebaseUtil.loadTasks(this.$store.getters.user.uid,targetDate);         
+            // Promiseを配列に溜めておく
+            fsdsPromises[n] = FirebaseUtil.loadTasks(this.$store.getters.user.uid, targetDate);
 
-            //非同期処理の登録
-            fsdsPromises[n].then(tc => {
+            // 非同期処理の登録
+            fsdsPromises[n].then((tc: TaskController) => {
                 const estimate = this.createEstimate(tc, targetDate);
                 this.estimates_.push(estimate);
-            }).catch(function(error) {
-                console.log("Error getting document:", error);
+            }).catch((error: Error) => {
+                console.log('Error getting document:', error);
             });
         }
 
-        //1週間分のデータが全部非同期で取れたらソート
-        //TaskControllerが各Promiseから返ってくるけど使ってない。単に処理が終わった事だけ検知して処理している。微妙。
-        //おそらく画面も変な順番に並んだ後、ソートされていてぎこちない動きになってるかも
-        Promise.all(fsdsPromises).then(tc => {
-            //全部データ取得したら一旦ソート
-            this.estimates_.sort(function(a: Estimate, b: Estimate) : number {
+        // 1週間分のデータが全部非同期で取れたらソート
+        // TaskControllerが各Promiseから返ってくるけど使ってない。単に処理が終わった事だけ検知して処理している。微妙。
+        // おそらく画面も変な順番に並んだ後、ソートされていてぎこちない動きになってるかも
+        Promise.all(fsdsPromises).then((tc) => {
+            // 全部データ取得したら一旦ソート
+            this.estimates_.sort((a: Estimate, b: Estimate): number => {
                 if (a.date == null) {
                     return 1;
-                }else if(b.date == null) {
+                } else if (b.date == null) {
                     return -1;
                 } else {
                     return a.date.getTime() - b.date.getTime();
                 }
             });
-                
-            //ドキュメントのリッスン
-            for (let n=0; n<=6; n++) {
+
+            // ドキュメントのリッスン
+            for (let n = 0; n <= 6; n++) {
                 // 一日ずつ日付を進めてデータを取得
-                let tc: TaskController = new TaskController();
-                let targetDate: Date = new Date();
+                const targetDate: Date = new Date();
                 targetDate.setDate(this.targetDate.getDate() + n);
 
-                //リッスン破棄のために戻り値を配列で保存
-                this.unsubscribes_.push(FirebaseUtil.getQuery(this.$store.getters.user.uid,targetDate)
-                    .onSnapshot(query => {
-                        query.forEach(doc => {
-                            //更新があったら見積時間を再計算
+                // リッスン破棄のために戻り値を配列で保存
+                this.unsubscribes_.push(FirebaseUtil.getQuery(this.$store.getters.user.uid, targetDate)
+                    .onSnapshot((query) => {
+                        query.forEach((doc) => {
+                            // 更新があったら見積時間を再計算
                             const firedoc: firebase.firestore.DocumentData | undefined  = doc.data();
                             if (firedoc !== undefined) {
-                                FirebaseUtil.loadTasks(this.$store.getters.user.uid,targetDate).then(tc => {
-                                    const estimate = this.createEstimate(tc, targetDate);
+                                FirebaseUtil.loadTasks(this.$store.getters.user.uid, targetDate)
+                                .then((taskCtrl: TaskController) => {
+                                    const estimate = this.createEstimate(taskCtrl, targetDate);
                                     for (const [index, item] of this.estimates_.entries()) {
                                         if (item.dateStr === estimate.dateStr) {
                                             this.$set(this.estimates_, index, estimate);
@@ -125,8 +125,8 @@ export default class EstimateList extends Vue {
                                     }
                                 });
                             }
-                        })
-                    })
+                        });
+                    }),
                 );
             }
         });
@@ -136,48 +136,18 @@ export default class EstimateList extends Vue {
      * 一日分のEstimateクラスをつくって返す
      * @param tc 計算対象の一日のデータが入ったTaskController
      */
-    createEstimate(tc: TaskController, targetDate: Date) : Estimate {
-        let estimate = new Estimate();
+    public createEstimate(tc: TaskController, targetDate: Date): Estimate {
+        const estimate = new Estimate();
         estimate.date = targetDate;
-        const weekday:string[] = [ "日", "月", "火", "水", "木", "金", "土" ] ;
+        const weekday: string[] = [ '日', '月', '火', '水', '木', '金', '土' ] ;
         estimate.dayLabel = weekday[targetDate.getDay()];
         estimate.estimateTime = tc.getEstimateSum().toString();
 
         return estimate;
     }
 
-};
+}
 
-class Estimate extends Vue {
-    
-    
-    private  date_ : Date = new Date();
-    public get date() : Date {
-        return this.date_;
-    }
-    public set date(v : Date) {
-        this. date_ = v;
-    }
-    public get dateStr(): string {
-        return DateUtil.getDateString(this.date_);
-    }
-
-    private dayLabel_ : string ="";
-    public get dayLabel() : string {
-        return this. dayLabel_;
-    }
-    public set dayLabel(v : string) {
-        this. dayLabel_ = v;
-    }       
-    
-    private  estimateTime_ : string = "";
-    public get estimateTime() : string {
-        return this. estimateTime_;
-    }
-    public set estimateTime(v : string) {
-        this. estimateTime_ = v;
-    }
-};
 </script>
 
 <style>

@@ -41,37 +41,38 @@ import DateUtil from '../util/DateUtil';
 @Component
 export default class TaskEdit extends Vue {
 
-    canSubmit_: boolean = false;
-    menu_: boolean = false;
+    public canSubmit_: boolean = false;
+    public menu_: boolean = false;
+    public startTime_: string = '';
+    public endTime_: string = '';
+    public estimateTime_: string = '';
+    public backupedTask_!: Task;
+    public editTask_!: Task;
 
-    //!はundefinedやnullにならないことを示すもの
-    @Prop() task_!: Task;
-    
+    // !はundefinedやnullにならないことを示すもの
+    @Prop() public task_!: Task;
+
     @Emit('endEditEvent')
-    endEdit(task: Task): void {}
+    // tslint:disable-next-line:no-empty
+    public endEdit(task: Task): void {}
 
-    startTime_ : string = "";
-    endTime_ : string = "";
-    estimateTime_ : string ="";
-    backupedTask_!: Task;
-    editTask_!: Task;
 
-    save(): void {
-        if (this.startTime_.trim() !="" ) {
+    public save(): void {
+        if (this.startTime_.trim() !== '' ) {
             this.editTask_.startTime = DateUtil.getDateObject(this.task_.date, this.startTime_);
 
-            if (this.endTime_.trim() !="") {
+            if (this.endTime_.trim() !== '') {
                 this.editTask_.endTime = DateUtil.getDateObject(this.task_.date, this.endTime_);
-                //終了時間が入っていたら停止する
+                // 終了時間が入っていたら停止する
                 this.editTask_.isDoing = false;
-            }else{
+            } else {
                 this.editTask_.endTime = null;
-                //開始時間入っていて終了が入っていなければタスクを開始状態にする
+                // 開始時間入っていて終了が入っていなければタスクを開始状態にする
                 this.editTask_.isDoing = true;
             }
-        }else{
+        } else {
             this.editTask_.startTime = null;
-            //開始が入ってなければ終了時間も空にする
+            // 開始が入ってなければ終了時間も空にする
             this.editTask_.endTime = null;
             this.editTask_.isDoing = false;
         }
@@ -82,42 +83,42 @@ export default class TaskEdit extends Vue {
             this.editTask_.estimateTime = 0;
         }
 
-        //編集終了イベント発生
+        // 編集終了イベント発生
         this.endEdit(this.editTask_);
     }
-    
-    cancel(): void{
+
+    public cancel(): void {
         this.editTask_ = this.backupedTask_;
         this.endEdit(this.backupedTask_);
     }
 
-    setCanSubmit(): void {
+    public setCanSubmit(): void {
         this.canSubmit_ = true;
     }
 
-    created(): void {
-        console.log("created!");
-        //編集前の値を待避
+    public created(): void {
+        console.log('created!');
+        // 編集前の値を待避
         this.backupedTask_ = this.task_.copy();
-        //編集用オブジェクト作成
+        // 編集用オブジェクト作成
         this.editTask_ = this.task_.copy();
 
-        if (this.task_.startTime!=null) {
+        if (this.task_.startTime != null) {
             this.startTime_ = DateUtil.get4digitTime(this.task_.startTime);
         }
-        if (this.task_.endTime!=null) {
+        if (this.task_.endTime != null) {
             this.endTime_ = DateUtil.get4digitTime(this.task_.endTime);
         }
 
-        if (this.task_.estimateTime!=null) {
+        if (this.task_.estimateTime != null) {
             this.estimateTime_ = this.task_.estimateTime.toString();
         }
 
     }
 
-    //算出プロパティーでオブジェクトを返すと属性を展開してくれる
-    get layoutAttributes() : {} {
-        //画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+    // 算出プロパティーでオブジェクトを返すと属性を展開してくれる
+    get layoutAttributes(): {} {
+        // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
         switch (this.$vuetify.breakpoint.name) {
             case 'xs': return {column: true};
             case 'sm': return {column: true};
@@ -127,7 +128,7 @@ export default class TaskEdit extends Vue {
             default  : return {row: true};
         }
     }
-};
+}
 </script>
 
 <style>

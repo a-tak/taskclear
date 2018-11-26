@@ -5,10 +5,10 @@
                 <v-flex v-bind="logoSize" ma-5>
                     Taskclear
                 </v-flex>
-                <v-flex v-if="!loading_">
+                <v-flex v-if="!isLoading_">
                     <v-btn @click="googleLogin">Googleアカウントでログイン</v-btn>
                 </v-flex>
-                <v-flex v-if="loading_">
+                <v-flex v-if="isLoading_">
                     <v-progress-circular
                         indeterminate
                         color="primary"
@@ -32,36 +32,30 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import firebase from "firebase";
+import firebase from 'firebase';
 
 @Component
 export default class Login extends Vue {
-    
-    @Prop() loading_! : boolean;
 
-    googleLogin() : void {
+    @Prop() public isLoading_!: boolean;
+
+    private googleLogin(): void {
         firebase
             .auth()
             .signInWithRedirect(new firebase.auth.GoogleAuthProvider())
-            .then(():void => {
-            })
-            .catch(():void => {
-            });
+            .then()
+            .catch();
     }
 
-    created() {
-        console.log(`created loading state = ${this.loading_}`);
-    }
-
-    get logoSize() : {} {
-        //画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+    get logoSize(): {} {
+        // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
         switch (this.$vuetify.breakpoint.name) {
-            case 'xs': return {"display-3": true};
-            case 'sm': return {"display-3": true};
-            case 'md': return {"display-4": true};
-            case 'lg': return {"display-4": true};
-            case 'xl': return {"display-4": true};
-            default  : return {"display-4": true};
+            case 'xs': return {'display-3': true};
+            case 'sm': return {'display-3': true};
+            case 'md': return {'display-4': true};
+            case 'lg': return {'display-4': true};
+            case 'xl': return {'display-4': true};
+            default  : return {'display-4': true};
         }
     }
 

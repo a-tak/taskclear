@@ -88,10 +88,10 @@
 
 <script lang="ts">
 import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator';
-import NewTask from "@/components/NewTask.vue";
-import TaskEdit from "@/components/TaskEdit.vue";
-import RepeatEdit from "@/components/RepeatEdit.vue"
-import DateUtil from "../util/DateUtil";
+import NewTask from '@/components/NewTask.vue';
+import TaskEdit from '@/components/TaskEdit.vue';
+import RepeatEdit from '@/components/RepeatEdit.vue';
+import DateUtil from '../util/DateUtil';
 import Task from '../lib/Task';
 
 @Component({
@@ -104,71 +104,77 @@ import Task from '../lib/Task';
 
 export default class TaskRow extends Vue {
 
-    @Prop() task_!: Task;
-    @Prop() index_!: number;
+    get displayedTaskCal(): boolean {
+        return this.displayedTaskCal_;
+    }
+    set displayedTaskCal(value: boolean) {
+        console.log('targetDate_=' + this.targetDate_);
+        this.displayedTaskCal_ = value;
+    }
+    get targetDate(): string {
+        return this.task_.date.toISOString().substr(0, 10);
+    }
 
-    @Emit("clickStartButtomEvent")
-    startTask(task: Task): void{}
+    set targetDate(value: string) {
+        this.task_.date = new Date(value);
+    }
 
-    @Emit("clickStopButtomEvent")
-    stopTask(task: Task): void{}
-
-    @Emit("clickDeleteButtomEvent")
-    deleteTask(task: Task): void{}
-
-    @Emit('endEditEvent')
-    endEdit(task: Task, index: number): void {}
-
-    @Emit('changeTaskDateChangeEvent')
-    changeDate(task: Task): void {}
+    @Prop() public task_!: Task;
+    @Prop() public index_!: number;
 
     private isEdit_: boolean = false;
     private editingRepeat_: boolean = false;
 
     private displayedTaskCal_: boolean = false;
-    get displayedTaskCal() : boolean{
-        return this.displayedTaskCal_;
-    }
-    set displayedTaskCal(value: boolean) {
-        console.log("targetDate_=" + this.targetDate_);
-        this.displayedTaskCal_ = value;
-    }
 
-    private targetDate_:Date = new Date();
-    get targetDate(): string {
-        return this.task_.date.toISOString().substr(0, 10);
-    }
+    private targetDate_: Date = new Date();
 
-    set targetDate(value:string) {
-        this.task_.date = new Date(value);
-    }
+    @Emit('clickStartButtomEvent')
+    // tslint:disable-next-line:no-empty
+    public startTask(task: Task): void {}
 
-    getTime(time: Date) : string {
-        let timeStr: string = "";
+    @Emit('clickStopButtomEvent')
+    // tslint:disable-next-line:no-empty
+    public stopTask(task: Task): void {}
+
+    @Emit('clickDeleteButtomEvent')
+    // tslint:disable-next-line:no-empty
+    public deleteTask(task: Task): void {}
+
+    @Emit('endEditEvent')
+    // tslint:disable-next-line:no-empty
+    public endEdit(task: Task, index: number): void {}
+
+    @Emit('changeTaskDateChangeEvent')
+    // tslint:disable-next-line:no-empty
+    public changeDate(task: Task): void {}
+
+    public getTime(time: Date): string {
+        let timeStr: string = '';
         if (time != null) {
             timeStr = DateUtil.getTimeString(time);
         }
         return timeStr;
     }
 
-    startEdit() : void {
+    public startEdit(): void {
         this.isEdit_ = true;
     }
 
-    endEditEvent(task: Task) {
+    public endEditEvent(task: Task) {
         this.isEdit_ = false;
         this.endEdit(task, this.index_);
     }
 
-    endRepeatEditEvent(task: Task) {
+    public endRepeatEditEvent(task: Task) {
         this.editingRepeat_ = false;
         this.endEdit(task, this.index_);
     }
 
-    /** 
+    /**
      * タスクの日付を変更
      */
-    selectDate() : void {
+    public selectDate(): void {
         this.displayedTaskCal = false;
         this.changeDate(this.task_);
     }

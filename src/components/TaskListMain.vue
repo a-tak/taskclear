@@ -83,7 +83,7 @@
                 </v-card>
             </v-footer> 
         </div>
-  </div>
+    </div>
 </template>
 
 <style>
@@ -94,12 +94,12 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import firebase,{ firestore } from "firebase";
-import NewTask from "@/components/NewTask.vue";
-import TaskRow from "@/components/TaskRow.vue";
-import EstimateList from "@/components/EstimateList.vue";
-import DateUtil from "../util/DateUtil";
-import fb from "../util/FirebaseUtil";
+import firebase, { firestore } from 'firebase';
+import NewTask from '@/components/NewTask.vue';
+import TaskRow from '@/components/TaskRow.vue';
+import EstimateList from '@/components/EstimateList.vue';
+import DateUtil from '../util/DateUtil';
+import fb from '../util/FirebaseUtil';
 import uuid from 'uuid';
 import Task from '../lib/Task';
 import TaskController from '../lib/TaskController';
@@ -108,38 +108,38 @@ import Repeat from '../lib/Repeat';
 import RepeatCreator from '../lib/RepeatCreator';
 
 @Component({
-  components: {
+components: {
     NewTask,
     TaskRow,
     EstimateList,
-  },
+},
 })
 
 export default class TaskListMain extends Vue {
 
     private addingTask_: boolean = false;
 
-    get tasks():Task[] {
+    get tasks(): Task[] {
         return this.$store.getters.taskCtrl.tasks;
     }
 
     set tasks(value: Task[]) {
-        let tc: TaskController = new TaskController();
+        const tc: TaskController = new TaskController();
         tc.tasks = value;
-        this.$store.commit("setTaskCtrl", tc);
+        this.$store.commit('setTaskCtrl', tc);
     }
 
     get targetDate(): string {
-      return DateUtil.getDateString(this.$store.getters.targetDate);
+        return DateUtil.getDateString(this.$store.getters.targetDate);
     }
 
-    set targetDate(value:string) {
-        this.$store.commit("setTargetDate",new Date(value));
+    set targetDate(value: string) {
+        this.$store.commit('setTargetDate', new Date(value));
     }
 
     private menu2_: boolean = false;
 
-    get menu2() : boolean{
+    get menu2(): boolean {
         return this.menu2_;
     }
 
@@ -147,136 +147,136 @@ export default class TaskListMain extends Vue {
         this.menu2_ = value;
     }
 
-    //日付を変更したのを監視してタスクを読み込み直し
-    @Watch("targetDate")
-    onValueChange(newValue: string,oldValue: string): void {
+    // 日付を変更したのを監視してタスクを読み込み直し
+    @Watch('targetDate')
+    public onValueChange(newValue: string, oldValue: string): void {
         this.loadTasks();
     }
 
-    loadTasks() : void {
-        
-        let self: TaskListMain = this;
+    public loadTasks(): void {
 
-        //当日分のリピートタスクを作る
+        const self: TaskListMain = this;
+
+        // 当日分のリピートタスクを作る
         const rc: RepeatCreator = new RepeatCreator(this.$store.getters.user.uid, this.$store.getters.targetDate);
         rc.creaetRepeat(1)
-        .then(() : void => {
-            //今日のデータを読み込み(同期的に)
+        .then((): void => {
+            // 今日のデータを読み込み(同期的に)
             fb.loadTasks(self.$store.getters.user.uid, self.$store.getters.targetDate)
-            .then((tc: TaskController) : void => {
+            .then((tc: TaskController): void => {
                 tc.sort();
-                self.$store.commit("setTaskCtrl", tc);
-                }
+                self.$store.commit('setTaskCtrl', tc);
+                },
             );
-        })
+        });
 
         this.recreateRepeatTask();
     }
 
-    async recreateRepeatTask() : Promise<void> {
-        //非同期で明日以降1週間分のデータを作る
-        let d = new Date(this.$store.getters.targetDate);
-        d.setDate(d.getDate()+1);
+    public async recreateRepeatTask(): Promise<void> {
+        // 非同期で明日以降1週間分のデータを作る
+        const d = new Date(this.$store.getters.targetDate);
+        d.setDate(d.getDate() + 1);
         const rc2: RepeatCreator = new RepeatCreator(this.$store.getters.user.uid, d);
         rc2.creaetRepeat(6)
-        .then(() : void => {
+        .then((): void => {
             console.log(`repeat task create success`);
-        }).catch((e) : void => {
-            console.error(`repeate task create error! `,e);
-        })
+        }).catch((e): void => {
+            console.error(`repeate task create error! `, e);
+        });
 
-    } 
+    }
 
-    deleteTask(task: Task) : void {
-        this.$store.commit("deleteTask",task);
+    public deleteTask(task: Task): void {
+        this.$store.commit('deleteTask', task);
         console.log(`${task.title} ${this.$store.getters.taskCtrl.tasks}`);
         FirebaseUtil.deleteTask(this.$store.getters.user.uid, task);
     }
 
-    startTask(task: Task) : void {
-        //開始しているタスクがあれば中断処理する
+    public startTask(task: Task): void {
+        // 開始しているタスクがあれば中断処理する
         for (const otherTask of this.tasks) {
-            if (otherTask.isDoing == true) {
+            if (otherTask.isDoing === true) {
                 this.tasks.push(otherTask.createPauseTask());
-                otherTask.title = otherTask.title + "(中断)";
+                otherTask.title = otherTask.title + '(中断)';
                 this.stopTask(otherTask);
             }
         }
 
-        //既に終了しているタスクであればコピーしてタスクを開始する
-        if (task.endTime!=null) {
-            let newTask: Task = task.createPauseTask();
+        // 既に終了しているタスクであればコピーしてタスクを開始する
+        if (task.endTime != null) {
+            const newTask: Task = task.createPauseTask();
             newTask.isDoing = true;
             newTask.startTime = new Date();
             newTask.endTime = null;
-            this.$store.commit("addTask",newTask);
-        }else{
+            this.$store.commit('addTask', newTask);
+        } else {
             task.isDoing = true;
             task.startTime = new Date();
         }
 
-        this.$store.commit("sortTask");
+        this.$store.commit('sortTask');
 
         this.save();
     }
 
-    stopTask(task: Task) : void {
+    public stopTask(task: Task): void {
         task.isDoing = false;
         task.endTime = new Date();
         this.save();
     }
 
-    save(): void {
-        fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.targetDate,this.$store.getters.taskCtrl);
+    public save(): void {
+        fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.targetDate, this.$store.getters.taskCtrl);
     }
 
-    endEditTask(task: Task, index: number) {
+    public endEditTask(task: Task, index: number) {
         this.$set(this.tasks, index, task);
         this.save();
         this.recreateRepeatTask();
 
     }
 
-    created() : void {
+    public created(): void {
         this.loadTasks();
     }
 
-    logout() : void {
+    public logout(): void {
         firebase.auth().signOut();
     }
 
-    addTask() : void {
+    public addTask(): void {
         this.addingTask_ = true;
-        this.$nextTick(function(){
-            this.$vuetify.goTo("#newtask", {duration: 350, easing: "easeInOutCubic"})
+        this.$nextTick(function() {
+            this.$vuetify.goTo('#newtask', {duration: 350, easing: 'easeInOutCubic'});
         });
     }
 
-    addedTask() : void {
+    public addedTask(): void {
         this.addingTask_ = false;
     }
 
-    changeTaskDate(task: Task): void {
-        
-        //編集中の日付と同じならば何もしない
-        if (DateUtil.getDateString(task.date) == this.targetDate) return;
+    public changeTaskDate(task: Task): void {
 
-        //変更先の日付のdocを取ってくる
-        fb.loadTasks(this.$store.getters.user.uid,task.date)
+        // 編集中の日付と同じならば何もしない
+        if (DateUtil.getDateString(task.date) === this.targetDate) { return; }
+
+        // 変更先の日付のdocを取ってくる
+        fb.loadTasks(this.$store.getters.user.uid, task.date)
         .then((tc) => {
-            //タスクを追加してsave
+            // タスクを追加してsave
             tc.tasks.push(task);
-            fb.saveTasks(this.$store.getters.user.uid,task.date,tc);
+            fb.saveTasks(this.$store.getters.user.uid, task.date, tc);
 
-            //今開いている日付のdocから削除
-            this.$store.commit("deleteTask",task);
+            // 今開いている日付のdocから削除
+            this.$store.commit('deleteTask', task);
             this.save();
 
         });
     }
 
-    get topRowLayoutAttributes() : {} {
-        //画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+    get topRowLayoutAttributes(): {} {
+        // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
         switch (this.$vuetify.breakpoint.name) {
             case 'xs': return {column: true};
             case 'sm': return {column: true};
