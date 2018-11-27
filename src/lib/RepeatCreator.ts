@@ -101,7 +101,6 @@ export default class RepeatCreator {
      */
     private isExsistRepeat(repeat: Repeat, tasks: Task[]): boolean {
         for (const task of tasks) {
-            console.log(`itask id ${task.repeatId} repeat id = ${repeat.id}`);
             if (task.repeatId === repeat.id) { return true; }
         }
         return false;
