@@ -8,9 +8,19 @@ import ITask from '@/ITask';
 export default class FirebaseUtil {
     public static saveTasks(uid: string, date: Date, taskctrl: TaskController): void {
         // todo ここもbatch書き込みが必要
+        const promises: Array<Promise<void>> = [];
+
+        const start: number = Date.now();
         for (const task of taskctrl.tasks) {
-            this.addTask(uid, date, task);
+            promises.push(this.addTask(uid, date, task));
         }
+
+        Promise.all(promises)
+        .then((): void => {
+            console.log(` ${Date.now() - start} Save end!`);
+        }).catch((error: Error): void => {
+            console.error(` ${Date.now() - start} Save Error!`, error);
+        });
     }
 
     public static async loadRepeatByDateFrom(uid: string, dateFrom: Date): Promise<Repeat[]> {
