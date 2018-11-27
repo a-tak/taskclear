@@ -7,7 +7,6 @@ import ITask from '@/ITask';
 
 export default class FirebaseUtil {
     public static saveTasks(uid: string, date: Date, taskctrl: TaskController): void {
-        // todo ここもbatch書き込みが必要
         const promises: Array<Promise<void>> = [];
 
         const start: number = Date.now();
@@ -17,9 +16,9 @@ export default class FirebaseUtil {
 
         Promise.all(promises)
         .then((): void => {
-            console.log(` ${Date.now() - start} Save end!`);
+            console.log(`Save time ${Date.now() - start} ms `);
         }).catch((error: Error): void => {
-            console.error(` ${Date.now() - start} Save Error!`, error);
+            console.error(`Save Error! ${Date.now() - start} ms `, error);
         });
     }
 
