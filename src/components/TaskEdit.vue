@@ -97,7 +97,6 @@ export default class TaskEdit extends Vue {
     }
 
     public created(): void {
-        console.log('created!');
         // 編集前の値を待避
         this.backupedTask_ = this.task_.copy();
         // 編集用オブジェクト作成

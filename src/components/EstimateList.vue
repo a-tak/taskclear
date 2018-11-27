@@ -82,6 +82,7 @@ export default class EstimateList extends Vue {
                 const estimate = this.createEstimate(tc, targetDate);
                 this.estimates_.push(estimate);
             }).catch((error: Error) => {
+                // tslint:disable-next-line:no-console
                 console.log('Error getting document:', error);
             });
         }

@@ -108,7 +108,6 @@ export default class TaskRow extends Vue {
         return this.displayedTaskCal_;
     }
     set displayedTaskCal(value: boolean) {
-        console.log('targetDate_=' + this.targetDate_);
         this.displayedTaskCal_ = value;
     }
     get targetDate(): string {

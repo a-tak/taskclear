@@ -15,7 +15,6 @@
     "ordered-imports": false,
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
-    "variable-name": [true, "allow-trailing-underscore"],
-    "no-console" : [false]
+    "variable-name": [true, "allow-trailing-underscore"]
   }
 }

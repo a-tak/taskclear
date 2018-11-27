@@ -35,7 +35,6 @@ export default class DateUtil {
      * @param timeString 時間文字列(hhmm)。「:」は取り除く。
      */
     public static getDateObject(baseDate: Date, timeString: string): Date {
-        console.log('timeString=' + timeString);
         let str: string = timeString;
         str = str.replace(':', '').trim();
         let retStr: string = '';

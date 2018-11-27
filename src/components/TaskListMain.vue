@@ -179,9 +179,8 @@ export default class TaskListMain extends Vue {
         d.setDate(d.getDate() + 1);
         const rc2: RepeatCreator = new RepeatCreator(this.$store.getters.user.uid, d);
         rc2.creaetRepeat(6)
-        .then((): void => {
-            console.log(`repeat task create success`);
-        }).catch((e): void => {
+        .catch((e): void => {
+            // tslint:disable-next-line:no-console
             console.error(`repeate task create error! `, e);
         });
 
@@ -189,7 +188,6 @@ export default class TaskListMain extends Vue {
 
     public deleteTask(task: Task): void {
         this.$store.commit('deleteTask', task);
-        console.log(`${task.title} ${this.$store.getters.taskCtrl.tasks}`);
         FirebaseUtil.deleteTask(this.$store.getters.user.uid, task);
     }
 

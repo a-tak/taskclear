@@ -16,8 +16,10 @@ export default class FirebaseUtil {
 
         Promise.all(promises)
         .then((): void => {
+            // tslint:disable-next-line:no-console
             console.log(`Save time ${Date.now() - start} ms `);
         }).catch((error: Error): void => {
+            // tslint:disable-next-line:no-console
             console.error(`Save Error! ${Date.now() - start} ms `, error);
         });
     }
@@ -84,8 +86,8 @@ export default class FirebaseUtil {
     public static deleteTask(uid: string, task: Task): void {
         firebase.firestore().collection('users').doc(uid)
         .collection('tasks').doc(task.id).delete()
-        .then()
         .catch((error: Error) => {
+            // tslint:disable-next-line:no-console
             console.error(`Delete Task error! task id=${task.id}`, error);
         });
 
@@ -114,25 +116,21 @@ export default class FirebaseUtil {
             .get();
 
             snapshot.forEach((doc: firestore.QueryDocumentSnapshot): void => {
-                console.log(`ここすらきてない?`);
                 if (doc !== undefined) {
                     // 念のために開始していないものだけを削除
-                    console.log(`ここきてる?`);
                     if (doc.data().startTime == null) {
-                        console.log(`delete doc = ${doc.data().id}`);
                         batch.delete(doc.ref);
                     }
-                } else {
-                    console.log('delete rpeat task doc undefined?');
                 }
             });
         } catch (e) {
+            // tslint:disable-next-line:no-console
             console.error(`削除エラー repeatId=${repeatId}`, e);
         }
 
         batch.commit()
-        .then()
         .catch((error: Error) => {
+            // tslint:disable-next-line:no-console
             console.error(`Write repeat error! repeat id = ${repeatId}`, error);
         });
     }
@@ -167,10 +165,8 @@ export default class FirebaseUtil {
         }
 
         batch.commit()
-            .then(() => {
-                console.log(`success write repeat id = ${newId} delete repeat id = ${oldId}`);
-            })
             .catch((error: Error) => {
+                // tslint:disable-next-line:no-console
                 console.error(`Write repeat error! repeat id = ${newId} delete repeat id = ${oldId}`, error);
             });
 
@@ -196,6 +192,7 @@ export default class FirebaseUtil {
         try {
             repeat = this.setRepeat(data);
         } catch (error) {
+            // tslint:disable-next-line:no-console
             console.error(`load repeat error repeat id=${repeatId}`, error);
         }
         return repeat;

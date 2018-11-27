@@ -36,7 +36,6 @@ export default class NewTask extends Vue {
   }
 
   public addTask(): void {
-    console.log('addtask cansubmit=' + this.canSubmit_);
     if (this.inputvalue_.trim() === '' || this.canSubmit_ === false) { return; }
 
     // ここがタスクの追加部分
