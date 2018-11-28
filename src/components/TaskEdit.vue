@@ -1,40 +1,44 @@
 <template>
-    <div id="task-edit">
-        <v-card>
-            <v-layout v-bind="layoutAttributes" fill-height align-center justify-center ma-1>
-                <v-flex ma-1>
-                    <span>タスク名</span>
-                    <v-text-field placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @keydown="keyDown($event)" @keyup.enter="keyUp()"></v-text-field>
-                </v-flex>
-            </v-layout>
-            <v-layout v-bind="layoutAttributes" fill-height align-center justify-center ma-1>
-                <v-flex ma-1>
-                    <span>開始時間</span>
-                    <v-text-field type="number" placeholder="開始時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="startTime_" clearable @keyup.enter="save"></v-text-field>
-                </v-flex>
-                <v-flex ma-1>
-                    <span>終了時間</span>
-                    <v-text-field type="number" placeholder="終了時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="endTime_" clearable  @keyup.enter="save"></v-text-field>
-                </v-flex>
-                <v-flex ma-1>
-                    <span>見積時間(分)</span>
-                    <v-text-field type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save"> </v-text-field>
-                </v-flex>
-                <v-flex ma-1>
-                    <span>ソート順</span>
-                    <v-text-field type="number" placeholder="ソート順" single-line outline mask="#####" hint="ソート順を番号で入力" v-model="sortNo_"  @keyup.enter="save"> </v-text-field>
-                </v-flex>
-            </v-layout>
-            <v-layout row fill-height align-center justify-center>
-                <v-flex>
-                    <v-btn @click.stop="save">保存</v-btn>
-                </v-flex>
-                <v-flex>
-                    <v-btn @click.stop="cancel">キャンセル</v-btn>
-                </v-flex>
-            </v-layout>
-        </v-card>
-    </div>
+    <v-container grid-list-md text-xs-center pa-1>
+        <v-layout row wrap>
+            <v-flex>
+                <v-card>
+                    <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
+                        <v-flex ma-2>
+                            <span>タスク名</span>
+                            <v-text-field placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @keydown="keyDown($event)" @keyup.enter="keyUp()"></v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
+                        <v-flex ma-2>
+                            <span>開始時間</span>
+                            <v-text-field type="number" placeholder="開始時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="startTime_" clearable @keyup.enter="save"></v-text-field>
+                        </v-flex>
+                        <v-flex ma-2>
+                            <span>終了時間</span>
+                            <v-text-field type="number" placeholder="終了時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="endTime_" clearable  @keyup.enter="save"></v-text-field>
+                        </v-flex>
+                        <v-flex ma-2>
+                            <span>見積時間(分)</span>
+                            <v-text-field type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save"> </v-text-field>
+                        </v-flex>
+                        <v-flex ma-2>
+                            <span>ソート順</span>
+                            <v-text-field type="number" placeholder="ソート順" single-line outline mask="#####" hint="ソート順を番号で入力" v-model="sortNo_"  @keyup.enter="save"> </v-text-field>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row fill-height align-center justify-center>
+                        <v-flex>
+                            <v-btn @click.stop="save">保存</v-btn>
+                        </v-flex>
+                        <v-flex>
+                            <v-btn @click.stop="cancel">キャンセル</v-btn>
+                        </v-flex>
+                    </v-layout>
+                </v-card>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script lang="ts">

@@ -1,12 +1,12 @@
 <template>
-    <div id="repeat-edit">
+    <v-container grid-list-md text-xs-center pa-2>
         <v-card class="ma-2">
             <v-card-title>
                 リピート設定
             </v-card-title>
             <v-layout v-bind="layoutAttributes" fill-height align-center justify-center row>
                 <v-flex ml-3>
-                    <v-layout column fill-height align-center justify-center>
+                    <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
                         <v-flex>
                             <v-checkbox v-model="selectedDay_" label="月曜日" value=1></v-checkbox>
                         </v-flex>
@@ -71,7 +71,7 @@
                 </v-flex>
             </v-layout>
         </v-card>
-    </div>
+    </v-container>
 </template>
 
 <script lang="ts">
