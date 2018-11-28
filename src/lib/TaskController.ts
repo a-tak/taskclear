@@ -1,6 +1,6 @@
 import { firestore } from 'firebase';
 import Task from './Task';
-import ITask from '@/ITask';
+import ITask from '@/lib/ITask';
 
 // Taskオブジェクトを束ねるクラス
 export default class TaskController {
@@ -26,6 +26,7 @@ export default class TaskController {
                 estimateTime: task.estimateTime,
                 actualTime: task.actualTime,
                 repeatId: task.repeatId,
+                sortNo: task.sortNo,
             };
             if (task.startTime != null) { literal.startTime = firestore.Timestamp.fromDate(task.startTime); }
             if (task.endTime != null) { literal.endTime = firestore.Timestamp.fromDate(task.endTime); }
@@ -64,6 +65,7 @@ export default class TaskController {
                 task.endTime = null;
             }
             task.repeatId = fsobj.repeatId;
+            task.sortNo = fsobj.sortNo;
             this.tasks_.push(task);
         }
     }
@@ -82,8 +84,26 @@ export default class TaskController {
         return sum;
     }
 
+    /**
+     * タスクリストをソートする
+     */
     public sort(): void {
-        this.tasks_.sort((a: Task, b: Task) => {
+        // 終了タスクと開始中タスクと開始前タスクをわける
+        const doneTasks: Task[] = [];
+        const doingTask: Task[] = [];
+        const beforeStartTasks: Task[] = [];
+
+        for (const task of this.tasks_) {
+            if (task.endTime !== null) {
+                doneTasks.push(task);
+            } else if (task.isDoing === true) {
+                doingTask.push(task);
+            } else {
+                beforeStartTasks.push(task);
+            }
+        }
+        // 終了済みタスクは開始時間でソート
+        doneTasks.sort((a: Task, b: Task) => {
             if (a.startTime == null) {
                 return 1;
             } else if (b.startTime == null) {
@@ -92,6 +112,22 @@ export default class TaskController {
                 return a.startTime.getTime() - b.startTime.getTime();
             }
         });
+        // 開始前タスクはsortNoでソート
+        beforeStartTasks.sort((a: Task, b: Task) => {
+            if (a.sortNo == null) {
+                return 1;
+            } else if (b.sortNo == null) {
+                return -1;
+            } else {
+                return a.sortNo - b.sortNo;
+            }
+        });
 
+        this.tasks_ = doneTasks.concat(doingTask).concat(beforeStartTasks);
+
+        // 番号を振り直す
+        for (const [index, item] of this.tasks_.entries()) {
+            item.sortNo = index + 1;
+        }
     }
 }

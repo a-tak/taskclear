@@ -3,7 +3,7 @@ import firebase, { firestore } from 'firebase';
 import TaskController from '../lib/TaskController';
 import Task from '@/lib/Task';
 import Repeat from '@/lib/Repeat';
-import ITask from '@/ITask';
+import ITask from '@/lib/ITask';
 
 export default class FirebaseUtil {
     public static saveTasks(uid: string, date: Date, taskctrl: TaskController): void {
@@ -213,6 +213,7 @@ export default class FirebaseUtil {
             estimateTime: task.estimateTime,
             actualTime: task.actualTime,
             repeatId: task.repeatId,
+            sortNo: task.sortNo,
         };
         if (task.startTime != null) {
             literal.startTime = firestore.Timestamp.fromDate(task.startTime);
@@ -266,6 +267,7 @@ export default class FirebaseUtil {
         task.estimateTime = data.estimateTime;
         task.isDoing = data.isDoing;
         task.repeatId = this.toString(data.repeatId);
+        task.sortNo = this.toNumber(data.sortNo);
         return task;
     }
 

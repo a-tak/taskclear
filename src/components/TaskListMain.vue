@@ -230,6 +230,7 @@ export default class TaskListMain extends Vue {
 
     public endEditTask(task: Task, index: number) {
         this.$set(this.tasks, index, task);
+        this.$store.getters.taskCtrl.sort();
         this.save();
         this.recreateRepeatTask();
 

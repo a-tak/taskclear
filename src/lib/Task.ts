@@ -17,6 +17,7 @@ export default class Task {
     private endTime_: Date | null;
     private estimateTime_: number;
     private repeatId_: string;
+    private sortNo_: number;
 
     constructor(date: Date, title: string) {
         this.id_ = uuid();
@@ -27,6 +28,7 @@ export default class Task {
         this.endTime_ = null;
         this.estimateTime_ = 0;
         this.repeatId_ = '';
+        this.sortNo_ = 999;
     }
 
     get id(): string { return this.id_; }
@@ -66,6 +68,16 @@ export default class Task {
     }
 
     /**
+     * ソート順
+     */
+    public get sortNo(): number {
+        return this.sortNo_;
+    }
+    public set sortNo(value: number) {
+        this.sortNo_ = value;
+    }
+
+    /**
      * 中断タスクを作成
      * 元のタスクの見積から実績を引いた残り時間を入れて新たなタスクを戻す
      */
@@ -78,6 +90,8 @@ export default class Task {
         if (estimate < 0) { estimate = 0; }
         newTask.estimateTime = estimate;
         newTask.repeatId = '';
+        // とりあえずの対応だが次の行にコピーしたものは表示
+        newTask.sortNo = this.sortNo + 1;
 
         return newTask;
     }
@@ -96,6 +110,7 @@ export default class Task {
         newTask.endTime = this.endTime_;
         newTask.estimateTime = this.estimateTime_;
         newTask.repeatId = this.repeatId_;
+        newTask.sortNo = this.sortNo_;
 
         return newTask;
 

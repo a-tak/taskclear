@@ -6,6 +6,8 @@
                     <span>タスク名</span>
                     <v-text-field placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @keydown="keyDown($event)" @keyup.enter="keyUp()"></v-text-field>
                 </v-flex>
+            </v-layout>
+            <v-layout v-bind="layoutAttributes" fill-height align-center justify-center ma-1>
                 <v-flex ma-1>
                     <span>開始時間</span>
                     <v-text-field type="number" placeholder="開始時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="startTime_" clearable @keyup.enter="save"></v-text-field>
@@ -17,6 +19,10 @@
                 <v-flex ma-1>
                     <span>見積時間(分)</span>
                     <v-text-field type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save"> </v-text-field>
+                </v-flex>
+                <v-flex ma-1>
+                    <span>ソート順</span>
+                    <v-text-field type="number" placeholder="ソート順" single-line outline mask="#####" hint="ソート順を番号で入力" v-model="sortNo_"  @keyup.enter="save"> </v-text-field>
                 </v-flex>
             </v-layout>
             <v-layout row fill-height align-center justify-center>
@@ -52,6 +58,7 @@ export default class TaskEdit extends Vue {
     @Prop() public task_!: Task;
 
     private keyDownCode_: number = 0;
+    private sortNo_: number = 999;
 
     @Emit('endEditEvent')
     // tslint:disable-next-line:no-empty
@@ -83,6 +90,8 @@ export default class TaskEdit extends Vue {
             this.editTask_.estimateTime = 0;
         }
 
+        this.editTask_.sortNo = this.sortNo_;
+
         // 編集終了イベント発生
         this.endEdit(this.editTask_);
     }
@@ -104,11 +113,10 @@ export default class TaskEdit extends Vue {
         if (this.task_.endTime != null) {
             this.endTime_ = DateUtil.get4digitTime(this.task_.endTime);
         }
-
         if (this.task_.estimateTime != null) {
             this.estimateTime_ = this.task_.estimateTime.toString();
         }
-
+        this.sortNo_ = this.task_.sortNo;
     }
 
     // 算出プロパティーでオブジェクトを返すと属性を展開してくれる

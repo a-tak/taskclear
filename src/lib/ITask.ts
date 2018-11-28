@@ -10,4 +10,5 @@ export default interface ITask {
     actualTime: number;
     estimateTime: number;
     repeatId: string;
+    sortNo: number;
 }
