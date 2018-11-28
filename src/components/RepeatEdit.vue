@@ -56,7 +56,7 @@
                         </v-flex>
                         <v-flex>
                             <span>見積時間(分)</span>
-                            <v-text-field type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable > </v-text-field>
+                            <v-text-field type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save()" > </v-text-field>
                         </v-flex>
 
                     </v-layout>

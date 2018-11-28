@@ -4,7 +4,7 @@
             <v-layout v-bind="layoutAttributes" fill-height align-center justify-center ma-1>
                 <v-flex ma-1>
                     <span>タスク名</span>
-                    <v-text-field placeholder="タスク名" single-line outline v-model="editTask_.title" clearable  @keyup.enter="save" @keypress="setCanSubmit"></v-text-field>
+                    <v-text-field placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @keydown="keyDown($event)" @keyup.enter="keyUp()"></v-text-field>
                 </v-flex>
                 <v-flex ma-1>
                     <span>開始時間</span>
@@ -41,7 +41,6 @@ import DateUtil from '../util/DateUtil';
 @Component
 export default class TaskEdit extends Vue {
 
-    public canSubmit_: boolean = false;
     public menu_: boolean = false;
     public startTime_: string = '';
     public endTime_: string = '';
@@ -52,10 +51,11 @@ export default class TaskEdit extends Vue {
     // !はundefinedやnullにならないことを示すもの
     @Prop() public task_!: Task;
 
+    private keyDownCode_: number = 0;
+
     @Emit('endEditEvent')
     // tslint:disable-next-line:no-empty
     public endEdit(task: Task): void {}
-
 
     public save(): void {
         if (this.startTime_.trim() !== '' ) {
@@ -92,10 +92,6 @@ export default class TaskEdit extends Vue {
         this.endEdit(this.backupedTask_);
     }
 
-    public setCanSubmit(): void {
-        this.canSubmit_ = true;
-    }
-
     public created(): void {
         // 編集前の値を待避
         this.backupedTask_ = this.task_.copy();
@@ -125,6 +121,20 @@ export default class TaskEdit extends Vue {
             case 'lg': return {row: true};
             case 'xl': return {row: true};
             default  : return {row: true};
+        }
+    }
+
+    private keyDown(event: KeyboardEvent): void {
+        this.keyDownCode_ = event.keyCode;
+    }
+
+    /**
+     * 日本語入力確定のEnterキーで以外で先に進むようにする
+     */
+    private keyUp(): void {
+        if (this.keyDownCode_ === 13) {
+            this.save();
+            this.keyDownCode_ = 0;
         }
     }
 }
