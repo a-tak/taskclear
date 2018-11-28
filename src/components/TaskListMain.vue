@@ -284,7 +284,6 @@ export default class TaskListMain extends Vue {
             case 'xl': return {row: true};
             default  : return {row: true};
         }
-}
-
+    }
 }
 </script>

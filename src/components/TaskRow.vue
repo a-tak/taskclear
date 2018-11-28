@@ -8,7 +8,7 @@
             <v-flex>
                 <v-card>
                     <v-layout align-center justify-space-between row fill-height>
-                        <v-flex xs4 sm2 md1>
+                        <v-flex xs2 sm2 md1>
                             <v-btn icon ripple @click.stop="startTask(task_)" v-if="task_.isDoing === false && task_.endTime==null">
                                 <v-icon color="purple">play_circle_filled</v-icon>
                             </v-btn>
@@ -19,46 +19,47 @@
                                 <v-icon color="purple">pause_circle_filled</v-icon>
                             </v-btn>
                         </v-flex>
-                        <v-flex nowrap sm5 md5>
+                        <v-flex nowrap sm5 xs9 md5>
                             <v-card-actions  @click.stop="startEdit()">
                                 <div v-bind:class="{ done: task_.endTime!=null}" class="font-weight-bold">
                                     {{ task_.title }}
                                 </div>
                             </v-card-actions>
-                            <v-card-actions  @click.stop="startEdit()">
-                                <div>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 </div>
+                            <v-card-actions @click.stop="startEdit()">
+                                <span>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 </span>
                             </v-card-actions>
                         </v-flex>
                         <v-spacer></v-spacer>
-                        <v-flex xs4 sm2 md1 class="text-xs-right">
-                            <v-menu
-                                :close-on-content-click="true"
-                                v-model="displayedTaskCal"
-                                :nudge-right="40"
-                                lazy
-                                transition="scale-transition"
-                                offset-y
-                                full-width
-                                min-width="290px"
-                            >
-                            <v-btn slot="activator" icon ripple @click.stop="displayedTaskCal = !displayedTaskCal">
-                                <v-icon color="grey darken-1">calendar_today</v-icon>
-                            </v-btn>
-
-                            <v-date-picker v-model="targetDate" @input="selectDate()" locale="jp" :day-format="date => new Date(date).getDate()"></v-date-picker>
-                            </v-menu>
-                        </v-flex>
-                        <v-flex xs4 sm2 md1 class="text-xs-right">
-                            <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
-                                <v-icon v-if="task_.repeatId===''" color="grey darken-1">repeat</v-icon>
-                                <v-icon v-if="task_.repeatId!==''" color="purple">repeat</v-icon>
-                            </v-btn>
-                        </v-flex>
-                        <v-flex xs4 sm2 md1 class="text-xs-right">
-                            <v-btn icon ripple @click.stop="deleteTask(task_)">
-                                <v-icon color="grey darken-1">delete</v-icon>
-                            </v-btn>
-                        </v-flex>
+                        <v-layout v-bind="topRowLayoutAttributes">
+                            <v-flex xs4 sm2 md1 class="text-xs-right">
+                                <v-menu
+                                    :close-on-content-click="true"
+                                    v-model="displayedTaskCal"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
+                                <v-btn slot="activator" icon ripple @click.stop="displayedTaskCal = !displayedTaskCal">
+                                    <v-icon color="grey darken-1">calendar_today</v-icon>
+                                </v-btn>
+                                <v-date-picker v-model="targetDate" @input="selectDate()" locale="jp" :day-format="date => new Date(date).getDate()"></v-date-picker>
+                                </v-menu>
+                            </v-flex>
+                            <v-flex xs4 sm2 md1 class="text-xs-right">
+                                <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
+                                    <v-icon v-if="task_.repeatId===''" color="grey darken-1">repeat</v-icon>
+                                    <v-icon v-if="task_.repeatId!==''" color="purple">repeat</v-icon>
+                                </v-btn>
+                            </v-flex>
+                            <v-flex xs4 sm2 md1 class="text-xs-right">
+                                <v-btn icon ripple @click.stop="deleteTask(task_)">
+                                    <v-icon color="grey darken-1">delete</v-icon>
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
                     </v-layout>
                 </v-card>
             </v-flex>
@@ -176,6 +177,18 @@ export default class TaskRow extends Vue {
     public selectDate(): void {
         this.displayedTaskCal = false;
         this.changeDate(this.task_);
+    }
+
+    get topRowLayoutAttributes(): {} {
+        // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+        switch (this.$vuetify.breakpoint.name) {
+            case 'xs': return {column: true};
+            case 'sm': return {column: true};
+            case 'md': return {row: true};
+            case 'lg': return {row: true};
+            case 'xl': return {row: true};
+            default  : return {row: true};
+        }
     }
 
 }
