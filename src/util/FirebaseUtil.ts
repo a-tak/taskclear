@@ -239,6 +239,56 @@ export default class FirebaseUtil {
         return repeat;
     }
 
+    public static async migration(uid: string): Promise<void> {
+
+        const doc = await firebase
+            .firestore()
+            .collection('users')
+            .doc(uid)
+            .collection('version')
+            .doc('task-is-deleted-flag')
+            .get();
+        const data: firestore.DocumentData | undefined = doc.data();
+        if (data === undefined) {
+            // isDeletedフラグ追加実施
+            await this.migrationIsDeletedAdd(uid);
+        }
+
+        return;
+    }
+
+    /**
+     * タスクにisDeletedフラグがないDBバージョンなので追加する
+     * @param uid ユーザーid
+     */
+    private static async migrationIsDeletedAdd(uid: string): Promise<void> {
+        const batch: firestore.WriteBatch = firestore().batch();
+
+        firebase
+        .firestore()
+        .collection('users')
+        .doc(uid)
+        .collection('tasks')
+        .get()
+        .then((querySnapshot): void => {
+            querySnapshot.forEach((doc: firestore.QueryDocumentSnapshot): void => {
+                batch.update(doc.ref, {isDeleted: false});
+            });
+            batch.commit().then((): void => {
+                firebase
+                .firestore()
+                .collection('users')
+                .doc(uid)
+                .collection('version')
+                .doc('task-is-deleted-flag')
+                .set({done: true});
+                });
+        });
+
+
+    }
+
+
     /**
      * 指定した日のタスクを読み込むクエリを生成する(論理削除済みタスクも読み込む)
      * @param uid ユーザーid
@@ -324,6 +374,15 @@ export default class FirebaseUtil {
         }
     }
 
+    private static toBoolean(value: boolean | undefined): boolean {
+        if (value === undefined) {
+            // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
+            return false;
+        } else {
+            return value;
+        }
+    }
+
     private static converToTask(data: firestore.DocumentData): Task {
         const task = new Task(data.date.toDate(), data.title);
         task.id = data.id;
@@ -333,6 +392,7 @@ export default class FirebaseUtil {
         task.isDoing = data.isDoing;
         task.repeatId = this.toString(data.repeatId);
         task.sortNo = this.toNumber(data.sortNo);
+        task.isDeleted = this.toBoolean(data.isDeleted);
         return task;
     }
 

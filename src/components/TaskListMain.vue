@@ -283,7 +283,10 @@ export default class TaskListMain extends Vue {
     }
 
     private created(): void {
-        this.loadTasks();
+        FirebaseUtil.migration(this.$store.getters.user.uid)
+        .then((): void => {
+            this.loadTasks();
+        });
     }
 
     private mounted(): void {

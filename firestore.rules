@@ -8,5 +8,8 @@ service cloud.firestore {
     match /users/{user_id}/repeats/{id} {
       allow read, write: if request.auth.uid == user_id;
     }
+    match /users/{user_id}/version/{id} {
+      allow read, write: if request.auth.uid == user_id;
+    }
   }
 }
