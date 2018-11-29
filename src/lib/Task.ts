@@ -18,6 +18,7 @@ export default class Task {
     private estimateTime_: number;
     private repeatId_: string;
     private sortNo_: number;
+    private isDeleted_: boolean;
 
     constructor(date: Date, title: string) {
         this.id_ = uuid();
@@ -29,6 +30,7 @@ export default class Task {
         this.estimateTime_ = 0;
         this.repeatId_ = '';
         this.sortNo_ = 999;
+        this.isDeleted_ = false;
     }
 
     get id(): string { return this.id_; }
@@ -50,7 +52,15 @@ export default class Task {
     public set repeatId(value: string) {
         this.repeatId_ = value;
     }
-
+    /**
+     * 削除フラグ(論理削除)
+     */
+    public get isDeleted(): boolean {
+        return this.isDeleted_;
+    }
+    public set isDeleted(value: boolean) {
+        this.isDeleted_ = value;
+    }
     /**
      * 見積時間(分)
      */
@@ -91,7 +101,9 @@ export default class Task {
         newTask.estimateTime = estimate;
         newTask.repeatId = '';
         // とりあえずの対応だが次の行にコピーしたものは表示
-        newTask.sortNo = this.sortNo + 1;
+        newTask.sortNo = this.sortNo_ + 1;
+        // 削除したタスクの中断タスクが作られても意味がないはずなので、常にfalseにする
+        newTask.isDeleted = false;
 
         return newTask;
     }
@@ -111,6 +123,7 @@ export default class Task {
         newTask.estimateTime = this.estimateTime_;
         newTask.repeatId = this.repeatId_;
         newTask.sortNo = this.sortNo_;
+        newTask.isDeleted = this.isDeleted_;
 
         return newTask;
 

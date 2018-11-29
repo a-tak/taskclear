@@ -188,7 +188,7 @@ export default class TaskListMain extends Vue {
 
     public deleteTask(task: Task): void {
         this.$store.commit('deleteTask', task);
-        FirebaseUtil.deleteTask(this.$store.getters.user.uid, task);
+        FirebaseUtil.logicalDeleteTask(this.$store.getters.user.uid, task);
     }
 
     public startTask(task: Task): void {

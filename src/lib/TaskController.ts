@@ -27,6 +27,7 @@ export default class TaskController {
                 actualTime: task.actualTime,
                 repeatId: task.repeatId,
                 sortNo: task.sortNo,
+                isDeleted: task.isDeleted,
             };
             if (task.startTime != null) { literal.startTime = firestore.Timestamp.fromDate(task.startTime); }
             if (task.endTime != null) { literal.endTime = firestore.Timestamp.fromDate(task.endTime); }

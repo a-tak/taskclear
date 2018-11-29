@@ -11,4 +11,5 @@ export default interface ITask {
     estimateTime: number;
     repeatId: string;
     sortNo: number;
+    isDeleted: boolean;
 }

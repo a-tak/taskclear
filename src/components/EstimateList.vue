@@ -141,7 +141,6 @@ export default class EstimateList extends Vue {
 
         return estimate;
     }
-
 }
 
 </script>

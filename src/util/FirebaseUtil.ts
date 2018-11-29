@@ -11,7 +11,7 @@ export default class FirebaseUtil {
 
         const start: number = Date.now();
         for (const task of taskctrl.tasks) {
-            promises.push(this.addTask(uid, date, task));
+            promises.push(this.setTask(uid, task));
         }
 
         Promise.all(promises)
@@ -40,14 +40,14 @@ export default class FirebaseUtil {
         query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
             if (doc !== undefined) {
                 const data: firebase.firestore.DocumentData | undefined = doc.data();
-                repeats.push(this.setRepeat(data));
+                repeats.push(this.converToRepeat(data));
             }
         });
         return repeats;
     }
 
     /**
-     * Firestoreからデータを読み込み結果を含んだPromiseを返す
+     * Firestoreから一日分のタスクを読み込み
      * @param uid
      * @param date
      */
@@ -59,7 +59,7 @@ export default class FirebaseUtil {
         query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
             if (doc !== undefined) {
                 const data: firebase.firestore.DocumentData | undefined = doc.data();
-                tc.tasks.push(this.setTask(data));
+                tc.tasks.push(this.converToTask(data));
             }
         });
         return tc;
@@ -80,10 +80,51 @@ export default class FirebaseUtil {
             .doc(uid)
             .collection('tasks')
             .where('date', '>=', firestore.Timestamp.fromDate(from))
-            .where('date', '<', firestore.Timestamp.fromDate(to));
+            .where('date', '<', firestore.Timestamp.fromDate(to))
+            .where('isDeleted', '==', false);
     }
 
-    public static deleteTask(uid: string, task: Task): void {
+    /**
+     * Firestoreから削除済みタスクを含む一日分のタスクを読み込み
+     * @param uid
+     * @param date
+     */
+    public static async loadTasksIncluedDeleted(uid: string, date: Date): Promise<TaskController> {
+        const tc = new TaskController();
+
+        const query: firestore.QuerySnapshot = await this.getDeletedQuery(uid, date).get();
+
+        query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
+            if (doc !== undefined) {
+                const data: firebase.firestore.DocumentData | undefined = doc.data();
+                tc.tasks.push(this.converToTask(data));
+            }
+        });
+        return tc;
+    }
+
+    /**
+     * タスクの論理削除
+     * @param uid ユーザーid
+     * @param task 論理削除対象タスク
+     */
+    public static logicalDeleteTask(uid: string, task: Task): void {
+        task.isDeleted = true;
+
+        this.setTask(uid, task)
+        .catch((error: Error) => {
+            // tslint:disable-next-line:no-console
+            console.error(`Delete Task error! task id=${task.id}`, error);
+        });
+    }
+
+    /**
+     * タスクの物理削除
+     * 今の所どこでも使っていないはず(リピート変更時のタスク削除はbatchでやっていた)
+     * @param uid ユーザーid
+     * @param task 物理削除対象タスク
+     */
+    public static physicalDeleteTask(uid: string, task: Task): void {
         firebase.firestore().collection('users').doc(uid)
         .collection('tasks').doc(task.id).delete()
         .catch((error: Error) => {
@@ -93,7 +134,7 @@ export default class FirebaseUtil {
 
     }
 
-    public static async addTask(uid: string, date: Date, task: Task): Promise<void> {
+    public static async setTask(uid: string, task: Task): Promise<void> {
         firebase.firestore().collection('users').doc(uid)
         .collection('tasks').doc(task.id).set(this.getTaskLiteral(task));
     }
@@ -190,12 +231,35 @@ export default class FirebaseUtil {
         let repeat: Repeat = new Repeat();
         const data: firestore.DocumentData | undefined = doc.data();
         try {
-            repeat = this.setRepeat(data);
+            repeat = this.converToRepeat(data);
         } catch (error) {
             // tslint:disable-next-line:no-console
             console.error(`load repeat error repeat id=${repeatId}`, error);
         }
         return repeat;
+    }
+
+    /**
+     * 指定した日のタスクを読み込むクエリを生成する(論理削除済みタスクも読み込む)
+     * @param uid ユーザーid
+     * @param date 取込対象日付
+     */
+    private static getDeletedQuery(uid: string, date: Date): firestore.Query {
+        // とりあえず今は一日の区切りを0時としてfrom,toを作る
+        // 新たにnewしてセットしないと参照が書き換わるだけでendがおかしくなる
+        const from: Date = new Date(date);
+        from.setHours(0, 0, 0, 0);
+        const to: Date = new Date(date);
+        to.setDate(date.getDate() + 1);
+        to.setHours(0, 0, 0, 0);
+
+        return firebase
+            .firestore()
+            .collection('users')
+            .doc(uid)
+            .collection('tasks')
+            .where('date', '>=', firestore.Timestamp.fromDate(from))
+            .where('date', '<', firestore.Timestamp.fromDate(to));
     }
 
     /**
@@ -214,6 +278,7 @@ export default class FirebaseUtil {
             actualTime: task.actualTime,
             repeatId: task.repeatId,
             sortNo: task.sortNo,
+            isDeleted: task.isDeleted,
         };
         if (task.startTime != null) {
             literal.startTime = firestore.Timestamp.fromDate(task.startTime);
@@ -259,7 +324,7 @@ export default class FirebaseUtil {
         }
     }
 
-    private static setTask(data: firestore.DocumentData): Task {
+    private static converToTask(data: firestore.DocumentData): Task {
         const task = new Task(data.date.toDate(), data.title);
         task.id = data.id;
         task.startTime =  this.toDate(data.startTime);
@@ -276,7 +341,7 @@ export default class FirebaseUtil {
      * 注意 Firestoreから情報が取得できていない場合は、idが空のオブジェクトを返す
      * @param data
      */
-    private static setRepeat(data: firestore.DocumentData | undefined): Repeat {
+    private static converToRepeat(data: firestore.DocumentData | undefined): Repeat {
         const repeat: Repeat = new Repeat();
         if (data !== undefined) {
             repeat.id = this.toString(data.id);

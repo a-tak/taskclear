@@ -6,6 +6,13 @@
         {"fieldPath": "repeatId", "mode": "ASCENDING"},
         {"fieldPath": "date", "mode": "ASCENDING"}
       ]
+    },
+    {
+      "collectionId": "tasks",
+      "fields": [
+        {"fieldPath": "isDeleted", "mode": "ASCENDING"},
+        {"fieldPath": "date", "mode": "ASCENDING"}
+      ]
     }
   ]
 }

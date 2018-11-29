@@ -60,7 +60,7 @@ export default class RepeatCreator {
     public async createRepeatSub(repeats: Repeat[], targetDate: Date): Promise<void> {
         // 全処理完了確認用
         const promises: Array<Promise<void>> = [];
-        const tc: TaskController = await FirebaseUtil.loadTasks(this.uid_, targetDate);
+        const tc: TaskController = await FirebaseUtil.loadTasksIncluedDeleted(this.uid_, targetDate);
 
         for (const repeat of repeats) {
             if (this.isMakeRepeat(repeat, targetDate)) {
@@ -90,7 +90,7 @@ export default class RepeatCreator {
         task.startTime = null;
         task.endTime = null;
         task.estimateTime = repeat.estimateTime;
-        await FirebaseUtil.addTask(this.uid_, targetDate, task);
+        await FirebaseUtil.setTask(this.uid_, task);
         return;
     }
 
