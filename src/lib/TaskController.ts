@@ -95,6 +95,8 @@ export default class TaskController {
         const beforeStartTasks: Task[] = [];
 
         for (const task of this.tasks_) {
+            // nextフラグはクリア
+            task.isNext = false;
             if (task.endTime !== null) {
                 doneTasks.push(task);
             } else if (task.isDoing === true) {
@@ -123,6 +125,11 @@ export default class TaskController {
                 return a.sortNo - b.sortNo;
             }
         });
+
+        // 開始前タスクの中の一番目のタスクに「次のタスクフラグ」をつける
+        if (beforeStartTasks.length > 0) {
+            beforeStartTasks[0].isNext = true;
+        }
 
         this.tasks_ = doneTasks.concat(doingTask).concat(beforeStartTasks);
 

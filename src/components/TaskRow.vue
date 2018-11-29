@@ -1,5 +1,6 @@
 <template>
     <v-container grid-list-md text-xs-center pa-2>
+        <div id="next-task" v-if="task_.isNext === true"></div>
         <v-layout
         align-center
         row

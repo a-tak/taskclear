@@ -19,6 +19,7 @@ export default class Task {
     private repeatId_: string;
     private sortNo_: number;
     private isDeleted_: boolean;
+    private isNext_: boolean;
 
     constructor(date: Date, title: string) {
         this.id_ = uuid();
@@ -31,6 +32,7 @@ export default class Task {
         this.repeatId_ = '';
         this.sortNo_ = 999;
         this.isDeleted_ = false;
+        this.isNext_ = false;
     }
 
     get id(): string { return this.id_; }
@@ -88,6 +90,18 @@ export default class Task {
     }
 
     /**
+     * 次実行するタスクフラグ
+     * ショートカットキーで次のタスクまでスクロールするために使用
+     * 保存しない
+     */
+    public get isNext(): boolean {
+        return this.isNext_;
+    }
+    public set isNext(value: boolean) {
+        this.isNext_ = value;
+    }
+
+    /**
      * 中断タスクを作成
      * 元のタスクの見積から実績を引いた残り時間を入れて新たなタスクを戻す
      */
@@ -104,6 +118,8 @@ export default class Task {
         newTask.sortNo = this.sortNo_ + 1;
         // 削除したタスクの中断タスクが作られても意味がないはずなので、常にfalseにする
         newTask.isDeleted = false;
+        // ソートにより自動設定されるので仮にfalseを指定
+        newTask.isNext = false;
 
         return newTask;
     }
@@ -124,6 +140,7 @@ export default class Task {
         newTask.repeatId = this.repeatId_;
         newTask.sortNo = this.sortNo_;
         newTask.isDeleted = this.isDeleted_;
+        newTask.isNext = this.isNext_;
 
         return newTask;
 

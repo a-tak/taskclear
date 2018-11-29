@@ -1,5 +1,5 @@
 <template>
-    <div id="tasklist">
+    <div id="top">
         <v-toolbar
         color="teal lighten-3"
         >
@@ -117,8 +117,6 @@ components: {
 
 export default class TaskListMain extends Vue {
 
-    private addingTask_: boolean = false;
-
     get tasks(): Task[] {
         return this.$store.getters.taskCtrl.tasks;
     }
@@ -137,8 +135,6 @@ export default class TaskListMain extends Vue {
         this.$store.commit('setTargetDate', new Date(value));
     }
 
-    private menu2_: boolean = false;
-
     get menu2(): boolean {
         return this.menu2_;
     }
@@ -146,6 +142,22 @@ export default class TaskListMain extends Vue {
     set menu2(value: boolean) {
         this.menu2_ = value;
     }
+
+    get topRowLayoutAttributes(): {} {
+        // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+        switch (this.$vuetify.breakpoint.name) {
+            case 'xs': return {column: true};
+            case 'sm': return {column: true};
+            case 'md': return {row: true};
+            case 'lg': return {row: true};
+            case 'xl': return {row: true};
+            default  : return {row: true};
+        }
+    }
+
+    private addingTask_: boolean = false;
+
+    private menu2_: boolean = false;
 
     // 日付を変更したのを監視してタスクを読み込み直し
     @Watch('targetDate')
@@ -236,17 +248,13 @@ export default class TaskListMain extends Vue {
 
     }
 
-    public created(): void {
-        this.loadTasks();
-    }
-
     public logout(): void {
         firebase.auth().signOut();
     }
 
     public addTask(): void {
         this.addingTask_ = true;
-        this.$nextTick(function() {
+        this.$nextTick(() => {
             this.$vuetify.goTo('#newtask', {duration: 350, easing: 'easeInOutCubic'});
         });
     }
@@ -274,16 +282,34 @@ export default class TaskListMain extends Vue {
         });
     }
 
-    get topRowLayoutAttributes(): {} {
-        // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
-        switch (this.$vuetify.breakpoint.name) {
-            case 'xs': return {column: true};
-            case 'sm': return {column: true};
-            case 'md': return {row: true};
-            case 'lg': return {row: true};
-            case 'xl': return {row: true};
-            default  : return {row: true};
-        }
+    private created(): void {
+        this.loadTasks();
+    }
+
+    private mounted(): void {
+        document.onkeydown = (e: KeyboardEvent) => {
+            if (e.key === 'd') {
+                this.jumpToNextTask();
+            }
+            if (e.key === 't') {
+                this.jumpToTop();
+            }
+        };
+    }
+
+    private beforeDestroy(): void {
+        document.onkeydown = null;
+    }
+
+    private jumpToNextTask(): void {
+        this.$nextTick(() => {
+            this.$vuetify.goTo('#next-task', {duration: 350, easing: 'easeInOutCubic'});
+        });
+    }
+    private jumpToTop(): void {
+        this.$nextTick(() => {
+            this.$vuetify.goTo('#top', {duration: 350, easing: 'easeInOutCubic'});
+        });
     }
 }
 </script>
