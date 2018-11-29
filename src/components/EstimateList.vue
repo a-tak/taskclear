@@ -51,11 +51,6 @@ export default class EstimateList extends Vue {
         this.display();
     }
 
-    public get targetDate(): Date {
-        return this.$store.getters.targetDate;
-    }
-
-
     get estimates(): Estimate[] {
         return this.estimates_;
     }
@@ -71,8 +66,8 @@ export default class EstimateList extends Vue {
         // 見積時間の初期表示
         for (let n = 0; n <= 6; n++) {
             // 一日ずつ日付を進めてデータを取得
-            const targetDate: Date = new Date();
-            targetDate.setDate(this.targetDate.getDate() + n);
+            const targetDate: Date = new Date(this.$store.getters.targetDate);
+            targetDate.setDate(targetDate.getDate() + n);
 
             // Promiseを配列に溜めておく
             fsdsPromises[n] = FirebaseUtil.loadTasks(this.$store.getters.user.uid, targetDate);
@@ -105,8 +100,8 @@ export default class EstimateList extends Vue {
             // ドキュメントのリッスン
             for (let n = 0; n <= 6; n++) {
                 // 一日ずつ日付を進めてデータを取得
-                const targetDate: Date = new Date();
-                targetDate.setDate(this.targetDate.getDate() + n);
+                const targetDate: Date = new Date(this.$store.getters.targetDate);
+                targetDate.setDate(targetDate.getDate() + n);
 
                 // リッスン破棄のために戻り値を配列で保存
                 this.unsubscribes_.push(FirebaseUtil.getQuery(this.$store.getters.user.uid, targetDate)
