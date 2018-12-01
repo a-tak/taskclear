@@ -3,10 +3,11 @@
         <v-card>
             <v-layout row fill-height align-center justify-center>
                 <v-flex mt-4 ml-2>
-                    <v-text-field placeholder="新しいタスクを追加" single-line outline v-model="inputvalue_" autofocus clearable hint="記載したらEnterか追加ボタン" @keydown="keyDown($event)" @keyup.enter="keyUp()"></v-text-field>
+                    <v-text-field placeholder="新しいタスクを追加" single-line outline v-model="inputvalue_" autofocus clearable hint="記載したらEnterか追加ボタン" @keydown="keyDown($event)" @keyup.enter="keyUpEnter()" @keyup.esc="cancel"></v-text-field>
                 </v-flex>
                 <v-flex ma-2>
                     <v-btn @click="addTask">追加</v-btn>
+                    <v-btn @click="cancel">キャンセル</v-btn>
                 </v-flex>
             </v-layout>
         </v-card>
@@ -52,6 +53,11 @@ export default class NewTask extends Vue {
 
     }
 
+    public cancel(): void {
+        // イベント発生
+        this.addEnd();
+    }
+
     private keyDown(event: KeyboardEvent): void {
         this.keyDownCode_ = event.keyCode;
     }
@@ -59,7 +65,7 @@ export default class NewTask extends Vue {
     /**
      * 日本語入力確定のEnterキーで以外で先に進むようにする
      */
-    private keyUp(): void {
+    private keyUpEnter(): void {
         if (this.keyDownCode_ === 13) {
             this.addTask();
             this.keyDownCode_ = 0;

@@ -291,12 +291,13 @@ export default class TaskListMain extends Vue {
     }
 
     private mounted(): void {
-        document.onkeydown = (e: KeyboardEvent) => {
+        document.onkeyup = (e: KeyboardEvent) => {
             if (e.key === 'd') {
                 this.jumpToNextTask();
-            }
-            if (e.key === 't') {
+            } else if (e.key === 't') {
                 this.jumpToTop();
+            } else if (e.key === 'a') {
+                this.addTask();
             }
         };
     }
