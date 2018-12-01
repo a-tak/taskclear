@@ -106,6 +106,7 @@ import TaskController from '../lib/TaskController';
 import FirebaseUtil from '../util/FirebaseUtil';
 import Repeat from '../lib/Repeat';
 import RepeatCreator from '../lib/RepeatCreator';
+import Migration from '../util/Migration';
 
 @Component({
 components: {
@@ -283,7 +284,7 @@ export default class TaskListMain extends Vue {
     }
 
     private created(): void {
-        FirebaseUtil.migration(this.$store.getters.user.uid)
+        Migration.run(this.$store.getters.user.uid)
         .then((): void => {
             this.loadTasks();
         });
