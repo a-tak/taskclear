@@ -115,7 +115,7 @@ export default class Task {
         newTask.estimateTime = estimate;
         newTask.repeatId = '';
         // とりあえずの対応だが次の行にコピーしたものは表示
-        newTask.sortNo = this.sortNo_ + 1;
+        newTask.sortNo = this.sortNo_;
         // 削除したタスクの中断タスクが作られても意味がないはずなので、常にfalseにする
         newTask.isDeleted = false;
         // ソートにより自動設定されるので仮にfalseを指定
