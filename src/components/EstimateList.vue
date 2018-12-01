@@ -51,6 +51,13 @@ export default class EstimateList extends Vue {
         this.display();
     }
 
+    /**
+     * タスクリストの現在の日付が変わった事を検知するためのプロパティ
+     */
+    get targetDate(): Date {
+        return this.$store.getters.targetDate;
+    }
+
     get estimates(): Estimate[] {
         return this.estimates_;
     }
