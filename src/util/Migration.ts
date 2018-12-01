@@ -47,6 +47,8 @@ export default class Migration {
                         console.error('is Deleted Flag Write Error!', e);
                     }
                     batch = firestore().batch();
+                    // カウンターリセット
+                    count = 0;
                 }
                 batch.update(doc.ref, {isDeleted: false});
             }
