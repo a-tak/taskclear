@@ -5,21 +5,33 @@ import Repeat from '@/lib/Repeat';
 import ITask from '@/lib/ITask';
 
 export default class FirebaseUtil {
-    public static saveTasks(uid: string, date: Date, taskctrl: TaskController): void {
+    /**
+     * タスクを保存する
+     * 内部でタスクの保存が終わったらneedSaveフラグをクリアして返しているので注意
+     * @param uid ユーザーid
+     * @param taskctrl 保存対象のtaskが入ったtaskController
+     */
+    public static saveTasks(uid: string, taskctrl: TaskController): void {
         const promises: Array<Promise<void>> = [];
 
         const start: number = Date.now();
         for (const task of taskctrl.tasks) {
-            promises.push(this.setTask(uid, task));
+            if ( task.needSave === true ) {
+                promises.push(this.setTask(uid, task));
+            }
         }
 
         Promise.all(promises)
         .then((): void => {
+            // 保存が成功したら要セーブフラグをクリア
+            for (const task of taskctrl.tasks) {
+                task.needSave = false;
+            }
             // tslint:disable-next-line:no-console
-            console.log(`Save time ${Date.now() - start} ms `);
+            console.log(`セーブ件数 ${promises.length} 件 / Save time ${Date.now() - start} ms `);
         }).catch((error: Error): void => {
             // tslint:disable-next-line:no-console
-            console.error(`Save Error! ${Date.now() - start} ms `, error);
+            console.error(`Save Error! セーブ件数 ${promises.length} 件 / ${Date.now() - start} ms `, error);
         });
     }
 
@@ -342,6 +354,7 @@ export default class FirebaseUtil {
         task.repeatId = this.toString(data.repeatId);
         task.sortNo = this.toNumber(data.sortNo);
         task.isDeleted = this.toBoolean(data.isDeleted);
+        task.needSave = false;
         return task;
     }
 

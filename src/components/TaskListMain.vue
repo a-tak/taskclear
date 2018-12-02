@@ -162,11 +162,11 @@ export default class TaskListMain extends Vue {
 
     // 日付を変更したのを監視してタスクを読み込み直し
     @Watch('targetDate')
-    public onValueChange(newValue: string, oldValue: string): void {
+    private onValueChange(newValue: string, oldValue: string): void {
         this.loadTasks();
     }
 
-    public loadTasks(): void {
+    private loadTasks(): void {
 
         const self: TaskListMain = this;
 
@@ -186,7 +186,7 @@ export default class TaskListMain extends Vue {
         this.recreateRepeatTask();
     }
 
-    public async recreateRepeatTask(): Promise<void> {
+    private async recreateRepeatTask(): Promise<void> {
         // 非同期で明日以降1週間分のデータを作る
         const d = new Date(this.$store.getters.targetDate);
         d.setDate(d.getDate() + 1);
@@ -199,18 +199,18 @@ export default class TaskListMain extends Vue {
 
     }
 
-    public deleteTask(task: Task): void {
+    private deleteTask(task: Task): void {
         this.$store.commit('deleteTask', task);
         FirebaseUtil.logicalDeleteTask(this.$store.getters.user.uid, task);
     }
 
-    public startTask(task: Task): void {
+    private startTask(task: Task): void {
         // 開始しているタスクがあれば中断処理する
         for (const otherTask of this.tasks) {
             if (otherTask.isDoing === true) {
                 this.tasks.push(otherTask.createPauseTask());
                 otherTask.title = otherTask.title + '(中断)';
-                this.stopTask(otherTask);
+                this.changeStopTask(otherTask);
             }
         }
 
@@ -222,6 +222,7 @@ export default class TaskListMain extends Vue {
             newTask.endTime = null;
             this.$store.commit('addTask', newTask);
         } else {
+            task.needSave = true;
             task.isDoing = true;
             task.startTime = new Date();
         }
@@ -231,40 +232,35 @@ export default class TaskListMain extends Vue {
         this.save();
     }
 
-    public stopTask(task: Task): void {
-        task.isDoing = false;
-        task.endTime = new Date();
-        this.save();
+    private save(): void {
+        fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.taskCtrl);
     }
 
-    public save(): void {
-        fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.targetDate, this.$store.getters.taskCtrl);
-    }
-
-    public endEditTask(task: Task, index: number) {
+    private endEditTask(task: Task, index: number) {
         this.$set(this.tasks, index, task);
         this.$store.getters.taskCtrl.sort();
+        // needSaveフラグは子コンポーネントで設定しているのでここでは設定しない
         this.save();
         this.recreateRepeatTask();
 
     }
 
-    public logout(): void {
+    private logout(): void {
         firebase.auth().signOut();
     }
 
-    public addTask(): void {
+    private addTask(): void {
         this.addingTask_ = true;
         this.$nextTick(() => {
             this.$vuetify.goTo('#newtask', {duration: 350, easing: 'easeInOutCubic'});
         });
     }
 
-    public addedTask(): void {
+    private addedTask(): void {
         this.addingTask_ = false;
     }
 
-    public changeTaskDate(task: Task): void {
+    private changeTaskDate(task: Task): void {
 
         // 編集中の日付と同じならば何もしない
         if (DateUtil.getDateString(task.date) === this.targetDate) { return; }
@@ -273,14 +269,28 @@ export default class TaskListMain extends Vue {
         fb.loadTasks(this.$store.getters.user.uid, task.date)
         .then((tc) => {
             // タスクを追加してsave
+            task.needSave = true;
             tc.tasks.push(task);
-            fb.saveTasks(this.$store.getters.user.uid, task.date, tc);
+            fb.saveTasks(this.$store.getters.user.uid, tc);
 
             // 今開いている日付のdocから削除
             this.$store.commit('deleteTask', task);
-            this.save();
 
         });
+    }
+
+    private stopTask(task: Task): void {
+        this.changeStopTask(task);
+        this.save();
+    }
+
+    /**
+     * タスクの状態を停止状態に変える(保存はしない)
+     */
+    private changeStopTask(task: Task): void {
+        task.needSave = true;
+        task.isDoing = false;
+        task.endTime = new Date();
     }
 
     private created(): void {

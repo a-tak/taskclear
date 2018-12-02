@@ -44,7 +44,7 @@ export default class NewTask extends Vue {
         const task: Task = new Task(date, this.inputvalue_);
         this.$store.commit('addTask', task);
 
-        fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.targetDate, this.$store.getters.taskCtrl);
+        fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.taskCtrl);
 
         this.inputvalue_ = '';
 

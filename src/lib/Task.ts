@@ -18,8 +18,10 @@ export default class Task {
     private estimateTime_: number;
     private repeatId_: string;
     private sortNo_: number;
+    private oldSortno_: number;
     private isDeleted_: boolean;
     private isNext_: boolean;
+    private needSave_: boolean;
 
     constructor(date: Date, title: string) {
         this.id_ = uuid();
@@ -31,8 +33,11 @@ export default class Task {
         this.estimateTime_ = 0;
         this.repeatId_ = '';
         this.sortNo_ = 999;
+        this.oldSortno_ = 999;
         this.isDeleted_ = false;
         this.isNext_ = false;
+        // フラグセット忘れで保存されないのを多少防ぐためにtrueで
+        this.needSave_ = true;
     }
 
     get id(): string { return this.id_; }
@@ -90,6 +95,17 @@ export default class Task {
     }
 
     /**
+     * ソート前のソート順
+     * ソート順番が変更されたどうかの判断に使う
+     */
+    public get oldSortno(): number {
+        return this.oldSortno_;
+    }
+    public set oldSortno(value: number) {
+        this.oldSortno_ = value;
+    }
+
+    /**
      * 次実行するタスクフラグ
      * ショートカットキーで次のタスクまでスクロールするために使用
      * 保存しない
@@ -99,6 +115,17 @@ export default class Task {
     }
     public set isNext(value: boolean) {
         this.isNext_ = value;
+    }
+
+    /**
+     * 保存が必要かどうかの判断に使用するフラグ
+     * trueが付いているTaskのみ保存する
+     */
+    public get needSave(): boolean {
+        return this.needSave_;
+    }
+    public set needSave(value: boolean) {
+        this.needSave_ = value;
     }
 
     /**
@@ -114,12 +141,16 @@ export default class Task {
         if (estimate < 0) { estimate = 0; }
         newTask.estimateTime = estimate;
         newTask.repeatId = '';
-        // とりあえずの対応だが次の行にコピーしたものは表示
+        // 次の行にコピーしたものは表示
         newTask.sortNo = this.sortNo_;
+        // ソート直前に更新されるのでどうでもいいが一応コピー
+        newTask.oldSortno = this.oldSortno_;
         // 削除したタスクの中断タスクが作られても意味がないはずなので、常にfalseにする
         newTask.isDeleted = false;
         // ソートにより自動設定されるので仮にfalseを指定
         newTask.isNext = false;
+        // 新規に作成されるタスクなのでSave対象にする
+        newTask.needSave = true;
 
         return newTask;
     }
@@ -139,11 +170,20 @@ export default class Task {
         newTask.estimateTime = this.estimateTime_;
         newTask.repeatId = this.repeatId_;
         newTask.sortNo = this.sortNo_;
+        newTask.oldSortno = this.oldSortno_;
         newTask.isDeleted = this.isDeleted_;
         newTask.isNext = this.isNext_;
+        newTask.needSave = this.needSave_;
 
         return newTask;
 
+    }
+
+    /**
+     * 現在のソートNoを待避する
+     */
+    public backupSortNo(): void {
+        this.oldSortno_ = this.sortNo;
     }
 
 }

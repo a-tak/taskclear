@@ -89,6 +89,9 @@ export default class TaskController {
      * タスクリストをソートする
      */
     public sort(): void {
+
+        this.backupSortNo();
+
         // 終了タスクと開始中タスクと開始前タスクをわける
         const doneTasks: Task[] = [];
         const doingTask: Task[] = [];
@@ -136,6 +139,19 @@ export default class TaskController {
         // 番号を振り直す
         for (const [index, item] of this.tasks_.entries()) {
             item.sortNo = index + 1;
+        }
+
+        // セーブ対象を選定
+        for (const task of this.tasks_) {
+            if (task.sortNo !== task.oldSortno) {
+                task.needSave = true;
+            }
+        }
+    }
+
+    private backupSortNo(): void {
+        for (const task of this.tasks_) {
+            task.backupSortNo();
         }
     }
 }

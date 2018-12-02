@@ -95,6 +95,7 @@ export default class TaskEdit extends Vue {
         }
 
         this.editTask_.sortNo = this.sortNo_;
+        this.editTask_.needSave = true;
 
         // 編集終了イベント発生
         this.endEdit(this.editTask_);
