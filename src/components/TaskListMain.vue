@@ -78,7 +78,7 @@
                     color="teal lighten-3"
                 >
                     <v-card-text>
-                        &copy;2019 a-tak.com
+                        &copy;2019 a-tak.com  ver. {{ version_ }}
                     </v-card-text>
                 </v-card>
             </v-footer> 
@@ -107,6 +107,7 @@ import FirebaseUtil from '../util/FirebaseUtil';
 import Repeat from '../lib/Repeat';
 import RepeatCreator from '../lib/RepeatCreator';
 import Migration from '../util/Migration';
+import packageJson from '../../package.json';
 
 @Component({
 components: {
@@ -157,8 +158,8 @@ export default class TaskListMain extends Vue {
     }
 
     private addingTask_: boolean = false;
-
     private menu2_: boolean = false;
+    private version_: string = '';
 
     // 日付を変更したのを監視してタスクを読み込み直し
     @Watch('targetDate')
@@ -294,6 +295,7 @@ export default class TaskListMain extends Vue {
     }
 
     private created(): void {
+        this.version_ = packageJson.version;
         Migration.run(this.$store.getters.user.uid)
         .then((): void => {
             this.loadTasks();
