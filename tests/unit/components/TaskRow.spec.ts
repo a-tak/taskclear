@@ -11,7 +11,7 @@ describe('TaskRow.vue', () => {
     const task = new Task(new Date(), 'Unitテスト');
     const wrapper = shallowMount(TaskRow, {
       mocks: {
-        $vuetify: { breakpoint: {} }
+        $vuetify: { breakpoint: {} },
       },
       propsData: { task_: task,
         index_: 1 },
@@ -27,26 +27,13 @@ describe('TaskRow.vue', () => {
     task.startTime = new Date('2018-01-01 10:52:00');
     const wrapper = shallowMount(TaskRow, {
       mocks: {
-        $vuetify: { breakpoint: {} }
+        $vuetify: { breakpoint: {} },
       },
       propsData: { task_: task,
         index_: 1 },
     });
     expect(wrapper.text()).toMatch(task.title);
     expect(wrapper.text()).toMatch('開始:10:52');
-  });
-
-  it('IDが正しく要素に設定されているか?', () => {
-    const task = new Task(new Date(), 'Unitテスト2');
-    task.startTime = new Date('2018-01-01 10:52:00');
-    const wrapper = shallowMount(TaskRow, {
-      mocks: {
-        $vuetify: { breakpoint: {} }
-      },
-      propsData: { task_: task,
-        index_: 1 },
-    });
-    expect(wrapper.contains('#start-btn-' + task.id)).toBeTruthy();
   });
 });
 
@@ -56,11 +43,13 @@ describe('TaskRow.vue', () => {
     task.startTime = new Date('2018-01-01 10:53:00');
     const wrapper = shallowMount(TaskRow, {
       mocks: {
-        $vuetify: { breakpoint: {} }
+        $vuetify: { breakpoint: {} },
       },
       propsData: { task_: task,
         index_: 1 },
     });
     wrapper.find('#start-btn-' + task.id).trigger('click');
+    // ボタンを押してUIか変わった事を確認したい
+    // expect(wrapper.text()).toMatch('pause_circle_filled');
   });
 });

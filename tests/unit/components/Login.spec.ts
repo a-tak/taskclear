@@ -9,7 +9,7 @@ describe('Login.vue', () => {
   it('propsが渡るか?', () => {
     const wrapper = shallowMount(Login, {
       mocks: {
-        $vuetify: { breakpoint: {} }
+        $vuetify: { breakpoint: {} },
       },
       propsData: { isLoading_: false },
     });
