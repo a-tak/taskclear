@@ -9,7 +9,7 @@
 
         <v-btn @click="logout">ログアウト</v-btn>
         <v-spacer></v-spacer>
-        <v-btn icon>
+        <v-btn id="more" icon>
             <v-icon>more_vert</v-icon>
         </v-btn>
 
