@@ -6,25 +6,25 @@
                     <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
                         <v-flex ma-2>
                             <span>タスク名</span>
-                            <v-text-field placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @keydown="keyDown($event)" @keyup.enter="keyUp()"></v-text-field>
+                            <v-text-field v-bind:id="'task-edit-title-field-' + editTask_.id" placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @keydown="keyDown($event)" @keyup.enter="keyUp()" @keyup.esc="cancel()"></v-text-field>
                         </v-flex>
                     </v-layout>
                     <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
                         <v-flex ma-2>
                             <span>開始時間</span>
-                            <v-text-field type="number" placeholder="開始時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="startTime_" clearable @keyup.enter="save"></v-text-field>
+                            <v-text-field v-bind:id="'task-edit-start-field-' + editTask_.id" type="number" placeholder="開始時間" single-line outline hint="数字3または4桁。9時20分は「920」と入力" v-model="startTime_" clearable @keyup.enter="save" @keyup.esc="cancel()"></v-text-field>
                         </v-flex>
                         <v-flex ma-2>
                             <span>終了時間</span>
-                            <v-text-field type="number" placeholder="終了時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="endTime_" clearable  @keyup.enter="save"></v-text-field>
+                            <v-text-field v-bind:id="'task-edit-end-field-' + editTask_.id" type="number" placeholder="終了時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="endTime_" clearable  @keyup.enter="save" @keyup.esc="cancel()"></v-text-field>
                         </v-flex>
                         <v-flex ma-2>
                             <span>見積時間(分)</span>
-                            <v-text-field type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save"> </v-text-field>
+                            <v-text-field v-bind:id="'task-edit-estimate-field-' + editTask_.id" type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save" @keyup.esc="cancel()"> </v-text-field>
                         </v-flex>
                         <v-flex ma-2>
                             <span>ソート順</span>
-                            <v-text-field type="number" placeholder="ソート順" single-line outline mask="#####" hint="ソート順を番号で入力" v-model="sortNo_"  @keyup.enter="save"> </v-text-field>
+                            <v-text-field v-bind:id="'task-edit-sortno-field-' + editTask_.id" type="number" placeholder="ソート順" single-line outline mask="#####" hint="ソート順を番号で入力" v-model="sortNo_"  @keyup.enter="save" @keyup.esc="cancel()"> </v-text-field>
                         </v-flex>
                     </v-layout>
                     <v-layout row fill-height align-center justify-center>
@@ -32,7 +32,7 @@
                             <v-btn @click.stop="save">保存</v-btn>
                         </v-flex>
                         <v-flex>
-                            <v-btn @click.stop="cancel">キャンセル</v-btn>
+                            <v-btn v-bind:id="'task-edit-cancelbtn-' + editTask_.id" @click.stop="cancel">キャンセル</v-btn>
                         </v-flex>
                     </v-layout>
                 </v-card>
@@ -66,9 +66,9 @@ export default class TaskEdit extends Vue {
 
     @Emit('endEditEvent')
     // tslint:disable-next-line:no-empty
-    public endEdit(task: Task): void {}
+    private endEdit(task: Task): void {}
 
-    public save(): void {
+    private save(): void {
         if (this.startTime_.trim() !== '' ) {
             this.editTask_.startTime = DateUtil.getDateObject(this.task_.date, this.startTime_);
 
@@ -101,12 +101,12 @@ export default class TaskEdit extends Vue {
         this.endEdit(this.editTask_);
     }
 
-    public cancel(): void {
+    private cancel(): void {
         this.editTask_ = this.backupedTask_;
         this.endEdit(this.backupedTask_);
     }
 
-    public created(): void {
+    private created(): void {
         // 編集前の値を待避
         this.backupedTask_ = this.task_.copy();
         // 編集用オブジェクト作成
