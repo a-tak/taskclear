@@ -22,6 +22,7 @@ export default class Task {
     private isDeleted_: boolean;
     private isNext_: boolean;
     private needSave_: boolean;
+    private section_: string;
 
     constructor(date: Date, title: string) {
         this.id_ = uuid();
@@ -38,6 +39,7 @@ export default class Task {
         this.isNext_ = false;
         // フラグセット忘れで保存されないのを多少防ぐためにtrueで
         this.needSave_ = true;
+        this.section_ = '';
     }
 
     get id(): string { return this.id_; }
@@ -128,6 +130,13 @@ export default class Task {
         this.needSave_ = value;
     }
 
+    public get section(): string {
+        return this.section_;
+    }
+    public set section(value: string) {
+        this.section_ = value;
+    }
+
     /**
      * 中断タスクを作成
      * 元のタスクの見積から実績を引いた残り時間を入れて新たなタスクを戻す
@@ -174,6 +183,7 @@ export default class Task {
         newTask.isDeleted = this.isDeleted_;
         newTask.isNext = this.isNext_;
         newTask.needSave = this.needSave_;
+        newTask.section = this.section_;
 
         return newTask;
 
