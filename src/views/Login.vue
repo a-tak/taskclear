@@ -47,6 +47,19 @@ export default class Login extends Vue {
             .catch();
     }
 
+  private created(): void {
+    firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+    this.isLoading_ = false;
+    if (user) {
+      this.isLoading_ = true;
+      this.$store.commit('setUser', user);
+      this.$router.push('/tasklist');
+    } else {
+      this.$store.commit('setUser', null);
+    }
+  });
+  }
+
     get logoSize(): {} {
         // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
         switch (this.$vuetify.breakpoint.name) {

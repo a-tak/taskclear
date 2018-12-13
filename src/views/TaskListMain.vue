@@ -247,7 +247,9 @@ export default class TaskListMain extends Vue {
     }
 
     private logout(): void {
-        firebase.auth().signOut();
+        firebase.auth().signOut().then(() => {
+            this.$router.push('/login');
+        });
     }
 
     private addTask(): void {
