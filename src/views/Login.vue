@@ -5,14 +5,15 @@
                 <v-flex v-bind="logoSize" ma-5>
                     Taskclear
                 </v-flex>
-                <v-flex v-if="!isLoading_">
+                <v-flex v-if="!isLogin">
                     <v-btn @click="googleLogin">Googleアカウントでログイン</v-btn>
                 </v-flex>
-                <v-flex v-if="isLoading_">
+                <v-flex v-if="!isLoginChecked">
                     <v-progress-circular
                         indeterminate
                         color="primary"
                     ></v-progress-circular>
+                    ログイン処理中
                 </v-flex>
                 <v-flex ma-5>
                     <v-card>
@@ -37,27 +38,42 @@ import firebase from 'firebase';
 @Component
 export default class Login extends Vue {
 
-    @Prop() public isLoading_!: boolean;
+  private isLoginChecked_: boolean = false;
+  public get isLoginChecked(): boolean {
+    return this.isLoginChecked_;
+  }
+  public set isLoginChecked(value: boolean) {
+    this.isLoginChecked_ = value;
+  }
+
+  private isLogin_: boolean = false;
+  public get isLogin(): boolean {
+    return this.isLogin_;
+  }
+  public set isLogin(value: boolean) {
+    this.isLogin_ = value;
+  }
 
     private googleLogin(): void {
-        firebase
-            .auth()
-            .signInWithRedirect(new firebase.auth.GoogleAuthProvider())
-            .then()
-            .catch();
+      firebase
+          .auth()
+          .signInWithRedirect(new firebase.auth.GoogleAuthProvider())
+          .then()
+          .catch();
     }
 
-  private created(): void {
+  private mounted(): void {
     firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-    this.isLoading_ = false;
-    if (user) {
-      this.isLoading_ = true;
-      this.$store.commit('setUser', user);
-      this.$router.push('/tasklist');
-    } else {
-      this.$store.commit('setUser', null);
-    }
-  });
+      this.isLoginChecked_ = true;
+      if (user) {
+        this.isLogin = true;
+        this.$store.commit('setUser', user);
+        this.$router.push('/tasklist');
+      } else {
+        this.isLogin = false;
+        this.$store.commit('setUser', null);
+      }
+    });
   }
 
     get logoSize(): {} {
