@@ -1,5 +1,5 @@
 import Repeat from './Repeat';
-import FirebaseUtil from '@/util/FirebaseUtil';
+import FirestoreUtil from '@/util/FirestoreUtil';
 import TaskController from './TaskController';
 import Task from './Task';
 
@@ -60,7 +60,7 @@ export default class RepeatCreator {
     public async createRepeatSub(repeats: Repeat[], targetDate: Date): Promise<void> {
         // 全処理完了確認用
         const promises: Array<Promise<void>> = [];
-        const tc: TaskController = await FirebaseUtil.loadTasksIncluedDeleted(this.uid_, targetDate);
+        const tc: TaskController = await FirestoreUtil.loadTasksIncluedDeleted(this.uid_, targetDate);
 
         for (const repeat of repeats) {
             if (this.isMakeRepeat(repeat, targetDate)) {
@@ -90,7 +90,7 @@ export default class RepeatCreator {
         task.startTime = null;
         task.endTime = null;
         task.estimateTime = repeat.estimateTime;
-        await FirebaseUtil.setTask(this.uid_, task);
+        await FirestoreUtil.setTask(this.uid_, task);
         return;
     }
 
@@ -121,6 +121,6 @@ export default class RepeatCreator {
 
     private async readRepeat(targetDate: Date): Promise<Repeat[]> {
         // 取得の際に日付を指定してtargetDate以降がfromになっているリピート設定だけ取得し無駄に過去のリピートをとらない
-        return FirebaseUtil.loadRepeatByDateFrom(this.uid_, targetDate);
+        return FirestoreUtil.loadRepeatByDateFrom(this.uid_, targetDate);
     }
 }

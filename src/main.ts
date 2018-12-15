@@ -33,9 +33,8 @@ new Vue({
 }).$mount('#app');
 
 router.beforeEach((to, from, next) => {
-  console.log(`ルーティング開始!`);
   // isPublic でない場合(=認証が必要な場合)、かつ、ログインしていない場合
-  let notPublic: boolean = to.matched.some((record: RouteRecord) => !record.meta.isPublic);
+  const notPublic: boolean = to.matched.some((record: RouteRecord) => !record.meta.isPublic);
   if (notPublic) {
     firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
       if (user) {

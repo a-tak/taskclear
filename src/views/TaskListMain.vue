@@ -99,11 +99,10 @@ import NewTask from '@/components/NewTask.vue';
 import TaskRow from '@/components/TaskRow.vue';
 import EstimateList from '@/components/EstimateList.vue';
 import DateUtil from '../util/DateUtil';
-import fb from '../util/FirebaseUtil';
+import FirestoreUtil from '../util/FirestoreUtil';
 import uuid from 'uuid';
 import Task from '../lib/Task';
 import TaskController from '../lib/TaskController';
-import FirebaseUtil from '../util/FirebaseUtil';
 import Repeat from '../lib/Repeat';
 import RepeatCreator from '../lib/RepeatCreator';
 import Migration from '../util/Migration';
@@ -176,7 +175,7 @@ export default class TaskListMain extends Vue {
         rc.creaetRepeat(1)
         .then((): void => {
             // 今日のデータを読み込み(同期的に)
-            fb.loadTasks(self.$store.getters.user.uid, self.$store.getters.targetDate)
+            FirestoreUtil.loadTasks(self.$store.getters.user.uid, self.$store.getters.targetDate)
             .then((tc: TaskController): void => {
                 tc.sort();
                 self.$store.commit('setTaskCtrl', tc);
@@ -202,7 +201,7 @@ export default class TaskListMain extends Vue {
 
     private deleteTask(task: Task): void {
         this.$store.commit('deleteTask', task);
-        FirebaseUtil.logicalDeleteTask(this.$store.getters.user.uid, task);
+        FirestoreUtil.logicalDeleteTask(this.$store.getters.user.uid, task);
     }
 
     private startTask(task: Task): void {
@@ -234,7 +233,7 @@ export default class TaskListMain extends Vue {
     }
 
     private save(): void {
-        fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.taskCtrl);
+        FirestoreUtil.saveTasks(this.$store.getters.user.uid, this.$store.getters.taskCtrl);
     }
 
     private endEditTask(task: Task, index: number) {
@@ -269,12 +268,12 @@ export default class TaskListMain extends Vue {
         if (DateUtil.getDateString(task.date) === this.targetDate) { return; }
 
         // 変更先の日付のdocを取ってくる
-        fb.loadTasks(this.$store.getters.user.uid, task.date)
+        FirestoreUtil.loadTasks(this.$store.getters.user.uid, task.date)
         .then((tc) => {
             // タスクを追加してsave
             task.needSave = true;
             tc.tasks.push(task);
-            fb.saveTasks(this.$store.getters.user.uid, tc);
+            FirestoreUtil.saveTasks(this.$store.getters.user.uid, tc);
 
             // 今開いている日付のdocから削除
             this.$store.commit('deleteTask', task);
@@ -297,10 +296,13 @@ export default class TaskListMain extends Vue {
     }
 
     private created(): void {
-        this.version_ = packageJson.version;
-        Migration.run(this.$store.getters.user.uid)
-        .then((): void => {
-            this.loadTasks();
+        firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+            this.$store.commit('setUser', user);
+            this.version_ = packageJson.version;
+            Migration.run(this.$store.getters.user.uid)
+            .then((): void => {
+                this.loadTasks();
+            });
         });
     }
 

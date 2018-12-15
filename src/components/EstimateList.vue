@@ -29,8 +29,9 @@
 <script lang="ts">
 import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
 import TaskController from '../lib/TaskController';
-import FirebaseUtil from '../util/FirebaseUtil';
+import FirestoreUtil from '../util/FirestoreUtil';
 import { firestore } from 'firebase';
+import firebase from 'firebase';
 import Estimate from '../lib/Estimate';
 
 @Component
@@ -63,7 +64,10 @@ export default class EstimateList extends Vue {
     }
 
     public created(): void {
-        this.display();
+        firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+            this.$store.commit('setUser', user);
+            this.display();
+        });
     }
 
     public display(): void {
@@ -77,7 +81,7 @@ export default class EstimateList extends Vue {
             targetDate.setDate(targetDate.getDate() + n);
 
             // Promiseを配列に溜めておく
-            fsdsPromises[n] = FirebaseUtil.loadTasks(this.$store.getters.user.uid, targetDate);
+            fsdsPromises[n] = FirestoreUtil.loadTasks(this.$store.getters.user.uid, targetDate);
 
             // 非同期処理の登録
             fsdsPromises[n].then((tc: TaskController) => {
@@ -111,13 +115,13 @@ export default class EstimateList extends Vue {
                 targetDate.setDate(targetDate.getDate() + n);
 
                 // リッスン破棄のために戻り値を配列で保存
-                this.unsubscribes_.push(FirebaseUtil.getQuery(this.$store.getters.user.uid, targetDate)
+                this.unsubscribes_.push(FirestoreUtil.getQuery(this.$store.getters.user.uid, targetDate)
                     .onSnapshot((query) => {
                         query.forEach((doc) => {
                             // 更新があったら見積時間を再計算
                             const firedoc: firebase.firestore.DocumentData | undefined  = doc.data();
                             if (firedoc !== undefined) {
-                                FirebaseUtil.loadTasks(this.$store.getters.user.uid, targetDate)
+                                FirestoreUtil.loadTasks(this.$store.getters.user.uid, targetDate)
                                 .then((taskCtrl: TaskController) => {
                                     const estimate = this.createEstimate(taskCtrl, targetDate);
                                     for (const [index, item] of this.estimates_.entries()) {

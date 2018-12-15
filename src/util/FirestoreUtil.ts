@@ -4,7 +4,7 @@ import Task from '@/lib/Task';
 import Repeat from '@/lib/Repeat';
 import ITask from '@/lib/ITask';
 
-export default class FirebaseUtil {
+export default class FirestoreUtil {
     /**
      * タスクを保存する
      * 内部でタスクの保存が終わったらneedSaveフラグをクリアして返しているので注意

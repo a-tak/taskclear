@@ -18,7 +18,7 @@
 import { Component, Vue, Emit } from 'vue-property-decorator';
 import firebase, { firestore } from 'firebase';
 import uuid from 'uuid';
-import fb from '../util/FirebaseUtil';
+import FirestoreUtil from '../util/FirestoreUtil';
 import ITask from '../lib/ITask';
 import Task from '../lib/Task';
 
@@ -44,7 +44,7 @@ export default class NewTask extends Vue {
         const task: Task = new Task(date, this.inputvalue_);
         this.$store.commit('addTask', task);
 
-        fb.saveTasks(this.$store.getters.user.uid, this.$store.getters.taskCtrl);
+        FirestoreUtil.saveTasks(this.$store.getters.user.uid, this.$store.getters.taskCtrl);
 
         this.inputvalue_ = '';
 
