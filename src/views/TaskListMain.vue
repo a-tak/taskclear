@@ -54,21 +54,7 @@
       <NewTask v-if="addingTask_" v-on:addedEvent="addedTask"></NewTask>
     </div>
     <div>
-      <v-footer
-        color="teal lighten-3"
-        height="auto"
-        class="mt-2"
-      >
-        <v-card
-          flat
-          tile
-          color="teal lighten-3"
-        >
-          <v-card-text>
-            &copy;2019 a-tak.com  ver. {{ version_ }}
-          </v-card-text>
-        </v-card>
-      </v-footer> 
+      <Footer></Footer>
     </div>
   </div>
 </template>
@@ -86,6 +72,7 @@ import NewTask from '@/components/NewTask.vue';
 import TaskRow from '@/components/TaskRow.vue';
 import EstimateList from '@/components/EstimateList.vue';
 import Header from '@/components/Header.vue';
+import Footer from '@/components/Footer.vue';
 import DateUtil from '../util/DateUtil';
 import FirestoreUtil from '../util/FirestoreUtil';
 import uuid from 'uuid';
@@ -102,6 +89,7 @@ components: {
     TaskRow,
     EstimateList,
     Header,
+    Footer,
 },
 })
 
