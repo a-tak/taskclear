@@ -15,7 +15,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import firebase from 'firebase';
 
 @Component
-export default class TaskListMain extends Vue {
+export default class Header extends Vue {
   private logout(): void {
     firebase.auth().signOut().then(() => {
       this.$router.push('/login');
