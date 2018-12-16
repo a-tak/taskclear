@@ -1,6 +1,25 @@
 <template>
   <div id="main">
     <Header></Header>
+    <span>セクション設定</span>
+    <v-btn fab dark color="blue" fixed floating bottom right @click="addSection()">
+      <v-icon dark>add</v-icon>
+    </v-btn>
+      <v-slide-y-transition
+        class="py-0"
+        group
+        tag="v-list"
+      >
+        <SectionRow
+          v-for="(task, index) in tasks"
+          :key="task.id"
+          :task_="task"
+          :index_="index"
+          v-on:endEditEvent="endEditTask"
+          v-on:clickDeleteButtomEvent="deleteTask"
+        >
+        </SectionRow>
+      </v-slide-y-transition>    
     <Footer></Footer>
   </div>
 </template>
@@ -10,11 +29,13 @@ import { Component, Vue } from 'vue-property-decorator';
 import firebase, { firestore } from 'firebase';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
+import SectionRow from '@/components/SectionRow.vue';
 
 @Component({
 components: {
     Header,
     Footer,
+    SectionRow,
 },
 })
 
