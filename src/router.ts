@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import TaskListMain from '@/views/TaskListMain.vue';
 import Login from '@/views/Login.vue';
-
+import SectionList from '@/views/SectionList.vue';
 
 Vue.use(Router);
 
@@ -13,6 +13,7 @@ export default new Router({
     { path: '*', redirect: 'login' },
     { path: '/login', name: 'login', component: Login, meta: { isPublic: true} },
     { path: '/tasklist', name: 'tasklist', component: TaskListMain },
+    { path: '/sectionlist', name: 'sectionlist', component: SectionList },
   ],
 });
 
