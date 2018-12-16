@@ -1,89 +1,76 @@
 <template>
-    <div id="top">
-        <v-toolbar
-        color="teal lighten-3"
+  <div id="main">
+    <Header></Header>
+    <div>
+    <v-layout v-bind="topRowLayoutAttributes" fill-height>
+      <v-flex>
+          <v-card>
+              <v-menu
+                  :close-on-content-click="false"
+                  v-model="menu2"
+                  :nudge-right="40"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                  min-width="290px"
+              >
+              <v-text-field
+                  slot="activator"
+                  v-model="targetDate"
+                  label="日付を選択してください"
+                  prepend-icon="event"
+                  readonly
+              ></v-text-field>
+              <v-date-picker v-model="targetDate" @input="menu2 = false" locale="jp" :day-format="date => new Date(date).getDate()"></v-date-picker>
+              </v-menu>
+          </v-card>
+      </v-flex>
+      <v-flex>
+        <EstimateList></EstimateList>
+      </v-flex>
+    </v-layout>
+    <v-btn fab dark color="red" fixed floating bottom right @click="addTask()">
+      <v-icon dark>add</v-icon>
+    </v-btn>
+      <v-slide-y-transition
+        class="py-0"
+        group
+        tag="v-list"
+      >
+        <TaskRow
+          v-for="(task, index) in tasks"
+          :key="task.id"
+          :task_="task"
+          :index_="index"
+          v-on:clickStartButtomEvent="startTask"
+          v-on:clickStopButtomEvent="stopTask"
+          v-on:endEditEvent="endEditTask"
+          v-on:clickDeleteButtomEvent="deleteTask"
+          v-on:changeTaskDateChangeEvent="changeTaskDate"
         >
-        <v-toolbar-side-icon></v-toolbar-side-icon>
-
-        <v-toolbar-title>TaskClear</v-toolbar-title>
-
-        <v-btn @click="logout">ログアウト</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn id="more" icon>
-            <v-icon>more_vert</v-icon>
-        </v-btn>
-
-        </v-toolbar>
-        <div>
-        <v-layout v-bind="topRowLayoutAttributes" fill-height>
-            <v-flex>
-                <v-card>
-                    <v-menu
-                        :close-on-content-click="false"
-                        v-model="menu2"
-                        :nudge-right="40"
-                        lazy
-                        transition="scale-transition"
-                        offset-y
-                        full-width
-                        min-width="290px"
-                    >
-                    <v-text-field
-                        slot="activator"
-                        v-model="targetDate"
-                        label="日付を選択してください"
-                        prepend-icon="event"
-                        readonly
-                    ></v-text-field>
-                    <v-date-picker v-model="targetDate" @input="menu2 = false" locale="jp" :day-format="date => new Date(date).getDate()"></v-date-picker>
-                    </v-menu>
-                </v-card>
-            </v-flex>
-            <v-flex>
-                <EstimateList></EstimateList>
-            </v-flex>
-        </v-layout>
-        <v-btn fab dark color="red" fixed floating bottom right @click="addTask()">
-            <v-icon dark>add</v-icon>
-        </v-btn>
-            <v-slide-y-transition
-                    class="py-0"
-                    group
-                    tag="v-list"
-                >
-                <TaskRow
-                    v-for="(task, index) in tasks"
-                    :key="task.id"
-                    :task_="task"
-                    :index_="index"
-                    v-on:clickStartButtomEvent="startTask"
-                    v-on:clickStopButtomEvent="stopTask"
-                    v-on:endEditEvent="endEditTask"
-                    v-on:clickDeleteButtomEvent="deleteTask"
-                    v-on:changeTaskDateChangeEvent="changeTaskDate"
-                >
-                </TaskRow>
-            </v-slide-y-transition>
-            <NewTask v-if="addingTask_" v-on:addedEvent="addedTask"></NewTask>
-        </div>
-        <div>
-            <v-footer
-                color="teal lighten-3"
-                height="auto"
-                class="mt-2"
-            >
-                <v-card
-                    flat
-                    tile
-                    color="teal lighten-3"
-                >
-                    <v-card-text>
-                        &copy;2019 a-tak.com  ver. {{ version_ }}
-                    </v-card-text>
-                </v-card>
-            </v-footer> 
-        </div>
+        </TaskRow>
+      </v-slide-y-transition>
+      <NewTask v-if="addingTask_" v-on:addedEvent="addedTask"></NewTask>
     </div>
+    <div>
+      <v-footer
+        color="teal lighten-3"
+        height="auto"
+        class="mt-2"
+      >
+        <v-card
+          flat
+          tile
+          color="teal lighten-3"
+        >
+          <v-card-text>
+            &copy;2019 a-tak.com  ver. {{ version_ }}
+          </v-card-text>
+        </v-card>
+      </v-footer> 
+    </div>
+  </div>
 </template>
 
 <style>
@@ -98,6 +85,7 @@ import firebase, { firestore } from 'firebase';
 import NewTask from '@/components/NewTask.vue';
 import TaskRow from '@/components/TaskRow.vue';
 import EstimateList from '@/components/EstimateList.vue';
+import Header from '@/components/Header.vue';
 import DateUtil from '../util/DateUtil';
 import FirestoreUtil from '../util/FirestoreUtil';
 import uuid from 'uuid';
@@ -113,6 +101,7 @@ components: {
     NewTask,
     TaskRow,
     EstimateList,
+    Header,
 },
 })
 
@@ -245,12 +234,6 @@ export default class TaskListMain extends Vue {
 
     }
 
-    private logout(): void {
-        firebase.auth().signOut().then(() => {
-            this.$router.push('/login');
-        });
-    }
-
     private addTask(): void {
         this.addingTask_ = true;
         this.$nextTick(() => {
@@ -329,7 +312,7 @@ export default class TaskListMain extends Vue {
     }
     private jumpToTop(): void {
         this.$nextTick(() => {
-            this.$vuetify.goTo('#top', {duration: 350, easing: 'easeInOutCubic'});
+            this.$vuetify.goTo('#header', {duration: 350, easing: 'easeInOutCubic'});
         });
     }
 }
