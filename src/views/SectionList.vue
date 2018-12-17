@@ -11,12 +11,9 @@
         tag="v-list"
       >
         <SectionRow
-          v-for="(task, index) in tasks"
-          :key="task.id"
-          :task_="task"
-          :index_="index"
-          v-on:endEditEvent="endEditTask"
-          v-on:clickDeleteButtomEvent="deleteTask"
+          v-for="(section) in sections_"
+          :key="section.id"
+          :section_="section"
         >
         </SectionRow>
       </v-slide-y-transition>    
@@ -30,6 +27,7 @@ import firebase, { firestore } from 'firebase';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
 import SectionRow from '@/components/SectionRow.vue';
+import Section from '@/lib/Section';
 
 @Component({
 components: {
@@ -40,5 +38,11 @@ components: {
 })
 
 export default class SectionList extends Vue {
+  private sections_: Section[] = [];
+
+  private created(): void {
+    this.sections_.push(new Section('テスト1', new Date('9:12')));
+    this.sections_.push(new Section('テスト2', new Date('12:14')));
+  }
 }
 </script>
