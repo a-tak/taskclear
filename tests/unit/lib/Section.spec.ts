@@ -2,7 +2,10 @@ import Section from '@/lib/Section';
 
 describe('Section.ts', () => {
   const sectionName = '朝のセクション';
-  const section = new Section(sectionName , new Date('2018-04-12 9:00:00'));
+  const section = new Section();
+  section.title = sectionName;
+  section.startTime = new Date('2018-04-12 9:00:00');
+  
   it('タイトル取れるか?', () => {
     expect(section.title).toBe(sectionName);
   });

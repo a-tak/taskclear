@@ -10,6 +10,11 @@
             <v-flex ma-2>
               <v-text-field v-bind:id="'section-start-field-' + section_.id" type="number" placeholder="開始時間" single-line outline hint="数字3または4桁。9時20分は「920」と入力" v-model="section_.startTime" clearable></v-text-field>
             </v-flex>
+            <v-flex xs4 sm2 md1 class="text-xs-right">
+              <v-btn icon ripple @click.stop="deleteSection(section_)">
+                  <v-icon color="grey darken-1">delete</v-icon>
+                </v-btn>
+            </v-flex>
           </v-layout>
         </v-card>
       </v-flex>
@@ -26,6 +31,11 @@ export default class SectionRow extends Vue {
 
   // !はundefinedやnullにならないことを示すもの
   @Prop() public section_!: Section;
+
+  @Emit('clickDeleteButtomEvent')
+  // tslint:disable-next-line:no-empty
+  public deleteSection(section: Section): void {}
+
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる
   get layoutAttributes(): {} {
