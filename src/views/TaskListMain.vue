@@ -81,7 +81,6 @@ import TaskController from '../lib/TaskController';
 import Repeat from '../lib/Repeat';
 import RepeatCreator from '../lib/RepeatCreator';
 import Migration from '../util/Migration';
-import packageJson from '../../package.json';
 
 @Component({
 components: {
@@ -135,7 +134,6 @@ export default class TaskListMain extends Vue {
 
   private addingTask_: boolean = false;
   private menu2_: boolean = false;
-  private version_: string = '';
 
   // 日付を変更したのを監視してタスクを読み込み直し
   @Watch('targetDate')
@@ -268,7 +266,6 @@ export default class TaskListMain extends Vue {
   private created(): void {
     firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
       this.$store.commit('setUser', user);
-      this.version_ = packageJson.version;
       Migration.run(this.$store.getters.user.uid)
       .then((): void => {
         this.loadTasks();
