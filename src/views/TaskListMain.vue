@@ -73,14 +73,14 @@ import TaskRow from '@/components/TaskRow.vue';
 import EstimateList from '@/components/EstimateList.vue';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import DateUtil from '../util/DateUtil';
-import FirestoreUtil from '../util/FirestoreUtil';
+import DateUtil from '@/util/DateUtil';
+import FirestoreUtil from '@/util/FirestoreUtil';
 import uuid from 'uuid';
-import Task from '../lib/Task';
-import TaskController from '../lib/TaskController';
-import Repeat from '../lib/Repeat';
-import RepeatCreator from '../lib/RepeatCreator';
-import Migration from '../util/Migration';
+import Task from '@/lib/Task';
+import TaskController from '@/lib/TaskController';
+import Repeat from '@/lib/Repeat';
+import RepeatCreator from '@/lib/RepeatCreator';
+import Migration from '@/util/Migration';
 
 @Component({
 components: {
@@ -95,7 +95,7 @@ components: {
 export default class TaskListMain extends Vue {
 
   get tasks(): Task[] {
-    return this.$store.getters.taskCtrl.tasks;
+    return this.$store.getters['taskList/taskCtrl'].tasks;
   }
 
   set tasks(value: Task[]) {
@@ -105,7 +105,7 @@ export default class TaskListMain extends Vue {
   }
 
   get targetDate(): string {
-    return DateUtil.getDateString(this.$store.getters.targetDate);
+    return DateUtil.getDateString(this.$store.getters['taskList/targetDate']);
   }
 
   set targetDate(value: string) {
@@ -146,11 +146,12 @@ export default class TaskListMain extends Vue {
     const self: TaskListMain = this;
 
     // 当日分のリピートタスクを作る
-    const rc: RepeatCreator = new RepeatCreator(this.$store.getters.user.uid, this.$store.getters.targetDate);
+    const rc: RepeatCreator =
+      new RepeatCreator(this.$store.getters['taskList/user'].uid, this.$store.getters['taskList/targetDate']);
     rc.creaetRepeat(1)
     .then((): void => {
         // 今日のデータを読み込み(同期的に)
-        FirestoreUtil.loadTasks(self.$store.getters.user.uid, self.$store.getters.targetDate)
+        FirestoreUtil.loadTasks(self.$store.getters['taskList/user'].uid, self.$store.getters['taskList/targetDate'])
         .then((tc: TaskController): void => {
             tc.sort();
             self.$store.commit('setTaskCtrl', tc);
@@ -165,7 +166,7 @@ export default class TaskListMain extends Vue {
     // 非同期で明日以降1週間分のデータを作る
     const d = new Date(this.$store.getters.targetDate);
     d.setDate(d.getDate() + 1);
-    const rc2: RepeatCreator = new RepeatCreator(this.$store.getters.user.uid, d);
+    const rc2: RepeatCreator = new RepeatCreator(this.$store.getters['taskList/user'].uid, d);
     rc2.creaetRepeat(6)
     .catch((e): void => {
         // tslint:disable-next-line:no-console
@@ -176,7 +177,7 @@ export default class TaskListMain extends Vue {
 
   private deleteTask(task: Task): void {
     this.$store.commit('deleteTask', task);
-    FirestoreUtil.logicalDeleteTask(this.$store.getters.user.uid, task);
+    FirestoreUtil.logicalDeleteTask(this.$store.getters['taskList/user'].uid, task);
   }
 
   private startTask(task: Task): void {
@@ -208,7 +209,7 @@ export default class TaskListMain extends Vue {
   }
 
   private save(): void {
-    FirestoreUtil.saveTasks(this.$store.getters.user.uid, this.$store.getters.taskCtrl);
+    FirestoreUtil.saveTasks(this.$store.getters['taskList/user'].uid, this.$store.getters['taskList/taskCtrl']);
   }
 
   private endEditTask(task: Task, index: number) {
@@ -236,15 +237,15 @@ export default class TaskListMain extends Vue {
     if (DateUtil.getDateString(task.date) === this.targetDate) { return; }
 
     // 変更先の日付のdocを取ってくる
-    FirestoreUtil.loadTasks(this.$store.getters.user.uid, task.date)
+    FirestoreUtil.loadTasks(this.$store.getters['taskList/user'].uid, task.date)
     .then((tc) => {
       // タスクを追加してsave
       task.needSave = true;
       tc.tasks.push(task);
-      FirestoreUtil.saveTasks(this.$store.getters.user.uid, tc);
+      FirestoreUtil.saveTasks(this.$store.getters['taskList/user'].uid, tc);
 
       // 今開いている日付のdocから削除
-      this.$store.commit('deleteTask', task);
+      this.$store.commit('taskList/deleteTask', task);
 
     });
   }
@@ -265,8 +266,8 @@ export default class TaskListMain extends Vue {
 
   private created(): void {
     firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-      this.$store.commit('setUser', user);
-      Migration.run(this.$store.getters.user.uid)
+      this.$store.commit('taskList/setUser', user);
+      Migration.run(this.$store.getters['taskList/user'].uid)
       .then((): void => {
         this.loadTasks();
       });

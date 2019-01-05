@@ -67,11 +67,11 @@ export default class Login extends Vue {
       this.isLoginChecked_ = true;
       if (user) {
         this.isLogin = true;
-        this.$store.commit('setUser', user);
+        this.$store.commit('taskList/setUser', user);
         this.$router.push('/tasklist');
       } else {
         this.isLogin = false;
-        this.$store.commit('setUser', null);
+        this.$store.commit('taskList/setUser', null);
       }
     });
   }

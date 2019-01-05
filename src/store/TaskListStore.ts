@@ -1,11 +1,15 @@
-import Vue from 'vue';
 import Vuex from 'vuex';
-import Task from './lib/Task';
-import TaskController from './lib/TaskController';
+import Task from '@/lib/Task';
+import TaskController from '@/lib/TaskController';
 
-Vue.use(Vuex);
+export interface State {
+  taskCtrl: TaskController;
+  user: firebase.User;
+  targetDate: Date;
+}
 
-export default new Vuex.Store({
+export default {
+  namespaced: true,
   state: {
     taskCtrl: new TaskController(),
     // 認証ユーザー情報
@@ -14,36 +18,36 @@ export default new Vuex.Store({
     targetDate: new Date(),
   },
   getters: {
-    taskCtrl(state) { return state.taskCtrl; },
-    user(state) { return state.user; },
-    targetDate(state) { return state.targetDate; },
+    taskCtrl(state: State) { return state.taskCtrl; },
+    user(state: State) { return state.user; },
+    targetDate(state: State) { return state.targetDate; },
   },
   mutations: {
-    addTask(state, task: Task) {
+    addTask(state: State, task: Task) {
       state.taskCtrl.tasks.push(task);
     },
-    deleteTask(state, task: Task) {
+    deleteTask(state: State, task: Task) {
       const index = state.taskCtrl.tasks.indexOf(task);
       // todo deleteTaskByIndexと同じロジック。他のmutation呼び出せないか?
       state.taskCtrl.tasks.splice(index, 1);
     },
-    setTaskCtrl(state, taskCtrl: TaskController) {
+    setTaskCtrl(state: State, taskCtrl: TaskController) {
       state.taskCtrl = taskCtrl;
     },
-    setUser(state, user) {
+    setUser(state: State, user: firebase.User) {
       state.user = user;
     },
-    setTargetDate(state, date: Date) {
+    setTargetDate(state: State, date: Date) {
       state.targetDate = date;
     },
-    sortTask(state) {
+    sortTask(state: State) {
       state.taskCtrl.sort();
     },
   },
   actions: {
 
   },
-});
+};
 
 
 

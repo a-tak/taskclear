@@ -28,11 +28,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
-import TaskController from '../lib/TaskController';
-import FirestoreUtil from '../util/FirestoreUtil';
+import TaskController from '@/lib/TaskController';
+import FirestoreUtil from '@/util/FirestoreUtil';
 import { firestore } from 'firebase';
 import firebase from 'firebase';
-import Estimate from '../lib/Estimate';
+import Estimate from '@/lib/Estimate';
 
 @Component
 export default class EstimateList extends Vue {
@@ -56,7 +56,7 @@ export default class EstimateList extends Vue {
      * タスクリストの現在の日付が変わった事を検知するためのプロパティ
      */
     get targetDate(): Date {
-        return this.$store.getters.targetDate;
+        return this.$store.getters['taskList/targetDate'];
     }
 
     get estimates(): Estimate[] {
@@ -65,7 +65,7 @@ export default class EstimateList extends Vue {
 
     public created(): void {
         firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-            this.$store.commit('setUser', user);
+            this.$store.commit('taskList/setUser', user);
             this.display();
         });
     }
@@ -77,11 +77,11 @@ export default class EstimateList extends Vue {
         // 見積時間の初期表示
         for (let n = 0; n <= 6; n++) {
             // 一日ずつ日付を進めてデータを取得
-            const targetDate: Date = new Date(this.$store.getters.targetDate);
+            const targetDate: Date = new Date(this.$store.getters['taskList/targetDate']);
             targetDate.setDate(targetDate.getDate() + n);
 
             // Promiseを配列に溜めておく
-            fsdsPromises[n] = FirestoreUtil.loadTasks(this.$store.getters.user.uid, targetDate);
+            fsdsPromises[n] = FirestoreUtil.loadTasks(this.$store.getters['taskList/user'].uid, targetDate);
 
             // 非同期処理の登録
             fsdsPromises[n].then((tc: TaskController) => {
@@ -111,17 +111,17 @@ export default class EstimateList extends Vue {
             // ドキュメントのリッスン
             for (let n = 0; n <= 6; n++) {
                 // 一日ずつ日付を進めてデータを取得
-                const targetDate: Date = new Date(this.$store.getters.targetDate);
+                const targetDate: Date = new Date(this.$store.getters['taskList/targetDate']);
                 targetDate.setDate(targetDate.getDate() + n);
 
                 // リッスン破棄のために戻り値を配列で保存
-                this.unsubscribes_.push(FirestoreUtil.getQuery(this.$store.getters.user.uid, targetDate)
+                this.unsubscribes_.push(FirestoreUtil.getQuery(this.$store.getters['taskList/user'].uid, targetDate)
                     .onSnapshot((query) => {
                         query.forEach((doc) => {
                             // 更新があったら見積時間を再計算
                             const firedoc: firebase.firestore.DocumentData | undefined  = doc.data();
                             if (firedoc !== undefined) {
-                                FirestoreUtil.loadTasks(this.$store.getters.user.uid, targetDate)
+                                FirestoreUtil.loadTasks(this.$store.getters['taskList/user'].uid, targetDate)
                                 .then((taskCtrl: TaskController) => {
                                     const estimate = this.createEstimate(taskCtrl, targetDate);
                                     for (const [index, item] of this.estimates_.entries()) {
