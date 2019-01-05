@@ -23,6 +23,8 @@ export default class Task {
     private isNext_: boolean;
     private needSave_: boolean;
     private section_: string;
+    private createTime_: Date;
+    private updateTime_: Date;
 
     constructor(date: Date, title: string) {
         this.id_ = uuid();
@@ -40,6 +42,8 @@ export default class Task {
         // フラグセット忘れで保存されないのを多少防ぐためにtrueで
         this.needSave_ = true;
         this.section_ = '';
+        this.createTime_ = new Date();
+        this.updateTime_ = this.createTime_;
     }
 
     get id(): string { return this.id_; }
@@ -86,6 +90,25 @@ export default class Task {
         return Math.floor((endTime.getTime() - this.startTime_.getTime()) / 1000 / 60);
     }
 
+    /**
+     * 作成日　オブジェクトの作成日を入れる
+     */
+    public get createTime(): Date {
+        return this.createTime_;
+    }
+    public set createTime(value: Date) {
+        this.createTime_ = value;
+    }
+
+    /**
+     * 更新日 最初はオブジェクトの作成日、以後はDB保存日を入れる
+     */
+    public get updateTime(): Date {
+        return this.updateTime_;
+    }
+    public set updateTime(value: Date) {
+        this.updateTime_ = value;
+    }
     /**
      * ソート順
      */
@@ -172,10 +195,18 @@ export default class Task {
     public copy(): Task {
         const newTask: Task = new Task(this.date_, this.title);
         newTask.id = this.id_;
-        newTask.date = this.date_;
+        newTask.date = new Date(this.date_);
         newTask.isDoing = this.isDoing_;
-        newTask.startTime = this.startTime_;
-        newTask.endTime = this.endTime_;
+        if (this.startTime_ !== null) {
+            newTask.startTime = new Date(this.startTime_);
+        } else {
+            newTask.startTime = null;
+        }
+        if (this.endTime_ !== null) {
+            newTask.endTime = new Date(this.endTime_);
+        } else {
+            newTask.endTime = null;
+        }
         newTask.estimateTime = this.estimateTime_;
         newTask.repeatId = this.repeatId_;
         newTask.sortNo = this.sortNo_;
@@ -184,6 +215,8 @@ export default class Task {
         newTask.isNext = this.isNext_;
         newTask.needSave = this.needSave_;
         newTask.section = this.section_;
+        newTask.createTime = new Date(this.createTime_);
+        newTask.updateTime = new Date(this.updateTime_);
 
         return newTask;
 

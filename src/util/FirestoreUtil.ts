@@ -146,6 +146,8 @@ export default class FirestoreUtil {
     }
 
     public static async setTask(uid: string, task: Task): Promise<void> {
+        // 保存時にTaskオブジェクトのupdateTimeも更新
+        task.updateTime = new Date();
         firebase.firestore().collection('users').doc(uid)
         .collection('tasks').doc(task.id).set(this.getTaskLiteral(task));
     }
@@ -290,6 +292,8 @@ export default class FirestoreUtil {
             repeatId: task.repeatId,
             sortNo: task.sortNo,
             isDeleted: task.isDeleted,
+            createTime: firestore.Timestamp.fromDate(task.createTime),
+            updateTime: firestore.Timestamp.fromDate(task.updateTime),
         };
         if (task.startTime != null) {
             literal.startTime = firestore.Timestamp.fromDate(task.startTime);
@@ -355,6 +359,21 @@ export default class FirestoreUtil {
         task.sortNo = this.toNumber(data.sortNo);
         task.isDeleted = this.toBoolean(data.isDeleted);
         task.needSave = false;
+
+        const createTime: Date | null = this.toDate(data.createTime);
+        if (createTime !== null) {
+            task.createTime = createTime;
+        } else {
+            task.createTime = new Date();
+        }
+
+        const updateTime: Date | null = this.toDate(data.updateTime);
+        if (updateTime !== null) {
+            task.updateTime = updateTime;
+        } else {
+            task.updateTime = new Date();
+        }
+
         return task;
     }
 
