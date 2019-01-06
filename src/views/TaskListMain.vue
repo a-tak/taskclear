@@ -89,7 +89,6 @@ components: {
   EstimateList,
   Header,
   Footer,
-
 },
 })
 

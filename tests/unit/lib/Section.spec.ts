@@ -20,4 +20,14 @@ describe('Section.ts', () => {
     expect(section.id).not.toBeNull();
   });
 
+  it('コピーしたオブジェクトがディープコピーされているか?', () => {
+    // 現在の日付というのが難しいので値が入っているかどうかだけチェック
+    const section2 = section.clone();
+    // オブジェクトは違うが
+    expect(section2).not.toBe(section);
+    // 中身は同じはず
+    expect(section2.title).toEqual(sectionName);
+  });
+
+
 });

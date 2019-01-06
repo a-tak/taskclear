@@ -15,6 +15,7 @@
         :key="section.id"
         :section_="section"
         v-on:clickDeleteButtomEvent="deleteSection"
+        v-on:changeEvent="changeSection"
       >
       </SectionRow>
     </v-slide-y-transition>    
@@ -42,7 +43,9 @@ export default class SectionList extends Vue {
   private sections_: Section[] = [];
 
   private created(): void {
-    // 未実装
+    firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+      this.$store.commit('taskList/setUser', user);
+    });
   }
 
   private addSection(): void {
@@ -52,6 +55,10 @@ export default class SectionList extends Vue {
   private deleteSection(section: Section): void {
       const index = this.sections_.indexOf(section);
       this.sections_.splice(index, 1);
+  }
+
+  private changeSection(section: Section): void {
+    this.$store.dispatch('section/set', section);
   }
 }
 </script>
