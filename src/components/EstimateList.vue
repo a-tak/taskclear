@@ -30,7 +30,6 @@
 import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
 import TaskController from '@/lib/TaskController';
 import FirestoreUtil from '@/util/FirestoreUtil';
-import { firestore } from 'firebase';
 import firebase from 'firebase';
 import Estimate from '@/lib/Estimate';
 

@@ -126,17 +126,18 @@ export default class RepeatEdit extends Vue {
             this.repeat_.from = this.from_;
             this.repeat_.day = this.selectedDay_;
             this.repeat_.estimateTime = this.estimateTime_;
-            FirestoreUtil.saveRepeat(this.$store.getters.user.uid, this.repeat_, this.oldRepeat_);
+            FirestoreUtil.saveRepeat(this.$store.getters['taskList/user'].uid, this.repeat_, this.oldRepeat_);
             this.task_.repeatId = this.repeat_.id;
         } else {
             // 曜日の指定を全て外したらリピートを削除する
-            FirestoreUtil.saveRepeat(this.$store.getters.user.uid, null, this.oldRepeat_);
+            FirestoreUtil.saveRepeat(this.$store.getters['taskList/user'].uid, null, this.oldRepeat_);
             this.task_.repeatId = '';
         }
 
         // 旧repeat idのタスクを削除
         if (this.oldRepeat_ !== null) {
-            FirestoreUtil.deleteRepeatTaskById(this.$store.getters.user.uid, this.oldRepeat_.id, this.oldRepeat_.from);
+            FirestoreUtil.deleteRepeatTaskById(
+                this.$store.getters['taskList/user'].uid, this.oldRepeat_.id, this.oldRepeat_.from);
         }
 
         // 編集終了イベント発生
@@ -153,7 +154,8 @@ export default class RepeatEdit extends Vue {
             this.setNewRepeat();
         } else {
             // リピートが設定されているタスクであればリピート設定を読み込み
-            FirestoreUtil.loadRepeat(this.$store.getters.user.uid, this.task_.repeatId).then((repeat: Repeat): void => {
+            FirestoreUtil.loadRepeat(
+                this.$store.getters['taskList/user.uid'], this.task_.repeatId).then((repeat: Repeat): void => {
                 if (repeat.id === '') {
                     // タスクに設定されているリピートが存在しない(リンクが外れて浮いている)場合も、今のタスクから情報セットする
                     this.setNewRepeat();

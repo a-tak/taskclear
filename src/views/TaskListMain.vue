@@ -89,6 +89,7 @@ components: {
   EstimateList,
   Header,
   Footer,
+
 },
 })
 
@@ -101,7 +102,7 @@ export default class TaskListMain extends Vue {
   set tasks(value: Task[]) {
     const tc: TaskController = new TaskController();
     tc.tasks = value;
-    this.$store.commit('setTaskCtrl', tc);
+    this.$store.commit('taskList/setTaskCtrl', tc);
   }
 
   get targetDate(): string {
@@ -109,7 +110,7 @@ export default class TaskListMain extends Vue {
   }
 
   set targetDate(value: string) {
-    this.$store.commit('setTargetDate', new Date(value));
+    this.$store.commit('taskList/setTargetDate', new Date(value));
   }
 
   get menu2(): boolean {
@@ -154,7 +155,7 @@ export default class TaskListMain extends Vue {
         FirestoreUtil.loadTasks(self.$store.getters['taskList/user'].uid, self.$store.getters['taskList/targetDate'])
         .then((tc: TaskController): void => {
             tc.sort();
-            self.$store.commit('setTaskCtrl', tc);
+            self.$store.commit('taskList/setTaskCtrl', tc);
             },
         );
     });
@@ -164,7 +165,7 @@ export default class TaskListMain extends Vue {
 
   private async recreateRepeatTask(): Promise<void> {
     // 非同期で明日以降1週間分のデータを作る
-    const d = new Date(this.$store.getters.targetDate);
+    const d = new Date(this.$store.getters['taskList/targetDate']);
     d.setDate(d.getDate() + 1);
     const rc2: RepeatCreator = new RepeatCreator(this.$store.getters['taskList/user'].uid, d);
     rc2.creaetRepeat(6)
@@ -176,7 +177,7 @@ export default class TaskListMain extends Vue {
   }
 
   private deleteTask(task: Task): void {
-    this.$store.commit('deleteTask', task);
+    this.$store.commit('taskList/deleteTask', task);
     FirestoreUtil.logicalDeleteTask(this.$store.getters['taskList/user'].uid, task);
   }
 
@@ -196,14 +197,14 @@ export default class TaskListMain extends Vue {
       newTask.isDoing = true;
       newTask.startTime = new Date();
       newTask.endTime = null;
-      this.$store.commit('addTask', newTask);
+      this.$store.commit('taskList/addTask', newTask);
     } else {
       task.needSave = true;
       task.isDoing = true;
       task.startTime = new Date();
     }
 
-    this.$store.commit('sortTask');
+    this.$store.commit('taskList/sortTask');
 
     this.save();
   }
@@ -214,7 +215,7 @@ export default class TaskListMain extends Vue {
 
   private endEditTask(task: Task, index: number) {
     this.$set(this.tasks, index, task);
-    this.$store.getters.taskCtrl.sort();
+    this.$store.getters['taskList/taskCtrl'].sort();
     // needSaveフラグは子コンポーネントで設定しているのでここでは設定しない
     this.save();
     this.recreateRepeatTask();

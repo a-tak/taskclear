@@ -1,4 +1,3 @@
-import Vuex from 'vuex';
 import Task from '@/lib/Task';
 import TaskController from '@/lib/TaskController';
 

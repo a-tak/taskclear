@@ -6,7 +6,7 @@
                     <v-text-field placeholder="新しいタスクを追加" single-line outline v-model="inputvalue_" autofocus clearable hint="記載したらEnterか追加ボタン" @keydown="keyDown($event)" @keyup.enter="keyUpEnter()" @keyup.esc="cancel"></v-text-field>
                 </v-flex>
                 <v-flex ma-2>
-                    <v-btn @click="addTask">追加</v-btn>
+                    <v-btn id="newtask-add" @click="addTask">追加</v-btn>
                     <v-btn @click="cancel">キャンセル</v-btn>
                 </v-flex>
             </v-layout>
@@ -38,13 +38,14 @@ export default class NewTask extends Vue {
         if (this.inputvalue_.trim() === '') { return; }
 
         // ここがタスクの追加部分
-        const d: Date = this.$store.getters.targetDate;
+//        const d: Date = this.$store.getters.targetDate;
+        const d: Date = this.$store.getters['taskList/targetDate'];
         // 一旦時間は0:00でセット。セクションを取り入れるときはここの時間をセクションの時間に変更する
         const date = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
         const task: Task = new Task(date, this.inputvalue_);
-        this.$store.commit('addTask', task);
+        this.$store.commit('taskList/addTask', task);
 
-        FirestoreUtil.saveTasks(this.$store.getters.user.uid, this.$store.getters.taskCtrl);
+        FirestoreUtil.saveTasks(this.$store.getters['taskList/user'].uid, this.$store.getters['taskList/taskCtrl']);
 
         this.inputvalue_ = '';
 
