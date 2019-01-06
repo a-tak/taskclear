@@ -192,7 +192,7 @@ export default class Task {
      * キャンセル機能などで元の値を待避するために使用
      * IDも同じものがコピーされるので重複が起きないように注意が必要
      */
-    public copy(): Task {
+    public clone(): Task {
         const newTask: Task = new Task(this.date_, this.title);
         newTask.id = this.id_;
         newTask.date = new Date(this.date_);

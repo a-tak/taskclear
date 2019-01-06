@@ -11,9 +11,9 @@ describe('Task.ts', () => {
       expect(task.section).toMatch('A');
   });
 
-  it('copyテスト', () => {
+  it('cloneテスト', () => {
       task.section = 'B';
-      const newTask = task.copy();
+      const newTask = task.clone();
       expect(newTask.section).toMatch(task.section);
   });
 
@@ -34,7 +34,7 @@ describe('Task.ts', () => {
     // 現在の日付というのが難しいので値が入っているかどうかだけチェック
     const date = new Date('2018-10-11 00:01:02');
     task.createTime = date;
-    const task2 = task.copy();
+    const task2 = task.clone();
     // オブジェクトは違うが
     expect(task2.createTime).not.toBe(date);
     // 日付は同じはず
@@ -45,7 +45,7 @@ describe('Task.ts', () => {
     // 現在の日付というのが難しいので値が入っているかどうかだけチェック
     const date = new Date('2018-10-11 00:01:02');
     task.updateTime = date;
-    const task2 = task.copy();
+    const task2 = task.clone();
     // オブジェクトは違うが
     expect(task2.updateTime).not.toBe(date);
     // 日付は同じはず

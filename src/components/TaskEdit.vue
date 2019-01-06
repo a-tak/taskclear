@@ -108,9 +108,9 @@ export default class TaskEdit extends Vue {
 
     private created(): void {
         // 編集前の値を待避
-        this.backupedTask_ = this.task_.copy();
+        this.backupedTask_ = this.task_.clone();
         // 編集用オブジェクト作成
-        this.editTask_ = this.task_.copy();
+        this.editTask_ = this.task_.clone();
 
         if (this.task_.startTime != null) {
             this.startTime_ = DateUtil.get4digitTime(this.task_.startTime);
