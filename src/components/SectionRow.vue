@@ -31,6 +31,7 @@ import DateUtil from '@/util/DateUtil';
 export default class SectionRow extends Vue {
 // !はundefinedやnullにならないことを示すもの
   @Prop() public section_!: Section;
+  @Prop() public index_!: number;
 
   private startTime_: string = '';
 
@@ -39,7 +40,7 @@ export default class SectionRow extends Vue {
   public deleteSection(section: Section): void {}
   @Emit('changeEvent')
   // tslint:disable-next-line:no-empty
-  public changeSection(section: Section): void {}
+  public changeSection(section: Section, index: number): void {}
 
   private changeStartTime(): void {
     if (this.startTime_.trim() !== '' ) {
@@ -51,7 +52,7 @@ export default class SectionRow extends Vue {
       }
       this.section_.startTime = DateUtil.getDateObject(baseDate , this.startTime_);
     }
-    this.changeSection(this.section_);
+    this.changeSection(this.section_, this.index_);
   }
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる

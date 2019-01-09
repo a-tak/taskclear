@@ -11,9 +11,10 @@
       tag="v-list"
     >
       <SectionRow
-        v-for="(section) in sections_"
+        v-for="(section, index) in sections_"
         :key="section.id"
         :section_="section"
+        :index_="index"
         v-on:clickDeleteButtomEvent="deleteSection"
         v-on:changeEvent="changeSection"
       >
@@ -53,11 +54,13 @@ export default class SectionList extends Vue {
   }
 
   private deleteSection(section: Section): void {
-      const index = this.sections_.indexOf(section);
-      this.sections_.splice(index, 1);
+    const index = this.sections_.indexOf(section);
+    this.sections_.splice(index, 1);
+    this.$store.dispatch('section/delete', section);
   }
 
-  private changeSection(section: Section): void {
+  private changeSection(section: Section, index: number): void {
+    this.$set(this.sections_, index, section);
     this.$store.dispatch('section/set', section);
   }
 }
