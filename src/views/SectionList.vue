@@ -56,12 +56,10 @@ export default class SectionList extends Vue {
   }
 
   private addSection(): void {
-    console.log(`追加だよ`)
     this.$store.dispatch('section/set', new Section());
   }
 
   private deleteSection(section: Section): void {
-    console.log(`削除ボタン押したのに`)
     this.$store.dispatch('section/delete', section);
   }
 

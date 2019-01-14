@@ -29,13 +29,11 @@ export default {
       state.list = []
     },
     add(state: State, section: Section) {
-      console.log(`ミューテーションでadd ${section.title} ${section.id}`)
       state.list.push(section)
     },
     delete(state: State, section: Section) {
-      console.log(`ミューテーションでdelete ${section.title} ${section.id}`)
       // ここで渡ってくるSectionオブジェクトは新規に作成されたものでメモリにあるものと別。indexOfでは探せない
-      const index = state.list.findIndex(item => item.id === section.id)
+      const index = state.list.findIndex((item) => item.id === section.id)
       state.list.splice(index, 1)
     },
     sort(state: State) {
@@ -58,7 +56,6 @@ export default {
       }
       const modifiedFunc: ((section: Section) => void) = (section: Section) => {
         // ソートするので一旦削除して追加するやり方でいく
-        console.log(`modifinedが走った ${section.title} ${section.id}`)
         commit('delete', section)
         commit('add', section)
         commit('sort')
