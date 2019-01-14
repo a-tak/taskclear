@@ -253,6 +253,34 @@ export default class FirestoreUtil {
     }
 
     /**
+     * FirestoreのタイムスタンプからDateに変換
+     * FirestoreからUndefinedを取得した場合はUndefinedで返す(つまり空も許容)
+     * @param date 日付オブジェクト
+     */
+    public static toDateUndefinable(date: firestore.Timestamp | undefined): Date | undefined {
+        if (date == undefined) {
+            return undefined;
+        } else {
+            return date.toDate();
+        }
+    }
+
+    /**
+     * FirestoreのタイムスタンプからDateに変換2
+     * こちらはFirestoreからUndefineを取得した場合は今日の日付のオブジェクトを返す
+     * 定義されていることが確実だったり、初期で今日の日付になっていて良いならこちらを使う
+     * 逆にUndefineの時に特殊処理をしたければtoDateUndefinableを使って戻り値によって適切に処理を行う
+     * @param date 日付オブジェクト
+     */
+    public static toDate(date: firestore.Timestamp | undefined): Date {
+        if (date == undefined) {
+            return new Date();
+        } else {
+            return date.toDate();
+        }
+    }
+
+    /**
      * 指定した日のタスクを読み込むクエリを生成する(論理削除済みタスクも読み込む)
      * @param uid ユーザーid
      * @param date 取込対象日付
@@ -322,14 +350,6 @@ export default class FirestoreUtil {
         }
     }
 
-    private static toDate(date: firestore.Timestamp | undefined): Date | undefined {
-        if (date === undefined || date === undefined) {
-            return undefined;
-        } else {
-            return date.toDate();
-        }
-    }
-
     private static toNumber(value: string | undefined): number {
         if (value === undefined) {
             // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
@@ -349,32 +369,19 @@ export default class FirestoreUtil {
     }
 
     private static converToTask(data: firestore.DocumentData): Task {
-        const task = new Task(data.date.toDate(), data.title);
-        task.id = data.id;
-        task.startTime =  this.toDate(data.startTime);
-        task.endTime = this.toDate(data.endTime);
-        task.estimateTime = data.estimateTime;
-        task.isDoing = data.isDoing;
-        task.repeatId = this.toString(data.repeatId);
-        task.sortNo = this.toNumber(data.sortNo);
-        task.isDeleted = this.toBoolean(data.isDeleted);
-        task.needSave = false;
-
-        const createTime: Date | undefined = this.toDate(data.createTime);
-        if (createTime !== undefined) {
-            task.createTime = createTime;
-        } else {
-            task.createTime = new Date();
-        }
-
-        const updateTime: Date | undefined = this.toDate(data.updateTime);
-        if (updateTime !== undefined) {
-            task.updateTime = updateTime;
-        } else {
-            task.updateTime = new Date();
-        }
-
-        return task;
+        const task = new Task(data.date.toDate(), data.title)
+        task.id = data.id
+        task.startTime =  this.toDateUndefinable(data.startTime)
+        task.endTime = this.toDateUndefinable(data.endTime)
+        task.estimateTime = data.estimateTime
+        task.isDoing = data.isDoing
+        task.repeatId = this.toString(data.repeatId)
+        task.sortNo = this.toNumber(data.sortNo)
+        task.isDeleted = this.toBoolean(data.isDeleted)
+        task.needSave = false
+        task.createTime = this.toDate(data.createTime)
+        task.updateTime = this.toDate(data.updateTime)
+        return task
     }
 
     /**
@@ -383,24 +390,18 @@ export default class FirestoreUtil {
      * @param data
      */
     private static converToRepeat(data: firestore.DocumentData | undefined): Repeat {
-        const repeat: Repeat = new Repeat();
+        const repeat: Repeat = new Repeat()
         if (data !== undefined) {
-            repeat.id = this.toString(data.id);
-            repeat.title = this.toString(data.title);
-            const fromDate = this.toDate(data.from);
-            if (fromDate !== undefined) {
-                repeat.from = fromDate;
-            } else {
-                // repeatでfromがない場合はあり得ない
-                throw new Error(`Repeat from undefined error repeatId=${data.id}`);
-            }
-            repeat.day = data.day;
-            repeat.estimateTime = this.toNumber(data.estimateTime);
+            repeat.id = this.toString(data.id)
+            repeat.title = this.toString(data.title)
+            repeat.from = this.toDate(data.from)
+            repeat.day = data.day
+            repeat.estimateTime = this.toNumber(data.estimateTime)
         } else {
             // 仕様上存在しないrepeatIdが来ることもあるのでエラーとしないが、それを検知して処理するために空のidのRepeatを返す
-            repeat.id = '';
+            repeat.id = ''
         }
-        return repeat;
+        return repeat
     }
 
     private static getRepeatLiteral(repeat: Repeat): object {

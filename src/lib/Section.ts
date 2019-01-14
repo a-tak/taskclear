@@ -2,11 +2,23 @@ import uuid from 'uuid';
 
 export default class Section {
 
-    private title_: string = '';
-    private startTime_: Date | null = null;
-    private id_: string = uuid();
-    private updateTime_: Date = new Date();
-    private createTime_: Date = new Date();
+    private title_: string
+    private startTime_: Date
+    private id_: string
+    private updateTime_: Date
+    private createTime_: Date
+
+    /**
+     * コンストラクタ
+     * startTimeはundefined状態を許容しないようにした為初期値を入れた
+     */
+    constructor() {
+      this.title_ = ''
+      this.startTime_ = this.clearDate(new Date())
+      this.id_ = uuid()
+      this.updateTime_ = new Date()
+      this.createTime_ = new Date()
+    }
 
     public get id(): string {
       return this.id_;
@@ -16,8 +28,8 @@ export default class Section {
     }
     get title(): string { return this.title_; }
     set title(value: string) { this.title_ = value; }
-    get startTime(): Date | null { return this.startTime_; }
-    set startTime(value: Date | null) {
+    get startTime(): Date { return this.startTime_; }
+    set startTime(value: Date) {
       this.startTime_ = this.clearDate(value);
     }
     public get updateTime(): Date {
@@ -41,8 +53,8 @@ export default class Section {
       return section;
     }
 
-    private clearDate(date: Date | null): Date {
-      if (date == null) {
+    private clearDate(date: Date | undefined): Date {
+      if (date == undefined) {
         date = new Date('1990-01-01 0:00:00');
         return date;
       }

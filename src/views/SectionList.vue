@@ -11,7 +11,7 @@
       tag="v-list"
     >
       <SectionRow
-        v-for="(section, index) in sections_"
+        v-for="(section, index) in sections"
         :key="section.id"
         :section_="section"
         :index_="index"
@@ -41,26 +41,31 @@ components: {
 })
 
 export default class SectionList extends Vue {
-  private sections_: Section[] = [];
-
+  public get sections(): Section[] {
+    return this.$store.getters['section/sections']
+  }
   private created(): void {
     firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
       this.$store.commit('taskList/setUser', user);
+      this.$store.dispatch('section/startListner');
     });
   }
 
+  private destroyed(): void {
+    this.$store.dispatch('section/stopListner');
+  }
+
   private addSection(): void {
-    this.sections_.push(new Section());
+    console.log(`追加だよ`)
+    this.$store.dispatch('section/set', new Section());
   }
 
   private deleteSection(section: Section): void {
-    const index = this.sections_.indexOf(section);
-    this.sections_.splice(index, 1);
+    console.log(`削除ボタン押したのに`)
     this.$store.dispatch('section/delete', section);
   }
 
   private changeSection(section: Section, index: number): void {
-    this.$set(this.sections_, index, section);
     this.$store.dispatch('section/set', section);
   }
 }

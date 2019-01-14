@@ -1,10 +1,11 @@
 import Section from '@/lib/Section';
-import fs from '@/util/firestore/SectionUtil';
+import SectionConnector from '@/lib/SectionConnector';
 import Store from '@/store/Store';
+
+const con: SectionConnector = new SectionConnector();
 
 export interface State {
   list: Section[];
-  user: firebase.User;
 }
 
 /**
@@ -24,22 +25,63 @@ export default {
       },
   },
   mutations: {
-    set(state: State, section: Section) {
-      // Firestoreに書き込み
-      fs.set(Store.getters['taskList/user'].uid, section);
+    clear(state: State) {
+      state.list = []
+    },
+    add(state: State, section: Section) {
+      console.log(`ミューテーションでadd ${section.title} ${section.id}`)
+      state.list.push(section)
     },
     delete(state: State, section: Section) {
-      fs.delete(Store.getters['taskList/user'].uid, section);
+      console.log(`ミューテーションでdelete ${section.title} ${section.id}`)
+      // ここで渡ってくるSectionオブジェクトは新規に作成されたものでメモリにあるものと別。indexOfでは探せない
+      const index = state.list.findIndex(item => item.id === section.id)
+      state.list.splice(index, 1)
+    },
+    sort(state: State) {
+      state.list.sort((a: Section, b: Section): number => {
+        if (a.startTime == undefined) {
+          return 1;
+        } else if (b.startTime == undefined) {
+            return -1;
+        } else {
+            return a.startTime.getTime() - b.startTime.getTime();
+        }
+      })
     },
   },
   actions: {
+    startListner({ commit }: {commit: (name: string, payload?: Section) => void }) {
+      // ドキュメントの各変更に対応する処理
+      const addedFunc: ((section: Section) => void) = (section: Section) => {
+        commit('add', section)
+      }
+      const modifiedFunc: ((section: Section) => void) = (section: Section) => {
+        // ソートするので一旦削除して追加するやり方でいく
+        console.log(`modifinedが走った ${section.title} ${section.id}`)
+        commit('delete', section)
+        commit('add', section)
+        commit('sort')
+      };
+      const removedFunc: ((section: Section) => void) = (section: Section) => {
+        commit('delete', section)
+      }
+
+      commit('clear')
+      // リスナースタート
+      con.startListener(Store.getters['taskList/user'].uid, addedFunc, modifiedFunc, removedFunc)
+    },
+    stopListner({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
+      con.stopListener()
+    },
     // { commit }はオブジェクトを分割代入でうけとる引数の書き方
     // TypeScriptの型指定として「: {commit: (arg1: string, arg2: Section) => void }」という関数型の定義をしてしないとコンパイルできない😢
     set({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
-      commit('set', section);
+      // Firestoreに書き込み
+      con.set(Store.getters['taskList/user'].uid, section);
     },
     delete({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
-      commit('delete', section);
+      con.delete(Store.getters['taskList/user'].uid, section);
     },
   },
 };

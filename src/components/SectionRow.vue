@@ -42,6 +42,10 @@ export default class SectionRow extends Vue {
   // tslint:disable-next-line:no-empty
   public changeSection(section: Section, index: number): void {}
 
+  private created() {
+    this.startTime_ = DateUtil.get4digitTime(this.section_.startTime);
+  }
+
   private changeStartTime(): void {
     if (this.startTime_.trim() !== '' ) {
       // getDateObjectがbaseDateを求めるのでややこしいことになってる
