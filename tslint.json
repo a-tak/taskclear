@@ -19,6 +19,6 @@
     "variable-name": [true, "allow-trailing-underscore"],
     "semicolon": [false],
     "no-null-keyword": [true],
-    "allow-undefined-check": [true],
+    "triple-equals": [true, "allow-undefined-check"]
   }
 }

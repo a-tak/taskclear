@@ -10,10 +10,10 @@
                 <v-card>
                     <v-layout align-center justify-space-between row fill-height>
                         <v-flex xs2 sm2 md1>
-                            <v-btn v-bind:id="'start-btn-' + task_.id" icon ripple @click.stop="startTask(task_)" v-if="task_.isDoing === false && task_.endTime==null">
+                            <v-btn v-bind:id="'start-btn-' + task_.id" icon ripple @click.stop="startTask(task_)" v-if="task_.isDoing === false && task_.endTime==undefined">
                                 <v-icon color="purple">play_circle_filled</v-icon>
                             </v-btn>
-                            <v-btn icon ripple @click.stop="startTask(task_)" v-else-if="task_.isDoing === false && task_.endTime!=null">
+                            <v-btn icon ripple @click.stop="startTask(task_)" v-else-if="task_.isDoing === false && task_.endTime!=undefined">
                                 <v-icon color="grey darken-1">play_circle_filled</v-icon>
                             </v-btn>
                             <v-btn icon ripple @click.stop="stopTask(task_)" v-else-if="task_.isDoing === true">
@@ -22,7 +22,7 @@
                         </v-flex>
                         <v-flex nowrap sm5 xs9 md5>
                             <v-card-actions  @click.stop="startEdit()">
-                                <div v-bind:class="{ done: task_.endTime!=null}" class="font-weight-bold">
+                                <div v-bind:class="{ done: task_.endTime!=undefined}" class="font-weight-bold">
                                     {{ task_.title }}
                                 </div>
                             </v-card-actions>
@@ -152,7 +152,7 @@ export default class TaskRow extends Vue {
 
     public getTime(time: Date): string {
         let timeStr: string = '';
-        if (time != null) {
+        if (time != undefined) {
             timeStr = DateUtil.getTimeString(time);
         }
         return timeStr;

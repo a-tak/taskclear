@@ -13,8 +13,8 @@ export default class Task {
     private date_: Date;
     private title_: string;
     private isDoing_: boolean;
-    private startTime_: Date | null;
-    private endTime_: Date | null;
+    private startTime_: Date | undefined;
+    private endTime_: Date | undefined;
     private estimateTime_: number;
     private repeatId_: string;
     private sortNo_: number;
@@ -31,8 +31,8 @@ export default class Task {
         this.date_ = date;
         this.title_ = title;
         this.isDoing_ = false;
-        this.startTime_ = null;
-        this.endTime_ = null;
+        this.startTime_ = undefined;
+        this.endTime_ = undefined;
         this.estimateTime_ = 0;
         this.repeatId_ = '';
         this.sortNo_ = 999;
@@ -54,10 +54,10 @@ export default class Task {
     set title(value: string) { this.title_ = value; }
     get isDoing(): boolean { return this.isDoing_; }
     set isDoing(value: boolean) { this.isDoing_ = value; }
-    get startTime(): Date | null { return this.startTime_; }
-    set startTime(value: Date | null) { this.startTime_ = value; }
-    get endTime(): Date | null { return this.endTime_; }
-    set endTime(value: Date | null) { this.endTime_ = value; }
+    get startTime(): Date | undefined { return this.startTime_; }
+    set startTime(value: Date | undefined) { this.startTime_ = value; }
+    get endTime(): Date | undefined { return this.endTime_; }
+    set endTime(value: Date | undefined) { this.endTime_ = value; }
 
     public get repeatId(): string {
         return this.repeatId_;
@@ -83,10 +83,10 @@ export default class Task {
      * 実績時間(分)
      */
     get actualTime(): number {
-        if (this.startTime_ == null) { return 0; }
+        if (this.startTime_ == undefined) { return 0; }
         // 終了時間が入っていないときは今の時間を使う
         let endTime: Date = new Date();
-        if (this.endTime_ != null) { endTime = this.endTime_; }
+        if (this.endTime_ != undefined) { endTime = this.endTime_; }
         return Math.floor((endTime.getTime() - this.startTime_.getTime()) / 1000 / 60);
     }
 
@@ -167,8 +167,8 @@ export default class Task {
     public createPauseTask(): Task {
         const newTask: Task = new Task(this.date_, this.title);
         newTask.isDoing = false;
-        newTask.startTime = null;
-        newTask.endTime = null;
+        newTask.startTime = undefined;
+        newTask.endTime = undefined;
         let estimate: number = this.estimateTime - this.actualTime;
         if (estimate < 0) { estimate = 0; }
         newTask.estimateTime = estimate;
@@ -197,15 +197,15 @@ export default class Task {
         newTask.id = this.id_;
         newTask.date = new Date(this.date_);
         newTask.isDoing = this.isDoing_;
-        if (this.startTime_ !== null) {
+        if (this.startTime_ !== undefined) {
             newTask.startTime = new Date(this.startTime_);
         } else {
-            newTask.startTime = null;
+            newTask.startTime = undefined;
         }
-        if (this.endTime_ !== null) {
+        if (this.endTime_ !== undefined) {
             newTask.endTime = new Date(this.endTime_);
         } else {
-            newTask.endTime = null;
+            newTask.endTime = undefined;
         }
         newTask.estimateTime = this.estimateTime_;
         newTask.repeatId = this.repeatId_;

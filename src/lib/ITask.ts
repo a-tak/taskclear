@@ -5,8 +5,8 @@ export default interface ITask {
     date: firestore.Timestamp;
     title: string;
     isDoing: boolean;
-    startTime: firestore.Timestamp | null;
-    endTime: firestore.Timestamp | null;
+    startTime: firestore.Timestamp | undefined;
+    endTime: firestore.Timestamp | undefined;
     actualTime: number;
     estimateTime: number;
     repeatId: string;

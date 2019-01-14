@@ -114,7 +114,7 @@ export default class RepeatEdit extends Vue {
     private from_: Date = new Date();
     private estimateTime_: number = 0;
     private repeat_: Repeat = new Repeat();
-    private oldRepeat_: Repeat | null = null;
+    private oldRepeat_: Repeat | undefined = undefined;
 
     @Emit('endRepeatEditEvent')
     // tslint:disable-next-line:no-empty
@@ -130,12 +130,12 @@ export default class RepeatEdit extends Vue {
             this.task_.repeatId = this.repeat_.id;
         } else {
             // 曜日の指定を全て外したらリピートを削除する
-            FirestoreUtil.saveRepeat(this.$store.getters['taskList/user'].uid, null, this.oldRepeat_);
+            FirestoreUtil.saveRepeat(this.$store.getters['taskList/user'].uid, undefined, this.oldRepeat_);
             this.task_.repeatId = '';
         }
 
         // 旧repeat idのタスクを削除
-        if (this.oldRepeat_ !== null) {
+        if (this.oldRepeat_ !== undefined) {
             FirestoreUtil.deleteRepeatTaskById(
                 this.$store.getters['taskList/user'].uid, this.oldRepeat_.id, this.oldRepeat_.from);
         }
@@ -176,7 +176,7 @@ export default class RepeatEdit extends Vue {
         this.repeat_ = new Repeat();
         this.repeat_.title = this.task_.title;
         this.repeat_.estimateTime = 0;
-        this.oldRepeat_ = null;
+        this.oldRepeat_ = undefined;
     }
 }
 </script>

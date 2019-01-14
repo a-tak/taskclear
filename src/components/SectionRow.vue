@@ -46,8 +46,8 @@ export default class SectionRow extends Vue {
     if (this.startTime_.trim() !== '' ) {
       // getDateObjectがbaseDateを求めるのでややこしいことになってる
       let baseDate: Date = new Date();
-      const sectionDate: Date | null = this.section_.startTime;
-      if (sectionDate !== null) {
+      const sectionDate: Date | undefined = this.section_.startTime;
+      if (sectionDate !== undefined) {
         baseDate = sectionDate;
       }
       this.section_.startTime = DateUtil.getDateObject(baseDate , this.startTime_);

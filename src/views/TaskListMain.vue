@@ -191,11 +191,11 @@ export default class TaskListMain extends Vue {
     }
 
     // 既に終了しているタスクであればコピーしてタスクを開始する
-    if (task.endTime != null) {
+    if (task.endTime != undefined) {
       const newTask: Task = task.createPauseTask();
       newTask.isDoing = true;
       newTask.startTime = new Date();
-      newTask.endTime = null;
+      newTask.endTime = undefined;
       this.$store.commit('taskList/addTask', newTask);
     } else {
       task.needSave = true;
@@ -287,6 +287,7 @@ export default class TaskListMain extends Vue {
   }
 
   private beforeDestroy(): void {
+    // tslint:disable-next-line:no-null-keyword
     document.onkeydown = null;
   }
 

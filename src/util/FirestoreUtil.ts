@@ -172,7 +172,7 @@ export default class FirestoreUtil {
             snapshot.forEach((doc: firestore.QueryDocumentSnapshot): void => {
                 if (doc !== undefined) {
                     // 念のために開始していないものだけを削除
-                    if (doc.data().startTime == null) {
+                    if (doc.data().startTime == undefined) {
                         batch.delete(doc.ref);
                     }
                 }
@@ -192,16 +192,16 @@ export default class FirestoreUtil {
     /**
      * リピートを保存する
      * リピートは更新はせずに毎回削除&追加の動作
-     * 新しいリピート設定にnullを指定すると古いリピートの削除のみ行われ新しいリピートが作られない。結果リピート設定の削除になる。
+     * 新しいリピート設定にundefinedを指定すると古いリピートの削除のみ行われ新しいリピートが作られない。結果リピート設定の削除になる。
      * @param uid
      * @param repeat 新しいリピート設定
      * @param oldRepeat 古いリピート設定
      */
-    public static saveRepeat(uid: string, repeat: Repeat | null, oldRepeat: Repeat | null): void {
+    public static saveRepeat(uid: string, repeat: Repeat | undefined, oldRepeat: Repeat | undefined): void {
         const batch: firestore.WriteBatch = firestore().batch();
 
         let newId: string = 'Non New Rpeat';
-        if (repeat !== null ) {
+        if (repeat !== undefined ) {
             newId = repeat.id;
             const newRef: firestore.DocumentReference = firebase.firestore()
                 .collection('users').doc(uid)
@@ -210,7 +210,7 @@ export default class FirestoreUtil {
         }
 
         let oldId: string = 'Non Old Repeat';
-        if (oldRepeat !== null) {
+        if (oldRepeat !== undefined) {
             oldId = oldRepeat.id;
             const oldRef: firestore.DocumentReference = firebase.firestore()
             .collection('users').doc(uid)
@@ -285,8 +285,8 @@ export default class FirestoreUtil {
             date: firestore.Timestamp.fromDate(task.date),
             title: task.title,
             isDoing: task.isDoing,
-            startTime: null,
-            endTime: null,
+            startTime: undefined,
+            endTime: undefined,
             estimateTime: task.estimateTime,
             actualTime: task.actualTime,
             repeatId: task.repeatId,
@@ -295,15 +295,15 @@ export default class FirestoreUtil {
             createTime: firestore.Timestamp.fromDate(task.createTime),
             updateTime: firestore.Timestamp.fromDate(task.updateTime),
         };
-        if (task.startTime != null) {
+        if (task.startTime != undefined) {
             literal.startTime = firestore.Timestamp.fromDate(task.startTime);
         } else {
-            literal.startTime = null;
+            literal.startTime = undefined;
         }
-        if (task.endTime != null) {
+        if (task.endTime != undefined) {
             literal.endTime = firestore.Timestamp.fromDate(task.endTime);
         } else {
-            literal.endTime = null;
+            literal.endTime = undefined;
         }
 
         return literal;
@@ -322,9 +322,9 @@ export default class FirestoreUtil {
         }
     }
 
-    private static toDate(date: firestore.Timestamp | undefined): Date | null {
-        if (date === undefined || date === null) {
-            return null;
+    private static toDate(date: firestore.Timestamp | undefined): Date | undefined {
+        if (date === undefined || date === undefined) {
+            return undefined;
         } else {
             return date.toDate();
         }
@@ -360,15 +360,15 @@ export default class FirestoreUtil {
         task.isDeleted = this.toBoolean(data.isDeleted);
         task.needSave = false;
 
-        const createTime: Date | null = this.toDate(data.createTime);
-        if (createTime !== null) {
+        const createTime: Date | undefined = this.toDate(data.createTime);
+        if (createTime !== undefined) {
             task.createTime = createTime;
         } else {
             task.createTime = new Date();
         }
 
-        const updateTime: Date | null = this.toDate(data.updateTime);
-        if (updateTime !== null) {
+        const updateTime: Date | undefined = this.toDate(data.updateTime);
+        if (updateTime !== undefined) {
             task.updateTime = updateTime;
         } else {
             task.updateTime = new Date();
@@ -388,7 +388,7 @@ export default class FirestoreUtil {
             repeat.id = this.toString(data.id);
             repeat.title = this.toString(data.title);
             const fromDate = this.toDate(data.from);
-            if (fromDate !== null) {
+            if (fromDate !== undefined) {
                 repeat.from = fromDate;
             } else {
                 // repeatでfromがない場合はあり得ない

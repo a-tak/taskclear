@@ -87,8 +87,8 @@ export default class RepeatCreator {
         const task = new Task(targetDate, repeat.title);
         task.repeatId = repeat.id;
         task.isDoing = false;
-        task.startTime = null;
-        task.endTime = null;
+        task.startTime = undefined;
+        task.endTime = undefined;
         task.estimateTime = repeat.estimateTime;
         await FirestoreUtil.setTask(this.uid_, task);
         return;

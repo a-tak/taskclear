@@ -77,14 +77,14 @@ export default class TaskEdit extends Vue {
                 // 終了時間が入っていたら停止する
                 this.editTask_.isDoing = false;
             } else {
-                this.editTask_.endTime = null;
+                this.editTask_.endTime = undefined;
                 // 開始時間入っていて終了が入っていなければタスクを開始状態にする
                 this.editTask_.isDoing = true;
             }
         } else {
-            this.editTask_.startTime = null;
+            this.editTask_.startTime = undefined;
             // 開始が入ってなければ終了時間も空にする
-            this.editTask_.endTime = null;
+            this.editTask_.endTime = undefined;
             this.editTask_.isDoing = false;
         }
 
@@ -112,13 +112,13 @@ export default class TaskEdit extends Vue {
         // 編集用オブジェクト作成
         this.editTask_ = this.task_.clone();
 
-        if (this.task_.startTime != null) {
+        if (this.task_.startTime != undefined) {
             this.startTime_ = DateUtil.get4digitTime(this.task_.startTime);
         }
-        if (this.task_.endTime != null) {
+        if (this.task_.endTime != undefined) {
             this.endTime_ = DateUtil.get4digitTime(this.task_.endTime);
         }
-        if (this.task_.estimateTime != null) {
+        if (this.task_.estimateTime != undefined) {
             this.estimateTime_ = this.task_.estimateTime.toString();
         }
         this.sortNo_ = this.task_.sortNo;

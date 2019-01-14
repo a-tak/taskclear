@@ -98,9 +98,9 @@ export default class EstimateList extends Vue {
         Promise.all(fsdsPromises).then((tc) => {
             // 全部データ取得したら一旦ソート
             this.estimates_.sort((a: Estimate, b: Estimate): number => {
-                if (a.date == null) {
+                if (a.date == undefined) {
                     return 1;
-                } else if (b.date == null) {
+                } else if (b.date == undefined) {
                     return -1;
                 } else {
                     return a.date.getTime() - b.date.getTime();

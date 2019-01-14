@@ -71,7 +71,7 @@ export default class Login extends Vue {
         this.$router.push('/tasklist');
       } else {
         this.isLogin = false;
-        this.$store.commit('taskList/setUser', null);
+        this.$store.commit('taskList/setUser', undefined);
       }
     });
   }

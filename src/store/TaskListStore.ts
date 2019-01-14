@@ -3,7 +3,7 @@ import TaskController from '@/lib/TaskController';
 
 export interface State {
   taskCtrl: TaskController;
-  user: firebase.User;
+  user: firebase.User | undefined;
   targetDate: Date;
 }
 
@@ -12,7 +12,7 @@ export default {
   state: {
     taskCtrl: new TaskController(),
     // 認証ユーザー情報
-    user: null,
+    user: undefined,
     // タスク表示日付 コストラクタが簡単なヤツはこれで初期化して型決定できるんだけどなぁ
     targetDate: new Date(),
   },
@@ -33,7 +33,7 @@ export default {
     setTaskCtrl(state: State, taskCtrl: TaskController) {
       state.taskCtrl = taskCtrl;
     },
-    setUser(state: State, user: firebase.User) {
+    setUser(state: State, user: firebase.User | undefined) {
       state.user = user;
     },
     setTargetDate(state: State, date: Date) {

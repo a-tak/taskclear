@@ -17,7 +17,7 @@ export default class TaskController {
         let sum: number = 0;
         for (const task of this.tasks_) {
             // 終了タスクの見積を含めると合計が何倍にもなるので除外する
-            if (task.endTime == null) {
+            if (task.endTime == undefined) {
                 sum = sum + task.estimateTime;
             }
         }
@@ -39,7 +39,7 @@ export default class TaskController {
         for (const task of this.tasks_) {
             // nextフラグはクリア
             task.isNext = false;
-            if (task.endTime !== null) {
+            if (task.endTime !== undefined) {
                 doneTasks.push(task);
             } else if (task.isDoing === true) {
                 doingTask.push(task);
@@ -49,9 +49,9 @@ export default class TaskController {
         }
         // 終了済みタスクは開始時間でソート
         doneTasks.sort((a: Task, b: Task) => {
-            if (a.startTime == null) {
+            if (a.startTime == undefined) {
                 return 1;
-            } else if (b.startTime == null) {
+            } else if (b.startTime == undefined) {
                 return -1;
             } else {
                 return a.startTime.getTime() - b.startTime.getTime();
@@ -59,9 +59,9 @@ export default class TaskController {
         });
         // 開始前タスクはsortNoでソート
         beforeStartTasks.sort((a: Task, b: Task) => {
-            if (a.sortNo == null) {
+            if (a.sortNo == undefined) {
                 return 1;
-            } else if (b.sortNo == null) {
+            } else if (b.sortNo == undefined) {
                 return -1;
             } else {
                 return a.sortNo - b.sortNo;
