@@ -4,7 +4,7 @@
             <v-layout row>
                 <v-flex>
                     <v-layout column>
-                        <v-flex v-for="(estimate, index) in estimates" v-if="index<=2" :key="estimate.dateStr">
+                        <v-flex v-for="(estimate, index) in estimates1" :key="estimate.dateStr">
                             <div v-if="index==0" class="headline">
                                 ({{ estimate.dayLabel }}) {{ estimate.estimateTime}} 分
                             </div>
@@ -16,7 +16,7 @@
                 </v-flex>
                 <v-flex>
                     <v-layout column>
-                        <v-flex v-for="(estimate, index) in estimates" v-if="3 <= index" :key="estimate.dateStr">
+                        <v-flex v-for="(estimate) in estimates2" :key="estimate.dateStr">
                             ({{ estimate.dayLabel }}) {{ estimate.estimateTime}} 分
                         </v-flex>
                     </v-layout>
@@ -56,8 +56,12 @@ export default class EstimateList extends Vue {
         return this.$store.getters['taskList/targetDate'];
     }
 
-    get estimates(): Estimate[] {
-        return this.estimates_;
+    get estimates1(): Estimate[] {
+        return this.estimates_.slice(0, 3);
+    }
+
+    get estimates2(): Estimate[] {
+        return this.estimates_.slice(3, 6);
     }
 
     public display(): void {
