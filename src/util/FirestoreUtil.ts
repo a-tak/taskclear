@@ -313,8 +313,10 @@ export default class FirestoreUtil {
             date: firestore.Timestamp.fromDate(task.date),
             title: task.title,
             isDoing: task.isDoing,
-            startTime: undefined,
-            endTime: undefined,
+            // tslint:disable-next-line:no-null-keyword
+            startTime: null,
+            // tslint:disable-next-line:no-null-keyword
+            endTime: null,
             estimateTime: task.estimateTime,
             actualTime: task.actualTime,
             repeatId: task.repeatId,
@@ -326,12 +328,14 @@ export default class FirestoreUtil {
         if (task.startTime != undefined) {
             literal.startTime = firestore.Timestamp.fromDate(task.startTime);
         } else {
-            literal.startTime = undefined;
+            // tslint:disable-next-line:no-null-keyword
+            literal.startTime = null;
         }
         if (task.endTime != undefined) {
             literal.endTime = firestore.Timestamp.fromDate(task.endTime);
         } else {
-            literal.endTime = undefined;
+            // tslint:disable-next-line:no-null-keyword
+            literal.endTime = null;
         }
 
         return literal;
