@@ -45,10 +45,8 @@ export default class EstimateList extends Vue {
     @Watch('targetDate')
     public onValueChange(newValue: string, oldValue: string): void {
         // 日付が変えられたときにリッスンを破棄
-        for (const unsubscribe of this.unsubscribes_) {
-            unsubscribe();
-        }
-        this.display();
+        this.stopListen()
+        this.display()
     }
 
     /**
@@ -60,13 +58,6 @@ export default class EstimateList extends Vue {
 
     get estimates(): Estimate[] {
         return this.estimates_;
-    }
-
-    public created(): void {
-        firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-            this.$store.commit('taskList/setUser', user);
-            this.display();
-        });
     }
 
     public display(): void {
@@ -150,6 +141,23 @@ export default class EstimateList extends Vue {
         estimate.estimateTime = tc.getEstimateSum().toString();
 
         return estimate;
+    }
+
+    private created(): void {
+        firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+            this.$store.commit('taskList/setUser', user);
+            this.display();
+        });
+    }
+
+    private destroyed(): void {
+        this.stopListen();
+    }
+
+    private stopListen(): void {
+        for (const unsubscribe of this.unsubscribes_) {
+            unsubscribe();
+        }
     }
 }
 
