@@ -23,6 +23,10 @@
                             <v-text-field v-bind:id="'task-edit-estimate-field-' + editTask_.id" type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save" @keyup.esc="cancel()"> </v-text-field>
                         </v-flex>
                         <v-flex ma-2>
+                            <span>予定時間帯</span>
+                            <v-text-field v-bind:id="'task-edit-section-field-' + editTask_.id" type="number" placeholder="予定時間帯" single-line outline mask="#####" hint="数字3または4桁。9時20分は「920」と入力" v-model="section_"  @keyup.enter="save" @keyup.esc="cancel()"> </v-text-field>
+                        </v-flex>
+                        <v-flex ma-2>
                             <span>ソート順</span>
                             <v-text-field v-bind:id="'task-edit-sortno-field-' + editTask_.id" type="number" placeholder="ソート順" single-line outline mask="#####" hint="ソート順を番号で入力" v-model="sortNo_"  @keyup.enter="save" @keyup.esc="cancel()"> </v-text-field>
                         </v-flex>
@@ -69,10 +73,11 @@ export default class TaskEdit extends Vue {
     private endEdit(task: Task): void {}
 
     private save(): void {
-        if (this.startTime_.trim() !== '' ) {
+        // Vuetifyでxボタンを押すとnullになるみたい…
+        if (this.startTime_ != undefined && this.startTime_.trim() !== '' ) {
             this.editTask_.startTime = DateUtil.getDateObject(this.task_.date, this.startTime_);
 
-            if (this.endTime_.trim() !== '') {
+            if (this.endTime_ != undefined && this.endTime_.trim() !== '') {
                 this.editTask_.endTime = DateUtil.getDateObject(this.task_.date, this.endTime_);
                 // 終了時間が入っていたら停止する
                 this.editTask_.isDoing = false;
