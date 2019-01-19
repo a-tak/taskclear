@@ -27,7 +27,10 @@ export default class Task {
   private updateTime_: Date
 
   constructor(date: Date, title: string) {
-    this.id_ = uuid()
+    this.id_ = date.getFullYear() +
+               (date.getMonth() + 1).toString().padStart(2, '0') +
+               date.getDate().toString().padStart(2, '0') +
+               '_' + uuid()
     this.date_ = date
     this.title_ = title
     this.isDoing_ = false
@@ -173,6 +176,8 @@ export default class Task {
     let estimate: number = this.estimateTime - this.actualTime
     if (estimate < 0) { estimate = 0 }
     newTask.estimateTime = estimate
+    // todo これでいいんだっけ?
+    newTask.section = this.section
     newTask.repeatId = ''
     // 次の行にコピーしたものは表示
     newTask.sortNo = this.sortNo_

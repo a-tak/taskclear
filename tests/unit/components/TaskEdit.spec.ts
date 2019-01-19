@@ -73,6 +73,13 @@ describe('TaskEdit.vue', () => {
     expect(cancelStub).toHaveBeenCalled();
   });
 
+  it('escでキャンセル 予定時間帯', () => {
+    wrapper.setMethods( { cancel: cancelStub});
+    const txtField = wrapper.find('#task-edit-section-field-' + task.id);
+    txtField.trigger('keyup.esc');
+    expect(cancelStub).toHaveBeenCalled();
+  });
+
   it('escでキャンセル ソート順', () => {
     wrapper.setMethods( { cancel: cancelStub});
     const txtField = wrapper.find('#task-edit-sortno-field-' + task.id);
