@@ -2,23 +2,27 @@ import Task from '@/lib/Task';
 
 describe('Task.ts', () => {
   const task = new Task(new Date('2018-12-06 0:54:03'), 'タスクのテスト');
-  it('初期値は空', () => {
-      expect(task.section).toMatch('');
+  it('セクションの初期値はundefined', () => {
+      expect(task.section).toEqual(undefined);
   });
 
-  it('値がセットできるか?', () => {
-      task.section = 'A';
-      expect(task.section).toMatch('A');
+  // 日付は一律1990-01-01にする。そうしないとソートが上手くいかないため
+  it('セクションの値は1990年としてセットされているか?', () => {
+      task.section = new Date('2019-01-19 9:00:00');
+      expect(task.section).toEqual(new Date('1990-01-01 9:00:00:00'));
   });
 
   it('cloneテスト', () => {
-      task.section = 'B';
+      task.section = new Date('2019-01-19 12:00:00');
       const newTask = task.clone();
-      expect(newTask.section).toMatch(task.section);
+      const s = newTask.section
+      if (s != undefined) {
+        expect(s).toEqual(task.section);
+      }
   });
 
   it('createPauseテスト', () => {
-      task.section = 'C';
+      task.section = new Date('2019-01-19 15:00:00');
       const newTask = task.createPauseTask();
   });
 

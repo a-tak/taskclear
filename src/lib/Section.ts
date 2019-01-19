@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import DateUtil from '@/util/DateUtil'
 
 export default class Section {
 
@@ -14,7 +15,7 @@ export default class Section {
      */
     constructor() {
       this.title_ = ''
-      this.startTime_ = this.clearDate(new Date())
+      this.startTime_ = DateUtil.clearDate(new Date())
       this.id_ = uuid()
       this.updateTime_ = new Date()
       this.createTime_ = new Date()
@@ -30,7 +31,7 @@ export default class Section {
     set title(value: string) { this.title_ = value; }
     get startTime(): Date { return this.startTime_; }
     set startTime(value: Date) {
-      this.startTime_ = this.clearDate(value);
+      this.startTime_ = DateUtil.clearDate(value);
     }
     public get updateTime(): Date {
       return this.updateTime_;
@@ -52,15 +53,4 @@ export default class Section {
       section.title = this.title_;
       return section;
     }
-
-    private clearDate(date: Date | undefined): Date {
-      if (date == undefined) {
-        date = new Date('1990-01-01 0:00:00');
-        return date;
-      }
-      const ret: Date = date;
-      ret.setFullYear(1990, 0, 1);
-      return ret;
-    }
-
 }
