@@ -24,7 +24,7 @@
             </v-flex>
             <v-flex ma-2>
               <span>予定時間帯</span>
-              <v-text-field v-bind:id="'task-edit-section-field-' + editTask_.id" type="number" placeholder="予定時間帯" single-line outline mask="#####" hint="数字3または4桁。9時20分は「920」と入力" v-model="section_"  @keyup.enter="save" @keyup.esc="cancel()"> </v-text-field>
+              <v-combobox :id="'task-edit-section-field-' + editTask_.id" type="number" placeholder="予定時間帯" single-line outline mask="#####" hint="数字3または4桁。9時20分は「920」と入力" v-model="section_" :items="sectionList_" @keyup.enter="save" @keyup.esc="cancel()"> </v-combobox>
             </v-flex>
             <v-flex ma-2>
               <span>ソート順</span>
@@ -46,11 +46,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
+import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator'
 import Task from '../lib/Task'
 import TaskController from '../lib/TaskController'
 import Util from '../util/Util'
 import DateUtil from '../util/DateUtil'
+import Section from '@/lib/Section'
 
 @Component
 export default class TaskEdit extends Vue {
@@ -64,6 +65,8 @@ export default class TaskEdit extends Vue {
   private estimateTime_: string = ''
   private section_: string = ''
   private sortNo_: number = 999
+  private sections_: Section[] = []
+  private sectionList_: string[] = []
 
   private backupedTask_!: Task
   private editTask_!: Task
@@ -72,6 +75,16 @@ export default class TaskEdit extends Vue {
   @Emit('endEditEvent')
   // tslint:disable-next-line:no-empty
   private endEdit(task: Task): void {}
+
+  // セクションが非同期で読み込まれるので読み込まれて変動したタイミングでリストを作るようにした
+  @Watch('sections_')
+  private onLoadSection() {
+    // セクションリスト作成
+    this.sectionList_ = []
+    for (const section of this.sections_) {
+      this.sectionList_.push(DateUtil.get4digitTime(section.startTime))
+    }
+  }
 
   private save(): void {
     // Vuetifyでxボタンを押すとnullになるみたい…
@@ -96,6 +109,8 @@ export default class TaskEdit extends Vue {
 
     if (this.section_ != undefined && this.section_.trim() !== '') {
       this.editTask_.section = DateUtil.getDateObject(this.task_.date, this.section_)
+    } else {
+      this.editTask_.section = undefined
     }
 
     if (Util.isNumber(this.estimateTime_)) {
@@ -135,6 +150,14 @@ export default class TaskEdit extends Vue {
       this.section_ = DateUtil.get4digitTime(this.task_.section)
     }
     this.sortNo_ = this.task_.sortNo
+
+    this.$store.dispatch('section/startListner')
+    this.sections_ = this.$store.getters['section/sections']
+
+  }
+
+  private destroyed(): void {
+    this.$store.dispatch('section/stopListner');
   }
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる

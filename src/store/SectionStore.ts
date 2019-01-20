@@ -49,7 +49,7 @@ export default {
     },
   },
   actions: {
-    startListner({ commit }: {commit: (name: string, payload?: Section) => void }) {
+    startListner({ commit }: {commit: (name: string, payload?: Section) => void }): void {
       // ドキュメントの各変更に対応する処理
       const addedFunc: ((section: Section) => void) = (section: Section) => {
         commit('add', section)

@@ -27,7 +27,7 @@
                                 </div>
                             </v-card-actions>
                             <v-card-actions @click.stop="startEdit()">
-                                <span>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ task_.section }}〜</span>
+                                <span>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.section) }}〜</span>
                             </v-card-actions>
                         </v-flex>
                         <v-spacer></v-spacer>
