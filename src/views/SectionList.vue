@@ -17,6 +17,7 @@
         :index_="index"
         v-on:clickDeleteButtomEvent="deleteSection"
         v-on:changeEvent="changeSection"
+        v-on:setFirstSectionEvent="setFirstSection"
       >
       </SectionRow>
     </v-slide-y-transition>    
@@ -65,6 +66,10 @@ export default class SectionList extends Vue {
 
   private changeSection(section: Section, index: number): void {
     this.$store.dispatch('section/set', section);
+  }
+
+  private setFirstSection(section: Section): void {
+    this.$store.dispatch('section/setFirst', section);
   }
 }
 </script>

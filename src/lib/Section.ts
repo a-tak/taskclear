@@ -31,7 +31,7 @@ export default class Section {
     set title(value: string) { this.title_ = value; }
     get startTime(): Date { return this.startTime_; }
     set startTime(value: Date) {
-      this.startTime_ = DateUtil.clearDate(value);
+      this.startTime_ = value;
     }
     public get updateTime(): Date {
       return this.updateTime_;

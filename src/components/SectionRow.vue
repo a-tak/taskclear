@@ -15,6 +15,14 @@
                   <v-icon color="grey darken-1">delete</v-icon>
                 </v-btn>
             </v-flex>
+            <v-flex xs4 sm2 md1 class="text-xs-right">
+              <v-tooltip bottom>
+                <v-btn slot="activator" icon ripple @click.stop="setFirtstSection(section_)">
+                  <v-icon color="grey darken-1">vertical_align_top</v-icon>
+                </v-btn>
+                <span>一日の開始セクションに指定</span>
+              </v-tooltip>
+            </v-flex>
           </v-layout>
         </v-card>
       </v-flex>
@@ -41,6 +49,10 @@ export default class SectionRow extends Vue {
   @Emit('changeEvent')
   // tslint:disable-next-line:no-empty
   public changeSection(section: Section, index: number): void {}
+
+  @Emit('setFirstSectionEvent')
+  // tslint:disable-next-line:no-empty
+  private setFirtstSection(section: Section): void {}
 
   private created() {
     this.startTime_ = DateUtil.get4digitTime(this.section_.startTime);
