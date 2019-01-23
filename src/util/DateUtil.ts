@@ -3,7 +3,7 @@ export default class DateUtil {
   public static getDateString(d: Date): string {
     return `${d.getFullYear().toString()}-${
       ('0' + (d.getMonth() + 1).toString()).slice(-2)}-${
-      ('0' + d.getDate().toString()).slice(-2)}`;
+      ('0' + d.getDate().toString()).slice(-2)}`
   }
 
   /**
@@ -15,9 +15,9 @@ export default class DateUtil {
     // なんでundifinedも通るし、stringの引数が渡ってくるの?
     if (d === undefined) { return ''; }
     if (zeroPadding === false) {
-      return `${d.getHours().toString()}:${('0' + d.getMinutes().toString()).slice(-2)}`;
+      return `${d.getHours().toString()}:${('0' + d.getMinutes().toString()).slice(-2)}`
     } else {
-      return `${('0' + d.getHours().toString()).slice(-2)}:${('0' + d.getMinutes().toString()).slice(-2)}`;
+      return `${('0' + d.getHours().toString()).slice(-2)}:${('0' + d.getMinutes().toString()).slice(-2)}`
     }
   }
 
@@ -26,7 +26,7 @@ export default class DateUtil {
    * @param date
    */
   public static get4digitTime(date: Date): string {
-    return this.getTimeString(date, true).replace(':', '');
+    return this.getTimeString(date, true).replace(':', '')
   }
 
   /**
@@ -35,19 +35,19 @@ export default class DateUtil {
    * @param timeString 時間文字列(hhmm)。「:」は取り除く。
    */
   public static getDateObject(baseDate: Date, timeString: string): Date {
-    let str: string = timeString;
-    str = str.replace(':', '').trim();
-    let retStr: string = '';
+    let str: string = timeString
+    str = str.replace(':', '').trim()
+    let retStr: string = ''
     // JSのsubstringの終了位置は実際は一つ前の桁までしか取れない!
     if (str.length === 3) {
-      retStr = `${str.substring(0, 1)}:${str.substring(1, 3)}`;
+      retStr = `${str.substring(0, 1)}:${str.substring(1, 3)}`
     } else if (str.length === 4) {
-      retStr = `${str.substring(0, 2)}:${str.substring(2, 4)}`;
+      retStr = `${str.substring(0, 2)}:${str.substring(2, 4)}`
     } else {
-      throw new Error(`timeStringの形式が不正です(${timeString})`);
+      throw new Error(`timeStringの形式が不正です(${timeString})`)
     }
-    const dateStr: string = `${baseDate.getFullYear()}/${baseDate.getMonth() + 1}/${baseDate.getDate()} ${retStr}`;
-    return new Date(dateStr);
+    const dateStr: string = `${baseDate.getFullYear()}/${baseDate.getMonth() + 1}/${baseDate.getDate()} ${retStr}`
+    return new Date(dateStr)
   }
 
   public static clearDate(date: Date | undefined): Date {
