@@ -78,8 +78,8 @@ export default {
       // Firestoreに書き込み
       con.set(Store.getters['taskList/user'].uid, section)
     },
-    delete({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
-      con.delete(Store.getters['taskList/user'].uid, section)
+    async delete({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
+      await con.delete(Store.getters['taskList/user'].uid, section)
     },
     setFirst({ dispatch, commit, state }: {dispatch: (arg1: string, arg2: Section) => void ,
                                            commit: (arg1: string, arg2: Section) => void ,

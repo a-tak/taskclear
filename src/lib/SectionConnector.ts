@@ -73,14 +73,16 @@ export default class SectionConnector {
     firebase.firestore().collection('users').doc(uid)
     .collection('sections').doc(section.id).set(this.converLiteral(section))
   }
-  public delete(uid: string, section: Section): void {
-    firebase.firestore().collection('users').doc(uid)
-    .collection('sections').doc(section.id).delete()
-    .catch((error: Error) => {
-        // tslint:disable-next-line:no-console
-        console.error(`Delete Section error! Section id=${section.id}`, error)
-    })
+  public async delete(uid: string, section: Section): Promise<void> {
+    try {
+      await firebase.firestore().collection('users').doc(uid)
+      .collection('sections').doc(section.id).delete()
+    } catch (error) {
+      // tslint:disable-next-line:no-console
+      console.error(`Delete Section error! Section id=${section.id}`, error)
+    }
   }
+
   private converLiteral(section: Section): object {
     return {
         id: section.id,

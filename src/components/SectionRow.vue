@@ -16,7 +16,7 @@
                 </v-btn>
             </v-flex>
             <v-flex xs4 sm2 md1 class="text-xs-right">
-              <v-tooltip bottom>
+              <v-tooltip bottom  v-if="index_!==0">
                 <v-btn slot="activator" icon ripple @click.stop="setFirtstSection(section_)">
                   <v-icon color="grey darken-1">vertical_align_top</v-icon>
                 </v-btn>
@@ -48,7 +48,7 @@ export default class SectionRow extends Vue {
   public deleteSection(section: Section): void {}
   @Emit('changeEvent')
   // tslint:disable-next-line:no-empty
-  public changeSection(section: Section, index: number): void {}
+  public changeSection(section: Section): void {}
 
   @Emit('setFirstSectionEvent')
   // tslint:disable-next-line:no-empty
@@ -68,7 +68,7 @@ export default class SectionRow extends Vue {
       }
       this.section_.startTime = DateUtil.getDateObject(baseDate , this.startTime_);
     }
-    this.changeSection(this.section_, this.index_);
+    this.changeSection(this.section_);
   }
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる

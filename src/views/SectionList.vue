@@ -61,10 +61,15 @@ export default class SectionList extends Vue {
   }
 
   private deleteSection(section: Section): void {
-    this.$store.dispatch('section/delete', section);
+    this.$store.dispatch('section/delete', section).then((): void => {
+      // 削除したあとのリストの最初のセクションを一日の開始セクションとして再設定
+      if (this.sections.length >= 1) {
+        this.setFirstSection(this.sections[0])
+      }
+    });
   }
 
-  private changeSection(section: Section, index: number): void {
+  private changeSection(section: Section): void {
     // 時間変更によりソート順が変わる前に最初のセクションを待避
     const firstSection: Section = this.sections[0].clone()
 
