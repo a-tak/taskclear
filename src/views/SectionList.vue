@@ -65,7 +65,13 @@ export default class SectionList extends Vue {
   }
 
   private changeSection(section: Section, index: number): void {
+    // 時間変更によりソート順が変わる前に最初のセクションを待避
+    const firstSection: Section = this.sections[0].clone()
+
     this.$store.dispatch('section/set', section);
+
+    // 時間を変更したときは一番最初のセクションを再度一日の最初のセクションとしてセットし直すことで他のセクションの日付を適切に設定する
+    this.setFirstSection(firstSection)
   }
 
   private setFirstSection(section: Section): void {
