@@ -109,7 +109,9 @@ export default class EstimateList extends Vue {
                 targetDate.setDate(targetDate.getDate() + n);
 
                 // リッスン破棄のために戻り値を配列で保存
-                this.unsubscribes_.push(FirestoreUtil.getQuery(this.$store.getters['taskList/user'].uid, targetDate)
+                this.unsubscribes_
+                // todo とりあえずコンパイル通る様に修正
+                .push(FirestoreUtil.getQuery(this.$store.getters['taskList/user'].uid, targetDate, targetDate)
                     .onSnapshot((query) => {
                         query.forEach((doc) => {
                             // 更新があったら見積時間を再計算

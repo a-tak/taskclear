@@ -3,6 +3,8 @@ import TaskController from '../lib/TaskController'
 import Task from '@/lib/Task'
 import Repeat from '@/lib/Repeat'
 import ITask from '@/lib/ITask'
+import Section from '@/lib/Section'
+import SectionConnector from '@/lib/SectionConnector'
 
 export default class FirestoreUtil {
   /**
@@ -60,12 +62,20 @@ export default class FirestoreUtil {
   /**
    * Firestoreから一日分のタスクを読み込み
    * @param uid
-   * @param date
    */
   public static async loadTasks(uid: string, date: Date): Promise<TaskController> {
     const tc = new TaskController()
 
-    const query: firestore.QuerySnapshot = await this.getQuery(uid, date).get()
+    // セクションを読み込み
+    const sc: SectionConnector = new SectionConnector()
+    const sections: Section[] = await sc.load(uid)
+    const from: Date = new Date()
+    const to: Date = new Date()
+    if (sections.length > 0) {
+
+    }
+
+    const query: firestore.QuerySnapshot = await this.getQuery(uid, from, to).get()
 
     query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
       if (doc !== undefined) {
@@ -76,15 +86,7 @@ export default class FirestoreUtil {
     return tc
   }
 
-  public static getQuery(uid: string, date: Date): firestore.Query {
-    // とりあえず今は一日の区切りを0時としてfrom,toを作る
-    // 新たにnewしてセットしないと参照が書き換わるだけでendがおかしくなる
-    const from: Date = new Date(date)
-    from.setHours(0, 0, 0, 0)
-    const to: Date = new Date(date)
-    to.setDate(date.getDate() + 1)
-    to.setHours(0, 0, 0, 0)
-
+  public static getQuery(uid: string, from: Date, to: Date): firestore.Query {
     return firebase
       .firestore()
       .collection('users')

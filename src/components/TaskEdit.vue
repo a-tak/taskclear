@@ -126,7 +126,6 @@ export default class TaskEdit extends Vue {
         DateUtil.getDateObject(new Date(this.$store.getters['taskList/targetDate']),
           this.section_,
           firstSectionTime)
-      console.log(`${newDate}`)
     } else {
       // 入力がなければ1日の開始セクションの時間をセットする
       newDate.setHours(firstSectionTime.getHours())

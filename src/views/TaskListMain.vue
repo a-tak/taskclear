@@ -81,6 +81,7 @@ import TaskController from '@/lib/TaskController';
 import Repeat from '@/lib/Repeat';
 import RepeatCreator from '@/lib/RepeatCreator';
 import Migration from '@/util/Migration';
+import SectionConnector from '@/lib/SectionConnector';
 
 @Component({
 components: {
@@ -144,6 +145,11 @@ export default class TaskListMain extends Vue {
   private loadTasks(): void {
 
     const self: TaskListMain = this;
+
+    // セクションを読み込み
+    const sc: SectionConnector = new SectionConnector()
+    sc.load(this.$store.getters['taskList/user'].uid)
+
 
     // 当日分のリピートタスクを作る
     const rc: RepeatCreator =

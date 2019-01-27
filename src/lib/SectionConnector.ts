@@ -32,11 +32,7 @@ export default class SectionConnector {
     }
 
     // データ検索
-    this.unscribe_ = firestore()
-                    .collection('users')
-                    .doc(uid)
-                    .collection('sections')
-                    .orderBy('startTime', 'asc')
+    this.unscribe_ = this.getQuery(uid)
                     .onSnapshot((snapshot) => {
                       snapshot.docChanges().forEach((change: firestore.DocumentChange) => {
                         let section: Section;
@@ -67,6 +63,23 @@ export default class SectionConnector {
     }
   }
 
+  /**
+   * セクションのリストを取得して返す
+   * リアルタイムアップデートは更新が入らない場合は面倒なだけだったので別で単純に取得するメソッドを追加した
+   * @param uid ユーザーID
+   */
+  public async load(uid: string): Promise<Section[]> {
+    const sections: Section[] = []
+    const query: firestore.QuerySnapshot = await this.getQuery(uid).get()
+    query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
+      if (doc !== undefined) {
+        const data: firebase.firestore.DocumentData | undefined = doc.data()
+        sections.push(this.convertClass(data))
+      }
+    })
+    return sections
+  }
+
   public async set(uid: string, section: Section): Promise<void> {
     // 保存時にTaskオブジェクトのupdateTimeも更新
     section.updateTime = new Date()
@@ -81,6 +94,14 @@ export default class SectionConnector {
       // tslint:disable-next-line:no-console
       console.error(`Delete Section error! Section id=${section.id}`, error)
     }
+  }
+
+  private getQuery(uid: string): firestore.Query {
+    return firestore()
+    .collection('users')
+    .doc(uid)
+    .collection('sections')
+    .orderBy('startTime', 'asc')
   }
 
   private converLiteral(section: Section): object {
