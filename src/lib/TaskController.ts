@@ -60,21 +60,10 @@ export default class TaskController {
     // 開始前タスクはセクションとsortNoでソート
     // aよりbが後ろに並ぶべきならば負数を返すように実装すること
     beforeStartTasks.sort((a: Task, b: Task) => {
-      if (a.section == undefined) {
-        if (b.section == undefined) {
-          return a.sortNo - b.sortNo
-        }
-        return -1
+      if (a.date.getTime() !== b.date.getTime()) {
+        return a.date.getTime() - b.date.getTime()
       } else {
-        if (b.section == undefined) {
-          return 1
-        } else {
-          if (a.section.toDateString() === b.section.toDateString()) {
-            return a.sortNo - b.sortNo
-          } else {
-            return a.section.getTime() - b.section.getTime()
-          }
-        }
+        return a.sortNo - b.sortNo
       }
     })
 

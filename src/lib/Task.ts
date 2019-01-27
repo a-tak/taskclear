@@ -22,7 +22,6 @@ export default class Task {
   private isDeleted_: boolean
   private isNext_: boolean
   private needSave_: boolean
-  private section_: Date | undefined
   private createTime_: Date
   private updateTime_: Date
 
@@ -31,7 +30,7 @@ export default class Task {
                (date.getMonth() + 1).toString().padStart(2, '0') +
                date.getDate().toString().padStart(2, '0') +
                '_' + uuid()
-    this.date_ = date
+    this.date_ = new Date(date)
     this.title_ = title
     this.isDoing_ = false
     this.startTime_ = undefined
@@ -44,7 +43,6 @@ export default class Task {
     this.isNext_ = false
     // フラグセット忘れで保存されないのを多少防ぐためにtrueで
     this.needSave_ = true
-    this.section_ = undefined
     this.createTime_ = new Date()
     this.updateTime_ = this.createTime_
   }
@@ -156,14 +154,6 @@ export default class Task {
     this.needSave_ = value
   }
 
-  public get section(): Date | undefined {
-    return this.section_
-  }
-  public set section(value: Date | undefined) {
-    value = DateUtil.clearDate(value)
-    this.section_ = value
-  }
-
   /**
    * 中断タスクを作成
    * 元のタスクの見積から実績を引いた残り時間を入れて新たなタスクを戻す
@@ -176,8 +166,6 @@ export default class Task {
     let estimate: number = this.estimateTime - this.actualTime
     if (estimate < 0) { estimate = 0 }
     newTask.estimateTime = estimate
-    // todo これでいいんだっけ?
-    newTask.section = this.section
     newTask.repeatId = ''
     // 次の行にコピーしたものは表示
     newTask.sortNo = this.sortNo_
@@ -220,7 +208,6 @@ export default class Task {
     newTask.isDeleted = this.isDeleted_
     newTask.isNext = this.isNext_
     newTask.needSave = this.needSave_
-    newTask.section = this.section_
     newTask.createTime = new Date(this.createTime_)
     newTask.updateTime = new Date(this.updateTime_)
 

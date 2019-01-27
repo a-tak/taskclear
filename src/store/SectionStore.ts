@@ -29,6 +29,13 @@ export default {
     clear(state: State) {
       state.list = []
     },
+    /**
+     * セクション追加 コミット
+     * 初回読み込み時もここが呼ばれてsectionが配列に追加される
+     * Firestoreでソートしているのでそれに従って配列に追加されると期待してここではソートしない
+     * @param state Vuexの状態オブジェクト
+     * @param section 追加するセクションオブジェクト
+     */
     add(state: State, section: Section) {
       state.list.push(section)
     },
@@ -37,6 +44,11 @@ export default {
       const index = state.list.findIndex((item) => item.id === section.id)
       state.list.splice(index, 1)
     },
+    /**
+     * ソート コミット
+     * 初期読み込み時はFirestoreからソート済み情報が取れるが、画面で時間編集すると自前でソートが必要になる。
+     * @param state Vuexの状態オブジェクト
+     */
     sort(state: State) {
       state.list.sort((a: Section, b: Section): number => {
         if (a.startTime == undefined) {
@@ -53,6 +65,10 @@ export default {
     startListner({ commit }: {commit: (name: string, payload?: Section) => void }): void {
       // ドキュメントの各変更に対応する処理
       const addedFunc: ((section: Section) => void) = (section: Section) => {
+        // 配列の最後に追加されることになるが一旦UIのわかりやすさ優先でこの仕様にしておく
+        // 厳密にやると今の時間で追加するので最後尾に来るとは限らない
+        // 普通のオペレーションだと追加後に時間を設定し直すので、その時に正しい日付が設定されるはず
+        // それか末尾に来るような時間をデフォルトでセットするかだな
         commit('add', section)
       }
       const modifiedFunc: ((section: Section) => void) = (section: Section) => {
@@ -85,7 +101,7 @@ export default {
                                            commit: (arg1: string, arg2: Section) => void ,
                                            state: State },
              firstSection: Section) {
-      // 一日の区切りとなるセクションは1990-01-01をセット
+      // 一日の区切りとなるセクションは日付をリセット
       firstSection.startTime = DateUtil.clearDate(firstSection.startTime)
       dispatch('set', firstSection)
 

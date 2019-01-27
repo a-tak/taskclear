@@ -107,11 +107,29 @@ export default class TaskEdit extends Vue {
       this.editTask_.isDoing = false
     }
 
+    let sectionDate: Date
     if (this.section_ != undefined && this.section_.trim() !== '') {
-      this.editTask_.section = DateUtil.getDateObject(this.task_.date, this.section_)
+      // 指定された時間に沿ってdateの日付と時間を変更する
+      sectionDate = DateUtil.getDateObject(new Date(), this.section_, this.sections_[0].startTime)
+      // sectionDate = DateUtil.clearDate(sectionDate)
+      console.log(`sectionDate= ${sectionDate}`)
     } else {
-      this.editTask_.section = undefined
+      // 1日の開始セクションの時間をセットする
+      if (this.sections_.length >= 1) {
+        sectionDate = this.sections_[0].startTime
+      } else {
+        // セクションが一つも設定されていない場合は1970/1/1のオブジェクトを設定する
+        sectionDate = DateUtil.getMinDate()
+      }
     }
+    // 開いている画面の日付にセクションの時間を足して設定
+    const newDate: Date = new Date(this.$store.getters['taskList/targetDate'])
+    console.log(`${newDate.getDate()} / ${sectionDate.getDate() - 1}` )
+    newDate.setDate(newDate.getDate() + sectionDate.getDate() - 1)
+    newDate.setHours(sectionDate.getHours())
+    newDate.setMinutes(sectionDate.getMinutes())
+    newDate.setMilliseconds(0)
+    this.editTask_.date = newDate
 
     if (Util.isNumber(this.estimateTime_)) {
       this.editTask_.estimateTime = Number(this.estimateTime_)
@@ -146,9 +164,7 @@ export default class TaskEdit extends Vue {
     if (this.task_.estimateTime != undefined) {
       this.estimateTime_ = this.task_.estimateTime.toString()
     }
-    if (this.task_.section != undefined) {
-      this.section_ = DateUtil.get4digitTime(this.task_.section)
-    }
+    this.section_ = DateUtil.get4digitTime(this.task_.date)
     this.sortNo_ = this.task_.sortNo
 
     this.$store.dispatch('section/startListner')

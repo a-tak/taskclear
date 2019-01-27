@@ -316,8 +316,6 @@ export default class FirestoreUtil {
       // tslint:disable-next-line:no-null-keyword
       endTime: null,
       estimateTime: task.estimateTime,
-      // tslint:disable-next-line:no-null-keyword
-      section: null,
       actualTime: task.actualTime,
       repeatId: task.repeatId,
       sortNo: task.sortNo,
@@ -336,12 +334,6 @@ export default class FirestoreUtil {
     } else {
       // tslint:disable-next-line:no-null-keyword
       literal.endTime = null
-    }
-    if (task.section != undefined) {
-      literal.section = firestore.Timestamp.fromDate(task.section)
-    } else {
-      // tslint:disable-next-line:no-null-keyword
-      literal.section = null
     }
 
     return literal
@@ -384,7 +376,6 @@ export default class FirestoreUtil {
       task.startTime =  this.toDateUndefinable(data.startTime)
       task.endTime = this.toDateUndefinable(data.endTime)
       task.estimateTime = data.estimateTime
-      task.section = this.toDateUndefinable(data.section)
       task.isDoing = data.isDoing
       task.repeatId = this.toString(data.repeatId)
       task.sortNo = this.toNumber(data.sortNo)
