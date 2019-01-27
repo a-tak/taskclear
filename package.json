@@ -15,7 +15,7 @@
   "dependencies": {
     "@types/uuid": "^3.4.4",
     "dom": "0.0.3",
-    "firebase": "^5.8.0",
+    "firebase": "^5.8.1",
     "grpc": "^1.18.0",
     "register-service-worker": "^1.0.0",
     "uuid": "^3.3.2",
