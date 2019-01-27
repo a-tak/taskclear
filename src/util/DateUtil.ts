@@ -56,15 +56,15 @@ export default class DateUtil {
     const retDate: Date = new Date(baseDate)
     if (firstSectionDate != undefined) {
       const firstSectionTime: Date = DateUtil.clearDate(firstSectionDate)
-      const inputTime: Date =
-        new Date(DateUtil.getMinDate().getFullYear + '/' +
-        DateUtil.getMinDate().getMonth() + '/' +
-        DateUtil.getMinDate().getDate() + ' ' + retTime)
+      const d: Date = DateUtil.getMinDate()
+      const secTimeStr: string = d.getFullYear() + '/' +
+                              d.getMonth() + 1 + '/' +
+                              d.getDate() + ' ' + retTime
+      const inputTime: Date = new Date(secTimeStr)
       if (inputTime.getTime() < firstSectionTime.getTime()) {
         retDate.setDate(retDate.getDate() + 1)
       }
     }
-
     const dateStr: string = `${retDate.getFullYear()}/${retDate.getMonth() + 1}/${retDate.getDate()} ${retTime}`
     return new Date(dateStr)
   }
