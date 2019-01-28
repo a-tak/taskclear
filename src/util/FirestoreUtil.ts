@@ -65,14 +65,12 @@ export default class FirestoreUtil {
    */
   public static async loadTasks(uid: string, date: Date): Promise<TaskController> {
     const tc = new TaskController()
-
-    // セクションを読み込み
-    const sc: SectionConnector = new SectionConnector()
-    const sections: Section[] = await sc.load(uid)
+    // todo ここでストアのセクションを読むべきか、引数で渡すべきか
+    const sections: Section[] = []
     const from: Date = new Date()
     const to: Date = new Date()
     if (sections.length > 0) {
-
+      // todo 一日の最初を取得する処理。他でも使うので関数化する
     }
 
     const query: firestore.QuerySnapshot = await this.getQuery(uid, from, to).get()
