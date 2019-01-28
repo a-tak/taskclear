@@ -171,13 +171,8 @@ export default class TaskEdit extends Vue {
     this.section_ = DateUtil.get4digitTime(this.task_.date)
     this.sortNo_ = this.task_.sortNo
 
-    this.$store.dispatch('section/startListner')
     this.sections_ = this.$store.getters['section/sections']
 
-  }
-
-  private destroyed(): void {
-    this.$store.dispatch('section/stopListner');
   }
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる
