@@ -142,42 +142,35 @@ export default class TaskListMain extends Vue {
     this.loadTasks();
   }
 
-  private loadTasks(): void {
+  private async loadTasks(): Promise<void> {
 
     const self: TaskListMain = this;
-
-    // セクションを読み込み
-    const sc: SectionConnector = new SectionConnector()
-    sc.load(this.$store.getters['taskList/user'].uid)
-
 
     // 当日分のリピートタスクを作る
     const rc: RepeatCreator =
       new RepeatCreator(this.$store.getters['taskList/user'].uid, this.$store.getters['taskList/targetDate']);
-    rc.creaetRepeat(1)
-    .then((): void => {
-        // 今日のデータを読み込み(同期的に)
-        FirestoreUtil.loadTasks(self.$store.getters['taskList/user'].uid, self.$store.getters['taskList/targetDate'])
-        .then((tc: TaskController): void => {
-            tc.sort();
-            self.$store.commit('taskList/setTaskCtrl', tc);
-            },
-        );
-    });
+    await rc.creaetRepeat(1)
+    // 今日のデータを読み込み(同期的に)
+    const tc: TaskController =
+      await FirestoreUtil.loadTasks(
+        self.$store.getters['taskList/user'].uid, self.$store.getters['taskList/targetDate'])
+    tc.sort();
+    self.$store.commit('taskList/setTaskCtrl', tc);
 
-    this.recreateRepeatTask();
+    this.reCreateRepeatTask();
   }
 
-  private async recreateRepeatTask(): Promise<void> {
+  private async reCreateRepeatTask(): Promise<void> {
     // 非同期で明日以降1週間分のデータを作る
     const d = new Date(this.$store.getters['taskList/targetDate']);
     d.setDate(d.getDate() + 1);
     const rc2: RepeatCreator = new RepeatCreator(this.$store.getters['taskList/user'].uid, d);
-    rc2.creaetRepeat(6)
-    .catch((e): void => {
-        // tslint:disable-next-line:no-console
-        console.error(`repeate task create error! `, e);
-    });
+    try {
+      rc2.creaetRepeat(6)
+    } catch (e) {
+      // tslint:disable-next-line:no-console
+      console.error(`repeate task create error! `, e)
+    }
 
   }
 
@@ -223,7 +216,7 @@ export default class TaskListMain extends Vue {
     this.$store.getters['taskList/taskCtrl'].sort();
     // needSaveフラグは子コンポーネントで設定しているのでここでは設定しない
     this.save();
-    this.recreateRepeatTask();
+    this.reCreateRepeatTask();
   }
 
   private addTask(): void {
@@ -271,15 +264,19 @@ export default class TaskListMain extends Vue {
   }
 
   private created(): void {
-    firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-      this.$store.commit('taskList/setUser', user);
-      Migration.run(this.$store.getters['taskList/user'].uid)
-      .then((): void => {
-        this.loadTasks();
-      });
-    });
+    this.initialLoad()
   }
 
+  private initialLoad() {
+    firebase.auth().onAuthStateChanged(async (user: firebase.User | null) =>  {
+      this.$store.commit('taskList/setUser', user)
+      await Migration.run(this.$store.getters['taskList/user'].uid)
+      // セクション読み込み
+      await this.$store.dispatch('section/load')
+      // タスクロード
+      this.loadTasks();
+    });
+  }
   private mounted(): void {
     document.onkeyup = (e: KeyboardEvent) => {
       if (e.key === 'd') {

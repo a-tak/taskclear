@@ -88,6 +88,18 @@ export default {
     stopListner({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
       con.stopListener()
     },
+    /**
+     * リアルタイムアップデート無しにセクションを読み込む
+     * 同期的にセクション読み込み後に何か処理をしたい場合に使う
+     * 中でuidを使っているのでuidが読み込まれていることが前提
+     */
+    async load({ commit }: {commit: (arg1: string, arg2?: Section) => void }) {
+      const sections: Section[] = await con.load(Store.getters['taskList/user'].uid)
+      commit('clear')
+      for (const section of sections) {
+        commit('add', section)
+      }
+    },
     // { commit }はオブジェクトを分割代入でうけとる引数の書き方
     // TypeScriptの型指定として「: {commit: (arg1: string, arg2: Section) => void }」という関数型の定義をしてしないとコンパイルできない😢
     set({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
