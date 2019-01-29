@@ -4,7 +4,9 @@ import Task from '@/lib/Task'
 import Repeat from '@/lib/Repeat'
 import ITask from '@/lib/ITask'
 import Section from '@/lib/Section'
-import SectionConnector from '@/lib/SectionConnector'
+import Store from '@/store/Store'
+import DateUtil from './DateUtil';
+import { start } from 'repl';
 
 export default class FirestoreUtil {
   /**
@@ -16,7 +18,7 @@ export default class FirestoreUtil {
   public static saveTasks(uid: string, taskctrl: TaskController): void {
     const promises: Array<Promise<void>> = []
 
-    const start: number = Date.now()
+    const processStartTime: number = Date.now()
     for (const task of taskctrl.tasks) {
       if ( task.needSave === true ) {
         promises.push(this.setTask(uid, task))
@@ -30,10 +32,10 @@ export default class FirestoreUtil {
         task.needSave = false
       }
       // tslint:disable-next-line:no-console
-      console.log(`セーブ件数 ${promises.length} 件 / Save time ${Date.now() - start} ms `)
+      console.log(`セーブ件数 ${promises.length} 件 / Save time ${Date.now() - processStartTime} ms `)
     }).catch((error: Error): void => {
       // tslint:disable-next-line:no-console
-      console.error(`Save Error! セーブ件数 ${promises.length} 件 / ${Date.now() - start} ms `, error)
+      console.error(`Save Error! セーブ件数 ${promises.length} 件 / ${Date.now() - processStartTime} ms `, error)
     })
   }
 
@@ -64,14 +66,16 @@ export default class FirestoreUtil {
    * @param uid
    */
   public static async loadTasks(uid: string, date: Date): Promise<TaskController> {
+    const startTime: Date = this.getFirstSectionTime()
     const tc = new TaskController()
-    // todo ここでストアのセクションを読むべきか、引数で渡すべきか
-    const sections: Section[] = []
-    const from: Date = new Date()
-    const to: Date = new Date()
-    if (sections.length > 0) {
-      // todo 一日の最初を取得する処理。他でも使うので関数化する
-    }
+
+    const from: Date = new Date(date)
+    from.setHours(startTime.getHours())
+    from.setMinutes(startTime.getMinutes())
+    from.setMilliseconds(0)
+
+    const to: Date = new Date(from)
+    to.setDate(to.getDate() + 1)
 
     const query: firestore.QuerySnapshot = await this.getQuery(uid, from, to).get()
 
@@ -276,6 +280,20 @@ export default class FirestoreUtil {
     } else {
       return date.toDate()
     }
+  }
+
+  /**
+   * 一日の開始時間を返す
+   */
+  private static getFirstSectionTime(): Date {
+    const sections: Section[] = Store.getters['section/sections']
+    if (sections.length > 0) {
+      return sections[0].startTime
+    } else {
+      // セクションの設定がなければ0:00をセットして返す
+      return DateUtil.getMinDate()
+    }
+
   }
 
   /**
