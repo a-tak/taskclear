@@ -3,10 +3,7 @@ import TaskController from '../lib/TaskController'
 import Task from '@/lib/Task'
 import Repeat from '@/lib/Repeat'
 import ITask from '@/lib/ITask'
-import Section from '@/lib/Section'
-import Store from '@/store/Store'
 import DateUtil from './DateUtil';
-import { start } from 'repl';
 
 export default class FirestoreUtil {
   /**
@@ -80,13 +77,7 @@ export default class FirestoreUtil {
   }
 
   public static getQuery(uid: string, date: Date): firestore.Query {
-    const startTime: Date = this.getFirstSectionTime()
-    const from: Date = new Date(date)
-    from.setHours(startTime.getHours())
-    from.setMinutes(startTime.getMinutes())
-    from.setMilliseconds(0)
-    const to: Date = new Date(from)
-    to.setDate(to.getDate() + 1)
+    const {from, to} = DateUtil.getDateFromToTime(date)
 
     return firebase
       .firestore()
@@ -282,20 +273,6 @@ export default class FirestoreUtil {
   }
 
   /**
-   * 一日の開始時間を返す
-   */
-  private static getFirstSectionTime(): Date {
-    const sections: Section[] = Store.getters['section/sections']
-    if (sections.length > 0) {
-      return sections[0].startTime
-    } else {
-      // セクションの設定がなければ0:00をセットして返す
-      return DateUtil.getMinDate()
-    }
-
-  }
-
-  /**
    * 指定した日のタスクを読み込むクエリを生成する(論理削除済みタスクも読み込む)
    * @param uid ユーザーid
    * @param date 取込対象日付
@@ -303,11 +280,7 @@ export default class FirestoreUtil {
   private static getDeletedQuery(uid: string, date: Date): firestore.Query {
     // とりあえず今は一日の区切りを0時としてfrom,toを作る
     // 新たにnewしてセットしないと参照が書き換わるだけでendがおかしくなる
-    const from: Date = new Date(date)
-    from.setHours(0, 0, 0, 0)
-    const to: Date = new Date(date)
-    to.setDate(date.getDate() + 1)
-    to.setHours(0, 0, 0, 0)
+    const {from, to} = DateUtil.getDateFromToTime(date)
 
     return firebase
       .firestore()

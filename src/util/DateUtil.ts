@@ -1,4 +1,5 @@
-import { Z_BEST_SPEED } from 'zlib';
+import Section from '@/lib/Section'
+import Store from '@/store/Store'
 
 export default class DateUtil {
   // 現地時間のyyyy-mm-dd形式の文字列を返す
@@ -105,4 +106,36 @@ export default class DateUtil {
   public static getMinDate(): Date {
     return new Date('1970-01-01 0:00:00')
   }
+
+  /**
+   * 一日の開始時間を返す
+   */
+  public static getFirstSectionTime(): Date {
+    const sections: Section[] = Store.getters['section/sections']
+    if (sections.length > 0) {
+      return sections[0].startTime
+    } else {
+      // セクションの設定がなければ0:00をセットして返す
+      return DateUtil.getMinDate()
+    }
+
+  }
+
+  /**
+   * 指定した日付の開始と終了時間を返す
+   * @param date 対象の日付
+   */
+  public static getDateFromToTime(date: Date): {from: Date, to: Date} {
+    const startTime: Date = this.getFirstSectionTime()
+    const from: Date = new Date(date)
+    from.setHours(startTime.getHours())
+    from.setMinutes(startTime.getMinutes())
+    from.setMilliseconds(0)
+    const to: Date = new Date(from)
+    to.setDate(to.getDate() + 1)
+
+    return {from, to}
+
+  }
+
 }
