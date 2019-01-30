@@ -58,7 +58,10 @@
                             <span>見積時間(分)</span>
                             <v-text-field type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save()" > </v-text-field>
                         </v-flex>
-
+                        <v-flex>
+                            <span>予定時間帯</span>
+                            <v-combobox type="number" placeholder="予定時間帯" single-line outline mask="#####" hint="数字3または4桁。9時20分は「920」と入力" v-model="section_" :items="sectionList_" @keyup.enter="save()" > </v-combobox>
+                        </v-flex>
                     </v-layout>
                 </v-flex>
             </v-layout>
@@ -81,6 +84,7 @@ import DateUtil from '../util/DateUtil';
 import TaskController from '../lib/TaskController';
 import Repeat from '../lib/Repeat';
 import FirestoreUtil from '../util/FirestoreUtil';
+import Section from '@/lib/Section'
 
 @Component
 export default class RepeatEdit extends Vue {
@@ -115,6 +119,8 @@ export default class RepeatEdit extends Vue {
     private estimateTime_: number = 0;
     private repeat_: Repeat = new Repeat();
     private oldRepeat_: Repeat | undefined = undefined;
+    private sections_: Section[] = []
+    private sectionList_: string[] = []
 
     @Emit('endRepeatEditEvent')
     // tslint:disable-next-line:no-empty
@@ -149,6 +155,12 @@ export default class RepeatEdit extends Vue {
     }
 
     public created(): void {
+        this.sections_ = this.$store.getters['section/sections']
+        this.sectionList_ = []
+        for (const section of this.sections_) {
+            this.sectionList_.push(DateUtil.get4digitTime(section.startTime))
+        }
+
         const self: RepeatEdit = this;
         if (this.task_.repeatId === '') {
             this.setNewRepeat();
