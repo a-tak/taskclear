@@ -107,33 +107,8 @@ export default class TaskEdit extends Vue {
       this.editTask_.isDoing = false
     }
 
-    // 何も指定がなければ現在開いている画面の日付の0:00をタスクの日付としてセット
-    let newDate: Date = DateUtil.clearDate(new Date(this.$store.getters['taskList/targetDate']))
-
-    // 開始セクションの時間を取得
-    let firstSectionTime: Date = DateUtil.getMinDate()
-    if (this.sections_.length > 0) {
-      firstSectionTime = new Date(this.sections_[0].startTime)
-    } else {
-      firstSectionTime.setHours(0)
-      firstSectionTime.setMinutes(0)
-      firstSectionTime.setMilliseconds(0)
-    }
-
-    if (this.section_ != undefined && this.section_.trim() !== '') {
-      // 指定された時間に沿ってdateの日付と時間を変更する
-      newDate =
-        DateUtil.getDateObject(new Date(this.$store.getters['taskList/targetDate']),
-          this.section_,
-          firstSectionTime)
-    } else {
-      // 入力がなければ1日の開始セクションの時間をセットする
-      newDate.setHours(firstSectionTime.getHours())
-      newDate.setMinutes(firstSectionTime.getMinutes())
-      newDate.setMilliseconds(firstSectionTime.getMilliseconds())
-    }
-
-    this.editTask_.date = newDate
+    this.editTask_.date =
+      DateUtil.calcTaskDate(this.$store.getters['taskList/targetDate'], DateUtil.getDateByTimeString(this.section_))
 
     if (Util.isNumber(this.estimateTime_)) {
       this.editTask_.estimateTime = Number(this.estimateTime_)
