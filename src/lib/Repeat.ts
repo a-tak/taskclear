@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import DateUtil from '@/util/DateUtil';
 
 export default class Repeat {
     public get id(): string {
@@ -39,6 +40,15 @@ export default class Repeat {
 
     private estimateTime_: number;
 
+    private section_: Date
+
+    public get section(): Date {
+        return this.section_
+    }
+    public set section(value: Date) {
+        this.section_ = value
+    }
+
     /**
      * リピートの開始日
      * セットされたDateオブジェクトの時分秒は自動的に0に修正する
@@ -54,6 +64,7 @@ export default class Repeat {
         this.from_ = new Date();
         this.day_ = [];
         this.estimateTime_ = 0;
+        this.section_ = DateUtil.getMinDate()
     }
 
     /**
