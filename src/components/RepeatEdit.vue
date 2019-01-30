@@ -101,21 +101,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
-import Task from '../lib/Task';
-import DateUtil from '../util/DateUtil';
-import TaskController from '../lib/TaskController';
-import Repeat from '../lib/Repeat';
-import FirestoreUtil from '../util/FirestoreUtil';
-import Section from '@/lib/Section';
+import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
+import Task from '../lib/Task'
+import DateUtil from '../util/DateUtil'
+import TaskController from '../lib/TaskController'
+import Repeat from '../lib/Repeat'
+import FirestoreUtil from '../util/FirestoreUtil'
+import Section from '@/lib/Section'
 
 @Component
 export default class RepeatEdit extends Vue {
   get dateFrom(): string {
-    return DateUtil.getDateString(this.from_);
+    return DateUtil.getDateString(this.from_)
   }
   set dateFrom(value: string) {
-    this.from_ = new Date(value);
+    this.from_ = new Date(value)
   }
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる
@@ -123,32 +123,32 @@ export default class RepeatEdit extends Vue {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
       case 'xs':
-        return { column: true };
+        return { column: true }
       case 'sm':
-        return { column: true };
+        return { column: true }
       case 'md':
-        return { row: true };
+        return { row: true }
       case 'lg':
-        return { row: true };
+        return { row: true }
       case 'xl':
-        return { row: true };
+        return { row: true }
       default:
-        return { row: true };
+        return { row: true }
     }
   }
 
   // !はundefinedやnullにならないことを示すもの
-  @Prop() public task_!: Task;
+  @Prop() public task_!: Task
 
-  private menufrom_: boolean = false;
-  private menuto_: boolean = false;
-  private selectedDay_: string[] = [];
-  private from_: Date = new Date();
-  private estimateTime_: number = 0;
-  private repeat_: Repeat = new Repeat();
-  private oldRepeat_: Repeat | undefined = undefined;
-  private sections_: Section[] = [];
-  private sectionList_: string[] = [];
+  private menufrom_: boolean = false
+  private menuto_: boolean = false
+  private selectedDay_: string[] = []
+  private from_: Date = new Date()
+  private estimateTime_: number = 0
+  private repeat_: Repeat = new Repeat()
+  private oldRepeat_: Repeat | undefined = undefined
+  private sections_: Section[] = []
+  private sectionList_: string[] = []
 
   @Emit('endRepeatEditEvent')
   // tslint:disable-next-line:no-empty
@@ -156,24 +156,24 @@ export default class RepeatEdit extends Vue {
 
   public save(): void {
     if (this.selectedDay_.length > 0) {
-      this.repeat_.title = this.task_.title;
-      this.repeat_.from = this.from_;
-      this.repeat_.day = this.selectedDay_;
-      this.repeat_.estimateTime = this.estimateTime_;
+      this.repeat_.title = this.task_.title
+      this.repeat_.from = this.from_
+      this.repeat_.day = this.selectedDay_
+      this.repeat_.estimateTime = this.estimateTime_
       FirestoreUtil.saveRepeat(
         this.$store.getters['taskList/user'].uid,
         this.repeat_,
         this.oldRepeat_,
-      );
-      this.task_.repeatId = this.repeat_.id;
+      )
+      this.task_.repeatId = this.repeat_.id
     } else {
       // 曜日の指定を全て外したらリピートを削除する
       FirestoreUtil.saveRepeat(
         this.$store.getters['taskList/user'].uid,
         undefined,
         this.oldRepeat_,
-      );
-      this.task_.repeatId = '';
+      )
+      this.task_.repeatId = ''
     }
 
     // 旧repeat idのタスクを削除
@@ -182,27 +182,27 @@ export default class RepeatEdit extends Vue {
         this.$store.getters['taskList/user'].uid,
         this.oldRepeat_.id,
         this.oldRepeat_.from,
-      );
+      )
     }
 
     // 編集終了イベント発生
-    this.endEdit(this.task_);
+    this.endEdit(this.task_)
   }
 
   public cancel(): void {
-    this.endEdit(this.task_);
+    this.endEdit(this.task_)
   }
 
   public created(): void {
-    this.sections_ = this.$store.getters['section/sections'];
-    this.sectionList_ = [];
+    this.sections_ = this.$store.getters['section/sections']
+    this.sectionList_ = []
     for (const section of this.sections_) {
-      this.sectionList_.push(DateUtil.get4digitTime(section.startTime));
+      this.sectionList_.push(DateUtil.get4digitTime(section.startTime))
     }
 
-    const self: RepeatEdit = this;
+    const self: RepeatEdit = this
     if (this.task_.repeatId === '') {
-      this.setNewRepeat();
+      this.setNewRepeat()
     } else {
       // リピートが設定されているタスクであればリピート設定を読み込み
       FirestoreUtil.loadRepeat(
@@ -212,25 +212,25 @@ export default class RepeatEdit extends Vue {
         (repeat: Repeat): void => {
           if (repeat.id === '') {
             // タスクに設定されているリピートが存在しない(リンクが外れて浮いている)場合も、今のタスクから情報セットする
-            this.setNewRepeat();
+            this.setNewRepeat()
           } else {
-            self.oldRepeat_ = repeat;
-            self.repeat_ = repeat.copyNew();
+            self.oldRepeat_ = repeat
+            self.repeat_ = repeat.copyNew()
 
-            self.selectedDay_ = self.repeat_.day;
-            self.from_ = self.repeat_.from;
-            self.estimateTime_ = self.repeat_.estimateTime;
+            self.selectedDay_ = self.repeat_.day
+            self.from_ = self.repeat_.from
+            self.estimateTime_ = self.repeat_.estimateTime
           }
         },
-      );
+      )
     }
   }
 
   public setNewRepeat(): void {
-    this.repeat_ = new Repeat();
-    this.repeat_.title = this.task_.title;
-    this.repeat_.estimateTime = 0;
-    this.oldRepeat_ = undefined;
+    this.repeat_ = new Repeat()
+    this.repeat_.title = this.task_.title
+    this.repeat_.estimateTime = 0
+    this.oldRepeat_ = undefined
   }
 }
 </script>
