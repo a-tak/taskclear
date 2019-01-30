@@ -36,17 +36,22 @@ export default class FirestoreUtil {
     })
   }
 
-  public static async loadRepeatByDateFrom(uid: string, dateFrom: Date): Promise<Repeat[]> {
+  /**
+   * 指定日以降のリピート設定を取得する
+   * @param uid uid
+   * @param date 対象日付
+   */
+  public static async loadRepeatByDateFrom(uid: string, date: Date): Promise<Repeat[]> {
 
     const repeats: Repeat[] = []
 
-    dateFrom.setHours(0, 0, 0, 0)
+    const {from} = DateUtil.getDateFromToTime(date)
     const query: firestore.QuerySnapshot = await firebase
       .firestore()
       .collection('users')
       .doc(uid)
       .collection('repeats')
-      .where('from', '<=', firestore.Timestamp.fromDate(dateFrom))
+      .where('from', '<=', firestore.Timestamp.fromDate(from))
       .get()
 
     query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
@@ -392,7 +397,12 @@ export default class FirestoreUtil {
           repeat.from = this.toDate(data.from)
           repeat.day = data.day
           repeat.estimateTime = this.toNumber(data.estimateTime)
-          // todo ここにもセクション追加が必要
+          const section: Date | undefined = this.toDateUndefinable(data.section)
+          if (section == undefined) {
+            repeat.section = DateUtil.getMinDate()
+          } else {
+            repeat.section = section
+          }
       } else {
           // 仕様上存在しないrepeatIdが来ることもあるのでエラーとしないが、それを検知して処理するために空のidのRepeatを返す
           repeat.id = ''
@@ -407,6 +417,7 @@ export default class FirestoreUtil {
           from: repeat.from,
           day: repeat.day,
           estimateTime: repeat.estimateTime,
+          section: repeat.section,
       }
   }
 }

@@ -149,6 +149,7 @@ export default class RepeatEdit extends Vue {
   private oldRepeat_: Repeat | undefined = undefined
   private sections_: Section[] = []
   private sectionList_: string[] = []
+  private section_: string = ''
 
   @Emit('endRepeatEditEvent')
   // tslint:disable-next-line:no-empty
@@ -160,6 +161,7 @@ export default class RepeatEdit extends Vue {
       this.repeat_.from = this.from_
       this.repeat_.day = this.selectedDay_
       this.repeat_.estimateTime = this.estimateTime_
+      this.repeat_.section = DateUtil.getDateObject(DateUtil.getMinDate() , this.section_)
       FirestoreUtil.saveRepeat(
         this.$store.getters['taskList/user'].uid,
         this.repeat_,
@@ -220,6 +222,7 @@ export default class RepeatEdit extends Vue {
             self.selectedDay_ = self.repeat_.day
             self.from_ = self.repeat_.from
             self.estimateTime_ = self.repeat_.estimateTime
+            self.section_ = DateUtil.get4digitTime(self.repeat_.section)
           }
         },
       )
