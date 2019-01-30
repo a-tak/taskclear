@@ -66,18 +66,9 @@ export default class FirestoreUtil {
    * @param uid
    */
   public static async loadTasks(uid: string, date: Date): Promise<TaskController> {
-    const startTime: Date = this.getFirstSectionTime()
     const tc = new TaskController()
 
-    const from: Date = new Date(date)
-    from.setHours(startTime.getHours())
-    from.setMinutes(startTime.getMinutes())
-    from.setMilliseconds(0)
-
-    const to: Date = new Date(from)
-    to.setDate(to.getDate() + 1)
-
-    const query: firestore.QuerySnapshot = await this.getQuery(uid, from, to).get()
+    const query: firestore.QuerySnapshot = await this.getQuery(uid, date).get()
 
     query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
       if (doc !== undefined) {
@@ -88,7 +79,15 @@ export default class FirestoreUtil {
     return tc
   }
 
-  public static getQuery(uid: string, from: Date, to: Date): firestore.Query {
+  public static getQuery(uid: string, date: Date): firestore.Query {
+    const startTime: Date = this.getFirstSectionTime()
+    const from: Date = new Date(date)
+    from.setHours(startTime.getHours())
+    from.setMinutes(startTime.getMinutes())
+    from.setMilliseconds(0)
+    const to: Date = new Date(from)
+    to.setDate(to.getDate() + 1)
+
     return firebase
       .firestore()
       .collection('users')
