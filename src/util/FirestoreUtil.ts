@@ -225,6 +225,9 @@ export default class FirestoreUtil {
    * @param repeatId
    */
   public static async loadRepeat(uid: string, repeatId: string): Promise<Repeat> {
+    if (uid === '') {
+      throw new Error('uid is empty!')
+    }
     const doc = await firebase
       .firestore()
       .collection('users')

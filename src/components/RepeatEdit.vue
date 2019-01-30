@@ -155,7 +155,7 @@ export default class RepeatEdit extends Vue {
         } else {
             // リピートが設定されているタスクであればリピート設定を読み込み
             FirestoreUtil.loadRepeat(
-                this.$store.getters['taskList/user.uid'], this.task_.repeatId).then((repeat: Repeat): void => {
+                this.$store.getters['taskList/user'].uid, this.task_.repeatId).then((repeat: Repeat): void => {
                 if (repeat.id === '') {
                     // タスクに設定されているリピートが存在しない(リンクが外れて浮いている)場合も、今のタスクから情報セットする
                     this.setNewRepeat();
