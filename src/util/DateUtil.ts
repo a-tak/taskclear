@@ -136,7 +136,6 @@ export default class DateUtil {
    * @param taskTime 対象時間
    */
   public static calcTaskDate(taskDate: Date, taskTime: Date | undefined): Date {
-    console.log(`${taskDate} / ${taskTime}`)
     // 何も指定がなければ現在開いている画面の日付の0:00をタスクの日付としてセット
     let newDate: Date = DateUtil.clearTime(new Date(taskDate))
 
@@ -157,7 +156,6 @@ export default class DateUtil {
         DateUtil.getDateObjectByDate(new Date(taskDate),
         taskTime,
           firstSectionTime)
-          console.log(`taskTimeセット! ${taskDate} / ${taskTime} / ${firstSectionTime} / ${newDate}`)
     } else {
       // 入力がなければ1日の開始セクションの時間をセットする
       newDate.setHours(firstSectionTime.getHours())
