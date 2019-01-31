@@ -214,7 +214,7 @@ export default class TaskListMain extends Vue {
   private endEditTask(task: Task, index: number) {
     this.$set(this.tasks, index, task);
     this.$store.getters['taskList/taskCtrl'].sort();
-    // needSaveフラグは子コンポーネントで設定しているのでここでは設定しない
+    // needSaveフラグは子コンポーネントで保存したときのみ設定しているのでここでは設定しない
     this.save();
     this.reCreateRepeatTask();
   }

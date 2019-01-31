@@ -156,6 +156,7 @@ export default class RepeatEdit extends Vue {
   public endEdit(task: Task): void {}
 
   public save(): void {
+    this.task_.needSave = true
     if (this.selectedDay_.length > 0) {
       this.repeat_.title = this.task_.title
       this.repeat_.from = this.from_
