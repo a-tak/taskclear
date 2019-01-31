@@ -160,10 +160,12 @@ export default class FirestoreUtil {
 
     const batch: firestore.WriteBatch = firestore().batch()
 
+    const {from} = DateUtil.getDateFromToTime(dateFrom)
+
     try {
       const snapshot = await firebase.firestore().collection('users').doc(uid)
       .collection('tasks')
-      .where('date', '>=', firestore.Timestamp.fromDate(dateFrom))
+      .where('date', '>=', firestore.Timestamp.fromDate(from))
       .where('repeatId', '==', repeatId)
       .get()
 
