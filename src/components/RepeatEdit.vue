@@ -205,35 +205,42 @@ export default class RepeatEdit extends Vue {
     const self: RepeatEdit = this
     if (this.task_.repeatId === '') {
       this.setNewRepeat()
+      this.setMember()
     } else {
       // リピートが設定されているタスクであればリピート設定を読み込み
       FirestoreUtil.loadRepeat(
         this.$store.getters['taskList/user'].uid,
-        this.task_.repeatId,
-      ).then(
-        (repeat: Repeat): void => {
+        this.task_.repeatId)
+        .then((repeat: Repeat): void => {
           if (repeat.id === '') {
             // タスクに設定されているリピートが存在しない(リンクが外れて浮いている)場合も、今のタスクから情報セットする
             this.setNewRepeat()
           } else {
             self.oldRepeat_ = repeat
             self.repeat_ = repeat.copyNew()
-
-            self.selectedDay_ = self.repeat_.day
-            self.from_ = self.repeat_.from
-            self.estimateTime_ = self.repeat_.estimateTime
-            self.section_ = DateUtil.get4digitTime(self.repeat_.section)
           }
-        },
-      )
+          this.setMember()
+        })
+        .catch((error) => {
+          // tslint:disable-next-line:no-console
+          console.error('Repeat load error!', error)
+        })
     }
   }
 
-  public setNewRepeat(): void {
+  private setNewRepeat(): void {
     this.repeat_ = new Repeat()
     this.repeat_.title = this.task_.title
-    this.repeat_.estimateTime = 0
+    this.repeat_.estimateTime = this.task_.estimateTime
+    this.repeat_.section = this.task_.date
     this.oldRepeat_ = undefined
+  }
+
+  private setMember() {
+    this.selectedDay_ = this.repeat_.day
+    this.from_ = this.repeat_.from
+    this.estimateTime_ = this.repeat_.estimateTime
+    this.section_ = DateUtil.get4digitTime(this.repeat_.section)
   }
 }
 </script>
