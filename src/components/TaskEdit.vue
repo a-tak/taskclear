@@ -89,10 +89,10 @@ export default class TaskEdit extends Vue {
   private save(): void {
     // Vuetifyでxボタンを押すとnullになるみたい…
     if (this.startTime_ != undefined && this.startTime_.trim() !== '' ) {
-      this.editTask_.startTime = DateUtil.getDateObject(this.task_.date, this.startTime_)
+      this.editTask_.startTime = DateUtil.getDateObject(this.$store.getters['taskList/targetDate'], this.startTime_)
 
       if (this.endTime_ != undefined && this.endTime_.trim() !== '') {
-        this.editTask_.endTime = DateUtil.getDateObject(this.task_.date, this.endTime_)
+        this.editTask_.endTime = DateUtil.getDateObject(this.$store.getters['taskList/targetDate'], this.endTime_)
         // 終了時間が入っていたら停止する
         this.editTask_.isDoing = false
       } else {

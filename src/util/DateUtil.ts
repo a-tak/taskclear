@@ -41,25 +41,23 @@ export default class DateUtil {
    * @param timeString 時間文字列(hhmm)。「:」は取り除く。
    * @param firstSectionDate 一日の区切り時間を渡すことでそれを考慮した日付加算を行って結果を返す
    */
-  public static getDateObject(baseDate: Date, timeString: string, firstSectionDate?: Date): Date {
+  public static getDateObject(baseDate: Date, timeString: string): Date {
     const timeDate: Date | undefined = this.getDateByTimeString(timeString)
     if (timeDate != undefined) {
-      return this.getDateObjectByDate(baseDate, timeDate, firstSectionDate)
+      return this.getDateObjectByDate(baseDate, timeDate)
     } else {
       throw new Error('timeString undefined error!')
     }
   }
 
-  public static getDateObjectByDate(baseDate: Date, timeDate: Date, firstSectionDate?: Date): Date {
+  public static getDateObjectByDate(baseDate: Date, timeDate: Date): Date {
     const retDate: Date = new Date(baseDate)
-    if (firstSectionDate != undefined) {
-      const firstSectionTime: Date = DateUtil.clearDate(firstSectionDate)
-      const d: Date = DateUtil.getMinDate()
-      const inputTime: Date =
-        new Date(d.getFullYear(), d.getMonth(), d.getDate(), timeDate.getHours(), timeDate.getMinutes())
-      if (inputTime.getTime() < firstSectionTime.getTime()) {
-        retDate.setDate(retDate.getDate() + 1)
-      }
+    const firstSectionTime: Date = DateUtil.clearDate(this.getFirstSectionTime())
+    const d: Date = DateUtil.getMinDate()
+    const inputTime: Date =
+      new Date(d.getFullYear(), d.getMonth(), d.getDate(), timeDate.getHours(), timeDate.getMinutes())
+    if (inputTime.getTime() < firstSectionTime.getTime()) {
+      retDate.setDate(retDate.getDate() + 1)
     }
     return new Date(
       retDate.getFullYear(), retDate.getMonth(), retDate.getDate(), timeDate.getHours(), timeDate.getMinutes() )
@@ -102,6 +100,7 @@ export default class DateUtil {
 
   /**
    * 一日の開始時間を返す
+   * 年月は1970年1月
    */
   public static getFirstSectionTime(): Date {
     const sections: Section[] = Store.getters['section/sections']
@@ -139,20 +138,12 @@ export default class DateUtil {
     let newDate: Date = DateUtil.clearTime(new Date(taskDate))
 
     // 開始セクションの時間を取得
-    let firstSectionTime: Date = DateUtil.getMinDate()
-    const sections: Section[] = Store.getters['section/sections']
-    if (sections.length > 0) {
-      firstSectionTime = new Date(sections[0].startTime)
-    } else {
-      firstSectionTime.setHours(0, 0, 0, 0)
-    }
+    const firstSectionTime: Date = this.getFirstSectionTime()
 
     if (taskTime != undefined) {
       // 指定された時間に沿ってdateの日付と時間を変更する
       newDate =
-        DateUtil.getDateObjectByDate(new Date(taskDate),
-        taskTime,
-          firstSectionTime)
+        DateUtil.getDateObjectByDate(new Date(taskDate), taskTime)
     } else {
       // 入力がなければ1日の開始セクションの時間をセットする
       newDate.setHours(firstSectionTime.getHours())
