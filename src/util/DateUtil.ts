@@ -87,9 +87,7 @@ export default class DateUtil {
       return this.getMinDate()
     }
     const ret: Date = date
-    ret.setHours(0)
-    ret.setMinutes(0)
-    ret.setMilliseconds(0)
+    ret.setHours(0, 0, 0, 0)
     return ret
   }
 
@@ -124,6 +122,7 @@ export default class DateUtil {
     const from: Date = new Date(date)
     from.setHours(startTime.getHours())
     from.setMinutes(startTime.getMinutes())
+    from.setSeconds(0)
     from.setMilliseconds(0)
     const to: Date = new Date(from)
     to.setDate(to.getDate() + 1)
@@ -145,9 +144,7 @@ export default class DateUtil {
     if (sections.length > 0) {
       firstSectionTime = new Date(sections[0].startTime)
     } else {
-      firstSectionTime.setHours(0)
-      firstSectionTime.setMinutes(0)
-      firstSectionTime.setMilliseconds(0)
+      firstSectionTime.setHours(0, 0, 0, 0)
     }
 
     if (taskTime != undefined) {
@@ -160,7 +157,8 @@ export default class DateUtil {
       // 入力がなければ1日の開始セクションの時間をセットする
       newDate.setHours(firstSectionTime.getHours())
       newDate.setMinutes(firstSectionTime.getMinutes())
-      newDate.setMilliseconds(firstSectionTime.getMilliseconds())
+      newDate.setSeconds(0)
+      newDate.setMilliseconds(0)
     }
     return newDate
 
