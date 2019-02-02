@@ -48,19 +48,14 @@ export default class NewTask extends Vue {
       return
     }
 
-    // ここがタスクの追加部分
-    //        const d: Date = this.$store.getters.targetDate
-    const d: Date = this.$store.getters['taskList/targetDate']
-    // 一旦時間は0:00でセット。セクションを取り入れるときはここの時間をセクションの時間に変更する
-    const date = new Date(
-      d.getFullYear(),
-      d.getMonth(),
-      d.getDate(),
-      0,
-      0,
-      0,
-      0,
-    )
+    // 現在リストで開いている日付で時間は今の時間を使ってタスクを作成する
+    const d: Date = new Date(this.$store.getters['taskList/targetDate'])
+    const now = new Date()
+    const date = new Date(d.getFullYear(),
+                          d.getMonth(),
+                          d.getDate(),
+                          now.getHours(),
+                          now.getMinutes())
     const task: Task = new Task(date, this.inputvalue_)
     this.$store.commit('taskList/addTask', task)
 
