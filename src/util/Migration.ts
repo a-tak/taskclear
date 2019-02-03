@@ -2,7 +2,11 @@ import firebase, { firestore } from 'firebase';
 
 export default class Migration {
     public static async run(uid: string): Promise<void> {
-
+        console.log(`uid = ${uid}`)
+        if (uid === '') {
+            console.error('uid is empty')
+            throw new Error('uid is empty!')
+        }
         const doc = await firebase
             .firestore()
             .collection('users')
