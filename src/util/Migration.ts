@@ -2,8 +2,8 @@ import firebase, { firestore } from 'firebase';
 
 export default class Migration {
     public static async run(uid: string): Promise<void> {
-        console.log(`uid = ${uid}`)
         if (uid === '') {
+            // tslint:disable-next-line:no-console
             console.error('uid is empty')
             throw new Error('uid is empty!')
         }
