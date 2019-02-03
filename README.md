@@ -18,9 +18,24 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
+###  ステージングビルド
+```
+npm run staging
+```
+
+### パッチレベル修正
 ```
 npm run build
+```
+
+### マイナーバージョンアップ
+```
+npm run minor
+```
+
+###  メジャーバージョンアップ
+```
+npm run major
 ```
 
 ### Run your tests
