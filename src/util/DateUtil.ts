@@ -34,12 +34,12 @@ export default class DateUtil {
 
   /**
    * 3-4桁の時間文字列からDateオブジェクトを生成して返す
+   * セクション情報を参照して一日の区切りを見て生成する
    * 「300」→「3:00」
    * 「1200」→「12:00」
    * 「13:00」→「13:00」
    * @param baseDate 日付を表すDateオブジェクト
    * @param timeString 時間文字列(hhmm)。「:」は取り除く。
-   * @param firstSectionDate 一日の区切り時間を渡すことでそれを考慮した日付加算を行って結果を返す
    */
   public static getDateObject(baseDate: Date, timeString: string): Date {
     const timeDate: Date | undefined = this.getDateByTimeString(timeString)
@@ -50,17 +50,27 @@ export default class DateUtil {
     }
   }
 
+  /**
+   * 基準日0時起算で指定した時間経過後の日付オブジェクトを返す
+   * ただし、一日の開始時間以前の時間の場合は、次の日の時間が指定されていると見なす
+   * @param baseDate 基準日
+   * @param timeDate 時間
+   */
   public static getDateObjectByDate(baseDate: Date, timeDate: Date): Date {
-    const retDate: Date = new Date(baseDate)
-    const firstSectionTime: Date = DateUtil.clearDate(this.getFirstSectionTime())
-    const d: Date = DateUtil.getMinDate()
-    const inputTime: Date =
-      new Date(d.getFullYear(), d.getMonth(), d.getDate(), timeDate.getHours(), timeDate.getMinutes())
-    if (inputTime.getTime() < firstSectionTime.getTime()) {
-      retDate.setDate(retDate.getDate() + 1)
+    const date: Date = this.clearTime(new Date(baseDate))
+    // 時間は24時超えた入力(30時など)もあり得るので日付情報をリセットしない
+    const time: Date = new Date(timeDate)
+    // 30:00等がセットされていると日付も進んでいるので日付も加算する
+    date.setDate(date.getDate() + (time.getDate() - 1))
+    date.setMinutes(time.getMinutes())
+    date.setHours(time.getHours())
+
+    const firstSectionTime: Date = this.clearDate(this.getFirstSectionTime())
+    if (time.getTime() < firstSectionTime.getTime()) {
+      date.setDate(date.getDate() + 1)
     }
-    return new Date(
-      retDate.getFullYear(), retDate.getMonth(), retDate.getDate(), timeDate.getHours(), timeDate.getMinutes() )
+
+    return date
   }
 
   /**
