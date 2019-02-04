@@ -105,7 +105,7 @@ export default class DateUtil {
    * readonlyも考えたがオブジェクトの中身書き換えられそうなので、毎回newして返す形にした
    */
   public static getMinDate(): Date {
-    return new Date('1970-01-01 0:00:00')
+    return new Date('1970/01/01 0:00:00')
   }
 
   /**
