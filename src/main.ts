@@ -23,8 +23,6 @@ firebase.initializeApp(config);
 Vue.use(Vuetify);
 
 const firestore = firebase.firestore();
-const settings = {timestampsInSnapshots: true};
-firestore.settings(settings);
 
 new Vue({
     router,
