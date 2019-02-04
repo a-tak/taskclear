@@ -14,7 +14,9 @@
   },
   "dependencies": {
     "@types/uuid": "^3.4.4",
+    "acorn": "^6.0.7",
     "dom": "0.0.3",
+    "eslint": "^5.13.0",
     "firebase": "^5.8.2",
     "grpc": "^1.18.0",
     "register-service-worker": "^1.0.0",
