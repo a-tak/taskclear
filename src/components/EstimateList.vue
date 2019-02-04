@@ -110,7 +110,6 @@ export default class EstimateList extends Vue {
 
                 // リッスン破棄のために戻り値を配列で保存
                 this.unsubscribes_
-                // todo とりあえずコンパイル通る様に修正
                 .push(FirestoreUtil.getQuery(this.$store.getters['taskList/user'].uid, targetDate)
                     .onSnapshot((query) => {
                         query.forEach((doc) => {
