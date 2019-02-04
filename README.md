@@ -1,4 +1,4 @@
-# taskclear-proto
+# Taskclear
 
 * タスク管理アプリ
 * お試しページ
@@ -7,6 +7,11 @@
   * メールや登録したデータは管理者は見えてしまいますので、ほんとあくまでお試しで
 * ヘルプ作成しました
   * https://github.com/a-tak/taskclear/tree/master/help
+
+## リリースノート
+
+* 2019-02-04 ver. 0.3.1
+  * セクション機能を追加しました。詳細はヘルプを参照。
 
 ## Project setup
 ```
