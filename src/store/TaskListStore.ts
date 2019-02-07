@@ -1,10 +1,10 @@
-import Task from '@/lib/Task';
-import TaskController from '@/lib/TaskController';
+import Task from '@/lib/Task'
+import TaskController from '@/lib/TaskController'
 
 export interface State {
-  taskCtrl: TaskController;
-  user: firebase.User | undefined;
-  targetDate: Date;
+  taskCtrl: TaskController
+  user: firebase.User | undefined
+  targetDate: Date
 }
 
 export default {
@@ -23,30 +23,30 @@ export default {
   },
   mutations: {
     addTask(state: State, task: Task) {
-      state.taskCtrl.tasks.push(task);
+      state.taskCtrl.tasks.push(task)
     },
     deleteTask(state: State, task: Task) {
-      const index = state.taskCtrl.tasks.indexOf(task);
+      const index = state.taskCtrl.tasks.indexOf(task)
       // todo deleteTaskByIndexと同じロジック。他のmutation呼び出せないか?
-      state.taskCtrl.tasks.splice(index, 1);
+      state.taskCtrl.tasks.splice(index, 1)
     },
     setTaskCtrl(state: State, taskCtrl: TaskController) {
-      state.taskCtrl = taskCtrl;
+      state.taskCtrl = taskCtrl
     },
     setUser(state: State, user: firebase.User | undefined) {
-      state.user = user;
+      state.user = user
     },
     setTargetDate(state: State, date: Date) {
-      state.targetDate = date;
+      state.targetDate = date
     },
     sortTask(state: State) {
-      state.taskCtrl.sort();
+      state.taskCtrl.sort()
     },
   },
   actions: {
 
   },
-};
+}
 
 
 

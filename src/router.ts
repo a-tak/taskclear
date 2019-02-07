@@ -1,10 +1,10 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import TaskListMain from '@/views/TaskListMain.vue';
-import Login from '@/views/Login.vue';
-import SectionList from '@/views/SectionList.vue';
+import Vue from 'vue'
+import Router from 'vue-router'
+import TaskListMain from '@/views/TaskListMain.vue'
+import Login from '@/views/Login.vue'
+import SectionList from '@/views/SectionList.vue'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   mode: 'hash',
@@ -15,7 +15,7 @@ export default new Router({
     { path: '/tasklist', name: 'tasklist', component: TaskListMain },
     { path: '/sectionlist', name: 'sectionlist', component: SectionList },
   ],
-});
+})
 
 
 

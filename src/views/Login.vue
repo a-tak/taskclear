@@ -32,26 +32,26 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import firebase from 'firebase';
+import { Component, Vue, Prop } from 'vue-property-decorator'
+import firebase from 'firebase'
 
 @Component
 export default class Login extends Vue {
 
-  private isLoginChecked_: boolean = false;
+  private isLoginChecked_: boolean = false
   public get isLoginChecked(): boolean {
-    return this.isLoginChecked_;
+    return this.isLoginChecked_
   }
   public set isLoginChecked(value: boolean) {
-    this.isLoginChecked_ = value;
+    this.isLoginChecked_ = value
   }
 
-  private isLogin_: boolean = false;
+  private isLogin_: boolean = false
   public get isLogin(): boolean {
-    return this.isLogin_;
+    return this.isLogin_
   }
   public set isLogin(value: boolean) {
-    this.isLogin_ = value;
+    this.isLogin_ = value
   }
 
     private googleLogin(): void {
@@ -59,32 +59,32 @@ export default class Login extends Vue {
           .auth()
           .signInWithRedirect(new firebase.auth.GoogleAuthProvider())
           .then()
-          .catch();
+          .catch()
     }
 
   private mounted(): void {
     firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
-      this.isLoginChecked_ = true;
+      this.isLoginChecked_ = true
       if (user) {
-        this.isLogin = true;
-        this.$store.commit('taskList/setUser', user);
-        this.$router.push('/tasklist');
+        this.isLogin = true
+        this.$store.commit('taskList/setUser', user)
+        this.$router.push('/tasklist')
       } else {
-        this.isLogin = false;
-        this.$store.commit('taskList/setUser', undefined);
+        this.isLogin = false
+        this.$store.commit('taskList/setUser', undefined)
       }
-    });
+    })
   }
 
     get logoSize(): {} {
         // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
         switch (this.$vuetify.breakpoint.name) {
-            case 'xs': return {'display-3': true};
-            case 'sm': return {'display-3': true};
-            case 'md': return {'display-4': true};
-            case 'lg': return {'display-4': true};
-            case 'xl': return {'display-4': true};
-            default  : return {'display-4': true};
+            case 'xs': return {'display-3': true}
+            case 'sm': return {'display-3': true}
+            case 'md': return {'display-4': true}
+            case 'lg': return {'display-4': true}
+            case 'xl': return {'display-4': true}
+            default  : return {'display-4': true}
         }
     }
 
