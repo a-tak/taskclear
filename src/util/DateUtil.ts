@@ -194,4 +194,19 @@ export default class DateUtil {
     return retDate
   }
 
+  /**
+   * 指定したDateオブジェクトの日時から基準日を取得する
+   * @param date 計算対象のDateオブジェクト
+   */
+  public static calcBaseDate(date: Date): Date {
+    // 開始セクションの時間を取得
+    const firstSectionTime: Date = this.getFirstSectionTime()
+    // 時間部分を比較して開始時間より前ならば日付を一日戻す
+    const retDate: Date = new Date(date)
+    if (DateUtil.clearDate(date) < firstSectionTime) {
+      retDate.setDate(retDate.getDate() - 1)
+    }
+    return retDate
+  }
+
 }

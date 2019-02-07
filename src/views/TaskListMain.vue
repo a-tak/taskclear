@@ -273,7 +273,8 @@ export default class TaskListMain extends Vue {
       await Migration.run(this.$store.getters['taskList/user'].uid)
       // セクション読み込み
       await this.$store.dispatch('section/load')
-      // タスクロード
+      // 日付指定
+      this.targetDate = DateUtil.calcBaseDate(new Date()).toString()
       this.loadTasks()
     })
   }
