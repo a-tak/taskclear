@@ -32,6 +32,7 @@ import uuid from 'uuid'
 import FirestoreUtil from '../util/FirestoreUtil'
 import ITask from '../lib/ITask'
 import Task from '../lib/Task'
+import DateUtil from '@/util/DateUtil';
 
 @Component
 export default class NewTask extends Vue {
@@ -50,12 +51,8 @@ export default class NewTask extends Vue {
 
     // 現在リストで開いている日付で時間は今の時間を使ってタスクを作成する
     const d: Date = new Date(this.$store.getters['taskList/targetDate'])
-    const now = new Date()
-    const date = new Date(d.getFullYear(),
-                          d.getMonth(),
-                          d.getDate(),
-                          now.getHours(),
-                          now.getMinutes())
+    const now = DateUtil.clearDate(new Date())
+    const date = DateUtil.getDateObjectByDate(d, now)
     const task: Task = new Task(date, this.inputvalue_)
     this.$store.commit('taskList/addTask', task)
 
