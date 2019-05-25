@@ -43,6 +43,13 @@ npm run minor
 npm run major
 ```
 
+### リリース
+
+```
+firebase use release
+firebase deploy
+```
+
 ### Run your tests
 ```
 npm run test
