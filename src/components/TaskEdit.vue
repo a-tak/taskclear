@@ -6,7 +6,7 @@
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
             <v-flex ma-2>
               <span>タスク名</span>
-              <v-text-field v-bind:id="'task-edit-title-field-' + editTask_.id" placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @keydown="keyDown($event)" @keyup.enter="keyUp()" @keyup.esc="cancel()"></v-text-field>
+              <v-text-field v-bind:id="'task-edit-title-field-' + editTask_.id" placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @focus="startEditTaskName()" @blur="endEditTaskName()" @keydown="keyDown($event)" @keyup.enter="keyUp()" @keyup.esc="cancel()"></v-text-field>
             </v-flex>
           </v-layout>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
@@ -75,6 +75,15 @@ export default class TaskEdit extends Vue {
   @Emit('endEditEvent')
   // tslint:disable-next-line:no-empty
   private endEdit(task: Task): void {}
+
+  // このコンポーネントだけ足してもダメ。親TaskRow側でもイベントをうけて親のTaskListMainに返す必要がある
+  @Emit('start-edit-task-name-event')
+  // tslint:disable-next-line:no-empty
+  private startEditTaskName(): void {}
+
+  @Emit('end-edit-task-name-event')
+  // tslint:disable-next-line:no-empty
+  private endEditTaskName(): void {}
 
   // セクションが非同期で読み込まれるので読み込まれて変動したタイミングでリストを作るようにした
   @Watch('sections_')

@@ -48,6 +48,8 @@
           v-on:endEditEvent="endEditTask"
           v-on:clickDeleteButtomEvent="deleteTask"
           v-on:changeTaskDateChangeEvent="changeTaskDate"
+          v-on:start-edit-task-name-event="startEditTaskName"
+          v-on:end-edit-task-name-event="endEditTaskName"
         >
         </TaskRow>
       </v-slide-y-transition>
@@ -211,6 +213,12 @@ export default class TaskListMain extends Vue {
     FirestoreUtil.saveTasks(this.$store.getters['taskList/user'].uid, this.$store.getters['taskList/taskCtrl'])
   }
 
+  private startEditTaskName() {
+    this.deleteShortcut()
+  }
+  private endEditTaskName() {
+    this.entryShortcut()
+  }
   private endEditTask(task: Task, index: number) {
     this.$set(this.tasks, index, task)
     this.$store.getters['taskList/taskCtrl'].sort()
@@ -279,6 +287,10 @@ export default class TaskListMain extends Vue {
     })
   }
   private mounted(): void {
+    this.entryShortcut()
+  }
+
+  private entryShortcut(): void {
     document.onkeyup = (e: KeyboardEvent) => {
       if (e.key === 'd') {
         this.jumpToNextTask()
@@ -288,6 +300,10 @@ export default class TaskListMain extends Vue {
         this.addTask()
       }
     }
+  }
+  private deleteShortcut(): void {
+    // tslint:disable-next-line:no-empty
+    document.onkeyup = (e: KeyboardEvent) => {}
   }
 
   private beforeDestroy(): void {

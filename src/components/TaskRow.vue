@@ -70,7 +70,11 @@
         row
         v-if="isEdit_"
         >
-            <TaskEdit v-bind:task_="task_" v-on:endEditEvent="endEditEvent"></TaskEdit>
+            <TaskEdit v-bind:task_="task_"
+                v-on:endEditEvent="endEditEvent"
+                v-on:start-edit-task-name-event="startEditTaskName"
+                v-on:end-edit-task-name-event="endEditTaskName">
+            </TaskEdit>
         </v-layout>
         <v-layout
         align-center
@@ -150,6 +154,14 @@ export default class TaskRow extends Vue {
     // tslint:disable-next-line:no-empty
     public changeDate(task: Task): void {}
 
+    @Emit('start-edit-task-name-event')
+    // tslint:disable-next-line:no-empty
+    public startEditTaskNameEvent(): void {}
+
+    @Emit('end-edit-task-name-event')
+    // tslint:disable-next-line:no-empty
+    public endEditTaskNameEvent(): void {}
+
     public getTime(time: Date): string {
         let timeStr: string = '';
         if (time != undefined) {
@@ -170,6 +182,14 @@ export default class TaskRow extends Vue {
     public endRepeatEditEvent(task: Task) {
         this.editingRepeat_ = false;
         this.endEdit(task, this.index_);
+    }
+
+    public startEditTaskName() {
+        this.startEditTaskNameEvent()
+    }
+
+    public endEditTaskName() {
+        this.endEditTaskNameEvent()
     }
 
     /**
