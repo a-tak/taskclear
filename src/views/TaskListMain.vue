@@ -30,9 +30,14 @@
         <EstimateList></EstimateList>
       </v-flex>
     </v-layout>
-    <v-btn fab dark color="red" fixed floating bottom right @click="addTask()">
-      <v-icon dark>add</v-icon>
-    </v-btn>
+      <v-btn fab dark color="red" fixed floating bottom right @click="addTask()">
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-icon dark v-on="on">add</v-icon>
+          </template>
+          <span>Aキーでもタスク追加できます</span>
+        </v-tooltip>
+      </v-btn>
       <v-slide-y-transition
         class="py-0"
         group
