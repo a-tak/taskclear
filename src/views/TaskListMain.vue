@@ -261,6 +261,24 @@ export default class TaskListMain extends Vue {
     })
   }
 
+  /**
+   * 日付を一日進める
+   */
+  private forwardTargetDate(): void {
+    const d = new Date(this.$store.getters['taskList/targetDate'])
+    d.setDate(d.getDate() + 1)
+    this.targetDate = d.toString()
+  }
+
+  /**
+   * 日付を一日戻す
+   */
+  private returnTargetDate(): void {
+    const d = new Date(this.$store.getters['taskList/targetDate'])
+    d.setDate(d.getDate() - 1)
+    this.targetDate = d.toString()
+  }
+
   private stopTask(task: Task): void {
     this.changeStopTask(task)
     this.save()
@@ -294,6 +312,9 @@ export default class TaskListMain extends Vue {
     this.entryShortcut()
   }
 
+  /**
+   * ショートカット有効化
+   */
   private entryShortcut(): void {
     document.onkeyup = (e: KeyboardEvent) => {
       if (e.key === 'd') {
@@ -302,9 +323,17 @@ export default class TaskListMain extends Vue {
         this.jumpToTop()
       } else if (e.key === 'a') {
         this.addTask()
+      } else if (e.key === 'f') {
+        this.forwardTargetDate()
+      } else if (e.key === 'r') {
+        this.returnTargetDate()
       }
     }
   }
+
+  /**
+   * ショートカット無効化
+   */
   private deleteShortcut(): void {
     // tslint:disable-next-line:no-empty
     document.onkeyup = (e: KeyboardEvent) => {}
