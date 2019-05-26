@@ -53,7 +53,11 @@
         >
         </TaskRow>
       </v-slide-y-transition>
-      <NewTask v-if="addingTask_" v-on:addedEvent="addedTask"></NewTask>
+      <NewTask v-if="addingTask_"
+        v-on:addedEvent="addedTask"
+        v-on:start-edit-task-name-event="startEditTaskName"
+        v-on:end-edit-task-name-event="endEditTaskName">
+      </NewTask>
     </div>
     <div>
       <Footer></Footer>

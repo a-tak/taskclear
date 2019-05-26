@@ -14,6 +14,8 @@
             @keydown="keyDown($event)"
             @keyup.enter="keyUpEnter()"
             @keyup.esc="cancel"
+            @focus="startEditTaskName()"
+            @blur="endEditTaskName()"
           ></v-text-field>
         </v-flex>
         <v-flex ma-2>
@@ -39,10 +41,6 @@ export default class NewTask extends Vue {
   public inputvalue_: string = ''
 
   private keyDownCode_: number = 0
-
-  @Emit('addedEvent')
-  // tslint:disable-next-line:no-empty
-  public addEnd(): void {}
 
   public addTask(): void {
     if (this.inputvalue_.trim() === '') {
@@ -70,6 +68,18 @@ export default class NewTask extends Vue {
     // イベント発生
     this.addEnd()
   }
+
+  @Emit('start-edit-task-name-event')
+  // tslint:disable-next-line:no-empty
+  private startEditTaskName(): void {}
+
+  @Emit('end-edit-task-name-event')
+  // tslint:disable-next-line:no-empty
+  private endEditTaskName(): void {}
+
+  @Emit('addedEvent')
+  // tslint:disable-next-line:no-empty
+  private addEnd(): void {}
 
   private keyDown(event: KeyboardEvent): void {
     this.keyDownCode_ = event.keyCode
