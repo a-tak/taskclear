@@ -25,3 +25,4 @@ yarn-error.log*
 *.code-workspace
 firebase-debug.log
 .firebase/hosting.*.cache
+*.icloud
