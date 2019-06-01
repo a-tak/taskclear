@@ -1,6 +1,4 @@
-import { firestore } from 'firebase'
 import Task from './Task'
-import ITask from '@/lib/ITask'
 
 // Taskオブジェクトを束ねるクラス
 export default class TaskController {
@@ -12,13 +10,23 @@ export default class TaskController {
 
   /**
    * 見積時間の合計(分)を返す
+   * このメソッドを使用すると内部でソートが行われタスクの並びが変わるので注意
    */
   public getEstimateSum(): number {
     let sum: number = 0
+    let overedSeparate: boolean = false
+    this.sort()
     for (const task of this.tasks_) {
       // 終了タスクの見積を含めると合計が何倍にもなるので除外する
       if (task.endTime == undefined) {
+        // 区切りタスクまでの見積時間を集計する。
+        // ひとつ上の条件で終了済みの区切りタスクはスキップしているので次の区切りタスクまでの時間を計上していることになる。
+        // 区切りタスク実行中は区切りタスク以降の見積時間が表示されなかったのでフラグ制御
+        if (task.estimateSeparate === true && overedSeparate === true) {
+          break
+        }
         sum = sum + task.estimateTime
+        overedSeparate = true
       }
     }
     return sum
