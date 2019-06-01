@@ -320,6 +320,7 @@ export default class FirestoreUtil {
       repeatId: task.repeatId,
       sortNo: task.sortNo,
       isDeleted: task.isDeleted,
+      estimateSeparate: task.estimateSeparate,
       createTime: firestore.Timestamp.fromDate(task.createTime),
       updateTime: firestore.Timestamp.fromDate(task.updateTime),
     }
@@ -381,6 +382,7 @@ export default class FirestoreUtil {
       task.sortNo = this.toNumber(data.sortNo)
       task.isDeleted = this.toBoolean(data.isDeleted)
       task.needSave = false
+      task.estimateSeparate = this.toBoolean(data.estimateSeparate)
       task.createTime = this.toDate(data.createTime)
       task.updateTime = this.toDate(data.updateTime)
       return task

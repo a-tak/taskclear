@@ -4,9 +4,12 @@
       <v-flex>
         <v-card>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
-            <v-flex ma-2>
+            <v-flex ma-2 grow>
               <span>タスク名</span>
               <v-text-field v-bind:id="'task-edit-title-field-' + editTask_.id" placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @focus="startEditTaskName()" @blur="endEditTaskName()" @keydown="keyDown($event)" @keyup.enter="keyUp()" @keyup.esc="cancel()"></v-text-field>
+            </v-flex>
+            <v-flex shrink>
+              <v-checkbox v-model="estimateSeparate_" label="見積の区切りにする"></v-checkbox>
             </v-flex>
           </v-layout>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
@@ -67,6 +70,7 @@ export default class TaskEdit extends Vue {
   private sortNo_: number = 999
   private sections_: Section[] = []
   private sectionList_: string[] = []
+  private estimateSeparate_: boolean = false
 
   private backupedTask_!: Task
   private editTask_!: Task
@@ -125,6 +129,7 @@ export default class TaskEdit extends Vue {
       this.editTask_.estimateTime = 0
     }
 
+    this.editTask_.estimateSeparate = this.estimateSeparate_
     this.editTask_.sortNo = this.sortNo_
     this.editTask_.needSave = true
 
@@ -154,6 +159,7 @@ export default class TaskEdit extends Vue {
     }
     this.section_ = DateUtil.get4digitTime(this.task_.date)
     this.sortNo_ = this.task_.sortNo
+    this.estimateSeparate_ = this.task_.estimateSeparate
 
     this.sections_ = this.$store.getters['section/sections']
 

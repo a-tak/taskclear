@@ -1,9 +1,13 @@
 import uuid from 'uuid'
-import DateUtil from '@/util/DateUtil'
+
+/**
+ * タスクを表すクラス
+ * ここに項目を追加する場合はFirestoreUtilのconverToTaskにもエラーが出ないけど追加が必要
+ */
 export default class Task {
 
   /**
-   * タスククラスのコンとすトラクタ
+   * タスククラスのコンストラクタ
    * idは自動生成する
    * @param date タスクの日付
    * @param title タスクのタイトル
@@ -22,6 +26,7 @@ export default class Task {
   private isDeleted_: boolean
   private isNext_: boolean
   private needSave_: boolean
+  private estimateSeparate_: boolean
   private createTime_: Date
   private updateTime_: Date
 
@@ -43,6 +48,7 @@ export default class Task {
     this.isNext_ = false
     // フラグセット忘れで保存されないのを多少防ぐためにtrueで
     this.needSave_ = true
+    this.estimateSeparate_ = false
     this.createTime_ = new Date()
     this.updateTime_ = this.createTime_
   }
@@ -155,6 +161,17 @@ export default class Task {
   }
 
   /**
+   * 一日の見積時間を表示する際の区切り
+   * このフラグがtrueになっているタスク以前までのタスクの見積時間を一日の見積時間として計上する
+   */
+  public get estimateSeparate(): boolean {
+    return this.estimateSeparate_
+  }
+  public set estimateSeparate(value: boolean) {
+    this.estimateSeparate_ = value
+  }
+
+  /**
    * 中断タスクを作成
    * 元のタスクの見積から実績を引いた残り時間を入れて新たなタスクを戻す
    */
@@ -177,7 +194,8 @@ export default class Task {
     newTask.isNext = false
     // 新規に作成されるタスクなのでSave対象にする
     newTask.needSave = true
-
+    // 区切りタスクを開始したがイレギュラーで前の作業に戻ることを想定して元タスクのフラグをコピーする
+    newTask.estimateSeparate = this.estimateSeparate
     return newTask
   }
 
@@ -208,6 +226,7 @@ export default class Task {
     newTask.isDeleted = this.isDeleted_
     newTask.isNext = this.isNext_
     newTask.needSave = this.needSave_
+    newTask.estimateSeparate = this.estimateSeparate_
     newTask.createTime = new Date(this.createTime_)
     newTask.updateTime = new Date(this.updateTime_)
 
