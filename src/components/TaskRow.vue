@@ -7,7 +7,7 @@
         v-if="!isEdit_"
         >
             <v-flex>
-                <v-card>
+                <v-card v-bind="rowColor">
                     <v-layout align-center justify-space-between row fill-height>
                         <v-flex xs2 sm2 md1>
                             <v-btn v-bind:id="'start-btn-' + task_.id" icon ripple @click.stop="startTask(task_)" v-if="task_.isDoing === false && task_.endTime==undefined">
@@ -209,6 +209,14 @@ export default class TaskRow extends Vue {
             case 'lg': return {row: true};
             case 'xl': return {row: true};
             default  : return {row: true};
+        }
+    }
+
+    get rowColor(): {} {
+        if (this.task_.estimateSeparate === true) {
+            return {color: 'amber accent-1'}
+        } else {
+            return {color: 'white'}
         }
     }
 
