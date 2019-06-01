@@ -1,4 +1,5 @@
 import Task from './Task'
+import TaskListStore from '@/store/TaskListStore';
 
 // Taskオブジェクトを束ねるクラス
 export default class TaskController {
@@ -11,14 +12,30 @@ export default class TaskController {
   /**
    * 見積時間の合計(分)を返す
    * このメソッドを使用すると内部でソートが行われタスクの並びが変わるので注意
+   * 見積開始フラグがついているタスクの見積時間は合計に含める
    */
   public getEstimateSum(): number {
     let sum: number = 0
     let overedSeparate: boolean = false
+
     this.sort()
+
+    // 見積開始フラグが一つも無い場合はその日の最初のタスクから判定していく
+    // 見積開始フラグがあるか調べる
+    let overedEstimateStart: boolean = true
     for (const task of this.tasks_) {
+      if (task.estimateSeparateStart === true) {
+        overedEstimateStart = false
+        break
+      }
+    }
+
+    for (const task of this.tasks_) {
+      if (task.estimateSeparateStart === true) {
+        overedEstimateStart = true
+      }
       // 終了タスクの見積を含めると合計が何倍にもなるので除外する
-      if (task.endTime == undefined) {
+      if (task.endTime == undefined && overedEstimateStart === true) {
         // 区切りタスクまでの見積時間を集計する。
         // ひとつ上の条件で終了済みの区切りタスクはスキップしているので次の区切りタスクまでの時間を計上していることになる。
         // 区切りタスク実行中は区切りタスク以降の見積時間が表示されなかったのでフラグ制御
