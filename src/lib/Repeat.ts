@@ -33,6 +33,12 @@ export default class Repeat {
   public set day(value: string[]) {
     this.day_ = value
   }
+  public get estimateSeparate(): boolean {
+    return this.estimateSeparate_
+  }
+  public set estimateSeparate(value: boolean) {
+    this.estimateSeparate_ = value
+  }
 
   private id_: string
 
@@ -48,6 +54,8 @@ export default class Repeat {
   public set section(value: Date) {
     this.section_ = value
   }
+
+  private estimateSeparate_: boolean
 
   /**
    * リピートの開始日
@@ -65,6 +73,7 @@ export default class Repeat {
     this.day_ = []
     this.estimateTime_ = 0
     this.section_ = DateUtil.getMinDate()
+    this.estimateSeparate_ = false
   }
 
   /**
@@ -79,6 +88,7 @@ export default class Repeat {
     newRepeat.from = this.from_
     newRepeat.estimateTime = this.estimateTime_
     newRepeat.section = this.section_
+    newRepeat.estimateSeparate = this.estimateSeparate_
     return newRepeat
   }
 

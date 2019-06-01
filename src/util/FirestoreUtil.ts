@@ -407,6 +407,7 @@ export default class FirestoreUtil {
           } else {
             repeat.section = section
           }
+          repeat.estimateSeparate = this.toBoolean(data.estimateSeparate)
       } else {
           // 仕様上存在しないrepeatIdが来ることもあるのでエラーとしないが、それを検知して処理するために空のidのRepeatを返す
           repeat.id = ''
@@ -422,6 +423,7 @@ export default class FirestoreUtil {
           day: repeat.day,
           estimateTime: repeat.estimateTime,
           section: repeat.section,
+          estimateSeparate: repeat.estimateSeparate,
       }
   }
 }

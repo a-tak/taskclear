@@ -85,6 +85,9 @@
                 @keyup.enter="save()"
               ></v-combobox>
             </v-flex>
+            <v-flex shrink>
+              <v-checkbox v-model="estimateSeparate_" label="見積の区切りにする"></v-checkbox>
+            </v-flex>
           </v-layout>
         </v-flex>
       </v-layout>
@@ -150,6 +153,7 @@ export default class RepeatEdit extends Vue {
   private sections_: Section[] = []
   private sectionList_: string[] = []
   private section_: string = ''
+  private estimateSeparate_: boolean = false
 
   @Emit('endRepeatEditEvent')
   // tslint:disable-next-line:no-empty
@@ -163,6 +167,7 @@ export default class RepeatEdit extends Vue {
       this.repeat_.day = this.selectedDay_
       this.repeat_.estimateTime = this.estimateTime_
       this.repeat_.section = DateUtil.getDateObject(DateUtil.getMinDate() , this.section_)
+      this.repeat_.estimateSeparate = this.estimateSeparate_
       FirestoreUtil.saveRepeat(
         this.$store.getters['taskList/user'].uid,
         this.repeat_,
@@ -234,6 +239,7 @@ export default class RepeatEdit extends Vue {
     this.repeat_.title = this.task_.title
     this.repeat_.estimateTime = this.task_.estimateTime
     this.repeat_.section = this.task_.date
+    this.repeat_.estimateSeparate = this.task_.estimateSeparate
     this.oldRepeat_ = undefined
   }
 
@@ -242,6 +248,7 @@ export default class RepeatEdit extends Vue {
     this.from_ = this.repeat_.from
     this.estimateTime_ = this.repeat_.estimateTime
     this.section_ = DateUtil.get4digitTime(this.repeat_.section)
+    this.estimateSeparate_ = this.repeat_.estimateSeparate
   }
 }
 </script>
