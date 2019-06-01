@@ -26,7 +26,7 @@ export default class Task {
   private isDeleted_: boolean
   private isNext_: boolean
   private needSave_: boolean
-  private estimateSeparate_: boolean
+  private estimateSeparateEnd_: boolean
   private createTime_: Date
   private updateTime_: Date
 
@@ -48,7 +48,7 @@ export default class Task {
     this.isNext_ = false
     // フラグセット忘れで保存されないのを多少防ぐためにtrueで
     this.needSave_ = true
-    this.estimateSeparate_ = false
+    this.estimateSeparateEnd_ = false
     this.createTime_ = new Date()
     this.updateTime_ = this.createTime_
   }
@@ -164,11 +164,11 @@ export default class Task {
    * 一日の見積時間を表示する際の区切り
    * このフラグがtrueになっているタスク以前までのタスクの見積時間を一日の見積時間として計上する
    */
-  public get estimateSeparate(): boolean {
-    return this.estimateSeparate_
+  public get estimateSeparateEnd(): boolean {
+    return this.estimateSeparateEnd_
   }
-  public set estimateSeparate(value: boolean) {
-    this.estimateSeparate_ = value
+  public set estimateSeparateEnd(value: boolean) {
+    this.estimateSeparateEnd_ = value
   }
 
   /**
@@ -195,7 +195,7 @@ export default class Task {
     // 新規に作成されるタスクなのでSave対象にする
     newTask.needSave = true
     // 区切りタスクを開始したがイレギュラーで前の作業に戻ることを想定して元タスクのフラグをコピーする
-    newTask.estimateSeparate = this.estimateSeparate
+    newTask.estimateSeparateEnd = this.estimateSeparateEnd
     return newTask
   }
 
@@ -226,7 +226,7 @@ export default class Task {
     newTask.isDeleted = this.isDeleted_
     newTask.isNext = this.isNext_
     newTask.needSave = this.needSave_
-    newTask.estimateSeparate = this.estimateSeparate_
+    newTask.estimateSeparateEnd = this.estimateSeparateEnd_
     newTask.createTime = new Date(this.createTime_)
     newTask.updateTime = new Date(this.updateTime_)
 

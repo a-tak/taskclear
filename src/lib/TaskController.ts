@@ -22,7 +22,7 @@ export default class TaskController {
         // 区切りタスクまでの見積時間を集計する。
         // ひとつ上の条件で終了済みの区切りタスクはスキップしているので次の区切りタスクまでの時間を計上していることになる。
         // 区切りタスク実行中は区切りタスク以降の見積時間が表示されなかったのでフラグ制御
-        if (task.estimateSeparate === true && overedSeparate === true) {
+        if (task.estimateSeparateEnd === true && overedSeparate === true) {
           break
         }
         sum = sum + task.estimateTime

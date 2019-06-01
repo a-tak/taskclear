@@ -320,7 +320,7 @@ export default class FirestoreUtil {
       repeatId: task.repeatId,
       sortNo: task.sortNo,
       isDeleted: task.isDeleted,
-      estimateSeparate: task.estimateSeparate,
+      estimateSeparateEnd: task.estimateSeparateEnd,
       createTime: firestore.Timestamp.fromDate(task.createTime),
       updateTime: firestore.Timestamp.fromDate(task.updateTime),
     }
@@ -382,7 +382,7 @@ export default class FirestoreUtil {
       task.sortNo = this.toNumber(data.sortNo)
       task.isDeleted = this.toBoolean(data.isDeleted)
       task.needSave = false
-      task.estimateSeparate = this.toBoolean(data.estimateSeparate)
+      task.estimateSeparateEnd = this.toBoolean(data.estimateSeparateEnd)
       task.createTime = this.toDate(data.createTime)
       task.updateTime = this.toDate(data.updateTime)
       return task
@@ -407,7 +407,7 @@ export default class FirestoreUtil {
           } else {
             repeat.section = section
           }
-          repeat.estimateSeparate = this.toBoolean(data.estimateSeparate)
+          repeat.estimateSeparateEnd = this.toBoolean(data.estimateSeparateEnd)
       } else {
           // 仕様上存在しないrepeatIdが来ることもあるのでエラーとしないが、それを検知して処理するために空のidのRepeatを返す
           repeat.id = ''
@@ -423,7 +423,7 @@ export default class FirestoreUtil {
           day: repeat.day,
           estimateTime: repeat.estimateTime,
           section: repeat.section,
-          estimateSeparate: repeat.estimateSeparate,
+          estimateSeparateEnd: repeat.estimateSeparateEnd,
       }
   }
 }
