@@ -6,10 +6,10 @@
                     <v-layout column>
                         <v-flex v-for="(estimate, index) in estimates1" :key="estimate.dateStr">
                             <div v-if="index==0" class="headline">
-                                ({{ estimate.dayLabel }}) {{ estimate.estimateTime}} 分
+                                ({{ estimate.dayLabel }}) {{ estimate.estimateTime}}
                             </div>
                             <div v-else>
-                                ({{ estimate.dayLabel }}) {{ estimate.estimateTime}} 分
+                                ({{ estimate.dayLabel }}) {{ estimate.estimateTime}}
                             </div>
                         </v-flex>
                     </v-layout>
@@ -17,7 +17,7 @@
                 <v-flex>
                     <v-layout column>
                         <v-flex v-for="(estimate) in estimates2" :key="estimate.dateStr">
-                            ({{ estimate.dayLabel }}) {{ estimate.estimateTime}} 分
+                            ({{ estimate.dayLabel }}) {{ estimate.estimateTime}}
                         </v-flex>
                     </v-layout>
                 </v-flex>
@@ -32,6 +32,7 @@ import TaskController from '@/lib/TaskController';
 import FirestoreUtil from '@/util/FirestoreUtil';
 import firebase from 'firebase';
 import Estimate from '@/lib/Estimate';
+import DateUtil from '../util/DateUtil';
 
 @Component
 export default class EstimateList extends Vue {
@@ -143,14 +144,16 @@ export default class EstimateList extends Vue {
         estimate.date = targetDate;
         const weekday: string[] = [ '日', '月', '火', '水', '木', '金', '土' ] ;
         estimate.dayLabel = weekday[targetDate.getDay()];
-        estimate.estimateTime = tc.getEstimateSum().toString();
+        estimate.estimateTime = DateUtil.getTimeString(tc.getEstimateTime());
 
         return estimate;
     }
 
     private created(): void {
-        firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
+        firebase.auth().onAuthStateChanged(async (user: firebase.User | null) => {
             this.$store.commit('taskList/setUser', user);
+            // セクション読み込み
+            // await this.$store.dispatch('section/load')
             this.display();
         });
     }
