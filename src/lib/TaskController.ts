@@ -1,5 +1,4 @@
 import Task from './Task'
-import DateUtil from '@/util/DateUtil';
 
 // Taskオブジェクトを束ねるクラス
 export default class TaskController {
@@ -78,27 +77,28 @@ export default class TaskController {
   public getEstimateTime(): Date {
     const sum: number = this.getEstimateSum()
     let endTime: Date = new Date()
-    const isIncluedeEstimateStartTask: boolean = this.isIncludeEstimateStartTask()
-
-    // タスクが事前にソートされている前提での処理(今はgetEstimeteSumでソートされている)
-    for (const task of this.tasks_) {
-      // 見積開始タスクを探す
-      if (task.estimateSeparateStart === true || isIncluedeEstimateStartTask === false) {
-        if (task.date < new Date()) {
-          // 見積開始タスクの時間後であれば今の時間が起点
-          endTime.setMinutes(endTime.getMinutes() + sum)
-          return endTime
-        } else {
-          endTime = new Date(task.date.setMinutes(task.date.getMinutes() + sum))
-          return endTime
-        }
+    let estimateStartTask: Task | undefined = this.getEstimateStartTask()
+    if (estimateStartTask == undefined) {
+      if (this.tasks_.length > 0) {
+        // タスクが事前にソートされている前提での処理(今はgetEstimeteSumでソートされている)
+        estimateStartTask = this.tasks_[0]
+      } else {
+        endTime.setHours(0)
+        endTime.setMinutes(0)
+        return endTime
       }
     }
-    // 見積開始タスクが存在しない場合は一つ目のタスクを取得するのでここに来ることは一件もタスクが無い場合
-    // 日付の区切りの時間を返したかったが、謎のエラーになるのでとりあえず0:00を
-    endTime.setHours(0)
-    endTime.setMinutes(0)
-    return endTime
+
+    const taskDate: Date = new Date(estimateStartTask.date)
+
+    if (taskDate < new Date()) {
+      // 見積開始タスクの時間後であれば今の時間が起点
+      endTime.setMinutes(endTime.getMinutes() + sum)
+      return endTime
+    } else {
+      endTime = new Date(taskDate.setMinutes(taskDate.getMinutes() + sum))
+      return endTime
+    }
   }
 
   /**
@@ -131,7 +131,17 @@ export default class TaskController {
         if (task.estimateSeparateEnd === true && overedSeparate === true) {
           break
         }
-        sum = sum + task.estimateTime
+
+        // 実行中のタスクは見積から実績時間を引いた時間を見積に足す
+        if (task.isDoing === true) {
+          let remain: number = task.estimateTime - task.actualTime
+          if (remain < 0) {
+            remain = 0
+          }
+          sum = sum + remain
+        } else {
+          sum = sum + task.estimateTime
+        }
         overedSeparate = true
       }
     }
@@ -143,12 +153,24 @@ export default class TaskController {
    * 毎回ループして返しているのでパフォーマンスは良くない
    */
   private isIncludeEstimateStartTask(): boolean {
+    if (this.getEstimateStartTask != undefined) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  /**
+   * 見積開始タスクを返す
+   * なければundefinedを返す
+   */
+  private getEstimateStartTask(): Task | undefined {
     for (const task of this.tasks_) {
       if (task.estimateSeparateStart === true) {
-        return true
+        return task
       }
     }
-    return false
+    return undefined
   }
 
   private backupSortNo(): void {
