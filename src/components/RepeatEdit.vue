@@ -85,8 +85,11 @@
                 @keyup.enter="save()"
               ></v-combobox>
             </v-flex>
-            <v-flex shrink>
-              <v-checkbox v-model="estimateSeparateEnd_" label="見積の区切りにする"></v-checkbox>
+            <v-flex>
+              <v-checkbox v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
+            </v-flex>
+            <v-flex>
+              <v-checkbox v-model="estimateSeparateEnd_" label="見積の区切りのタスクにする"></v-checkbox>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -153,6 +156,7 @@ export default class RepeatEdit extends Vue {
   private sections_: Section[] = []
   private sectionList_: string[] = []
   private section_: string = ''
+  private estimateSeparateStart_: boolean = false
   private estimateSeparateEnd_: boolean = false
 
   @Emit('endRepeatEditEvent')
@@ -167,6 +171,7 @@ export default class RepeatEdit extends Vue {
       this.repeat_.day = this.selectedDay_
       this.repeat_.estimateTime = this.estimateTime_
       this.repeat_.section = DateUtil.getDateObject(DateUtil.getMinDate() , this.section_)
+      this.repeat_.estimateSeparateStart = this.estimateSeparateStart_
       this.repeat_.estimateSeparateEnd = this.estimateSeparateEnd_
       FirestoreUtil.saveRepeat(
         this.$store.getters['taskList/user'].uid,
@@ -239,6 +244,7 @@ export default class RepeatEdit extends Vue {
     this.repeat_.title = this.task_.title
     this.repeat_.estimateTime = this.task_.estimateTime
     this.repeat_.section = this.task_.date
+    this.repeat_.estimateSeparateStart = this.task_.estimateSeparateStart
     this.repeat_.estimateSeparateEnd = this.task_.estimateSeparateEnd
     this.oldRepeat_ = undefined
   }
@@ -248,6 +254,7 @@ export default class RepeatEdit extends Vue {
     this.from_ = this.repeat_.from
     this.estimateTime_ = this.repeat_.estimateTime
     this.section_ = DateUtil.get4digitTime(this.repeat_.section)
+    this.estimateSeparateStart_ = this.repeat_.estimateSeparateStart
     this.estimateSeparateEnd_ = this.repeat_.estimateSeparateEnd
   }
 }

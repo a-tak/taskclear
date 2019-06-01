@@ -213,7 +213,9 @@ export default class TaskRow extends Vue {
     }
 
     get rowColor(): {} {
-        if (this.task_.estimateSeparateEnd === true) {
+        if (this.task_.estimateSeparateStart === true) {
+            return {color: 'blue lighten-4'}
+        } else if (this.task_.estimateSeparateEnd === true) {
             return {color: 'amber accent-1'}
         } else {
             return {color: 'white'}

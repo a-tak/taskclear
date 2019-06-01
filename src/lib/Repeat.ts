@@ -33,6 +33,12 @@ export default class Repeat {
   public set day(value: string[]) {
     this.day_ = value
   }
+  public get estimateSeparateStart(): boolean {
+    return this.estimateSeparateStart_
+  }
+  public set estimateSeparateStart(value: boolean) {
+    this.estimateSeparateStart_ = value
+  }
   public get estimateSeparateEnd(): boolean {
     return this.estimateSeparateEnd_
   }
@@ -55,6 +61,7 @@ export default class Repeat {
     this.section_ = value
   }
 
+  private estimateSeparateStart_: boolean
   private estimateSeparateEnd_: boolean
 
   /**
@@ -73,6 +80,7 @@ export default class Repeat {
     this.day_ = []
     this.estimateTime_ = 0
     this.section_ = DateUtil.getMinDate()
+    this.estimateSeparateStart_ = false
     this.estimateSeparateEnd_ = false
   }
 
@@ -88,6 +96,7 @@ export default class Repeat {
     newRepeat.from = this.from_
     newRepeat.estimateTime = this.estimateTime_
     newRepeat.section = this.section_
+    newRepeat.estimateSeparateStart = this.estimateSeparateStart_
     newRepeat.estimateSeparateEnd = this.estimateSeparateEnd_
     return newRepeat
   }

@@ -12,6 +12,7 @@ export default interface ITask {
   repeatId: string
   sortNo: number
   isDeleted: boolean
+  estimateSeparateStart: boolean
   estimateSeparateEnd: boolean
   createTime: firestore.Timestamp
   updateTime: firestore.Timestamp
