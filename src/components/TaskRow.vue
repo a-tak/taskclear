@@ -50,6 +50,11 @@
                                 </v-menu>
                             </v-flex>
                             <v-flex xs4 sm2 md1 class="text-xs-right">
+                                <v-btn icon ripple @click.stop="copyTask(task_)">
+                                    <v-icon color="grey darken-1">file_copy</v-icon>
+                                </v-btn>
+                            </v-flex>
+                            <v-flex xs4 sm2 md1 class="text-xs-right">
                                 <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
                                     <v-icon v-if="task_.repeatId===''" color="grey darken-1">repeat</v-icon>
                                     <v-icon v-if="task_.repeatId!==''" color="purple">repeat</v-icon>
@@ -145,6 +150,10 @@ export default class TaskRow extends Vue {
     @Emit('clickDeleteButtomEvent')
     // tslint:disable-next-line:no-empty
     public deleteTask(task: Task): void {}
+
+    @Emit('clickCopyButtomEvent')
+    // tslint:disable-next-line:no-empty
+    public copyTask(task: Task): void {}
 
     @Emit('endEditEvent')
     // tslint:disable-next-line:no-empty
