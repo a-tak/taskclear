@@ -351,7 +351,7 @@ export default class TaskListMain extends Vue {
 
   private jumpToNextTask(): void {
     this.$nextTick(() => {
-      this.$vuetify.goTo('#next-task', {duration: 350, easing: 'easeInOutCubic'})
+      this.$vuetify.goTo('#next-task', {duration: 350, easing: 'easeInOutCubic', offset: 200})
     })
   }
   private jumpToTop(): void {
