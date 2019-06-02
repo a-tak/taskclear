@@ -6,7 +6,7 @@
   * データを消す場合がありますのであくまでお試しで
   * メールや登録したデータは管理者は見えてしまいますので、ほんとあくまでお試しで
 * ヘルプ作成しました
-  * https://github.com/a-tak/taskclear/tree/master/help
+  * https://github.com/a-tak/taskclear/tree/master/help/README.md
 
 ## リリースノート
 
