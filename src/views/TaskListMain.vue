@@ -52,6 +52,7 @@
           v-on:clickStopButtomEvent="stopTask"
           v-on:endEditEvent="endEditTask"
           v-on:clickDeleteButtomEvent="deleteTask"
+          v-on:clickCopyButtomEvent="copyTask"
           v-on:changeTaskDateChangeEvent="changeTaskDate"
           v-on:start-edit-task-name-event="startEditTaskName"
           v-on:end-edit-task-name-event="endEditTaskName"
@@ -188,6 +189,15 @@ export default class TaskListMain extends Vue {
   private deleteTask(task: Task): void {
     this.$store.commit('taskList/deleteTask', task)
     FirestoreUtil.logicalDeleteTask(this.$store.getters['taskList/user'].uid, task)
+  }
+
+  private copyTask(task: Task): void {
+    const newTask: Task = task.createPauseTask()
+    newTask.startTime = new Date()
+    newTask.endTime = undefined
+    this.$store.commit('taskList/addTask', newTask)
+    this.$store.commit('taskList/sortTask')
+    this.save()
   }
 
   private startTask(task: Task): void {
