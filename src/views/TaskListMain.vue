@@ -193,7 +193,7 @@ export default class TaskListMain extends Vue {
 
   private copyTask(task: Task): void {
     const newTask: Task = task.createPauseTask()
-    newTask.startTime = new Date()
+    newTask.startTime = undefined
     newTask.endTime = undefined
     this.$store.commit('taskList/addTask', newTask)
     this.$store.commit('taskList/sortTask')
