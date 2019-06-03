@@ -62,7 +62,7 @@ export default class EstimateList extends Vue {
     }
 
     get estimates2(): Estimate[] {
-        return this.estimates_.slice(3, 6);
+        return this.estimates_.slice(3, 7);
     }
 
     public display(): void {
