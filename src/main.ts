@@ -5,6 +5,7 @@ import store from '@/store/Store'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import firebase from 'firebase'
+import './registerServiceWorker'
 import { RouteRecord } from 'vue-router'
 
 Vue.config.productionTip = false
