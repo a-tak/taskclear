@@ -1,5 +1,5 @@
 import Section from '@/lib/Section'
-import Store from '@/store/Store2'
+import Store from '@/store/Store'
 
 export default class DateUtil {
   // 現地時間のyyyy-mm-dd形式の文字列を返す
