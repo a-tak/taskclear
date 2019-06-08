@@ -1,5 +1,7 @@
 # Taskclear
 
+![](./public/img/logo.svg)
+
 * タスク管理アプリ
 * お試しページ
   * https://tc.a-tak.com
