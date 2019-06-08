@@ -1,6 +1,6 @@
 import Section from '@/lib/Section'
 import SectionConnector from '@/lib/SectionConnector'
-import Store from '@/store/Store'
+import Store from '@/store/Store2'
 import DateUtil from '@/util/DateUtil'
 
 const con: SectionConnector = new SectionConnector()
