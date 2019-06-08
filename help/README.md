@@ -1,5 +1,7 @@
 # TaskClear ヘルプ
 
+![](../public/img/logo.svg)
+
 ## TaskClearとは
 
 * タスク管理手法である「タスクシュート」に影響をうけ作成したタスク管理ツールです。
