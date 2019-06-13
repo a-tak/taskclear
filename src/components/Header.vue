@@ -1,7 +1,6 @@
 <template>
   <v-toolbar color="teal lighten-3" id="header" >
-    <v-toolbar-side-icon></v-toolbar-side-icon>
-    <v-toolbar-title>TaskClear</v-toolbar-title>
+    <v-img src="/img/top-logo.svg" aspect-ratio="1" max-height="30px" max-width="30px"></v-img>
     <v-spacer></v-spacer>
     <v-menu offset-y>
       <v-btn id="more"
