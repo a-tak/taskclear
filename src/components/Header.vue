@@ -2,7 +2,6 @@
   <v-toolbar color="teal lighten-3" id="header" >
     <v-toolbar-side-icon></v-toolbar-side-icon>
     <v-toolbar-title>TaskClear</v-toolbar-title>
-    <v-btn @click="logout">ログアウト</v-btn>
     <v-spacer></v-spacer>
     <v-menu offset-y>
       <v-btn id="more"
@@ -19,6 +18,9 @@
         </v-list-tile>
         <v-list-tile @click="jumpToHelp()">
           <v-list-tile-title>ヘルプ</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile @click="logout()">
+          <v-list-tile-title>ログアウト</v-list-tile-title>
         </v-list-tile>
       </v-list>
     </v-menu>
