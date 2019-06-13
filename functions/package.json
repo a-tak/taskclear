@@ -18,5 +18,8 @@
     "tslint": "^5.15.0",
     "typescript": "^3.4.3"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": "8"
+  }
 }

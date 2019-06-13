@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg58"
+   height="335"
+   width="335"
+   viewBox="0 0 335 335"
+   preserveAspectRatio="xMidYMid meet"
+   version="1.1">
+  <metadata
+     id="metadata62">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs40">
+    <linearGradient
+       osb:paint="solid"
+       id="linearGradient859">
+      <stop
+         id="stop857"
+         offset="0"
+         style="stop-color:#4e0000;stop-opacity:1;" />
+    </linearGradient>
+  </defs>
+  <g
+     style="display:inline"
+     id="layer6">
+    <path
+       id="rect899"
+       d="m 82.181641,-0.5234375 c -45.186306,0 -81.5644535,36.3781475 -81.5644535,81.5644535 V 254.67188 c 0,45.1863 36.3781475,81.56445 81.5644535,81.56445 H 253.95898 c 45.18631,0 81.56446,-36.37817 81.56446,-81.56445 V 81.041016 c 0,-45.186306 -36.37815,-81.5644535 -81.56446,-81.5644535 z M 70.767578,70.205078 116.73633,99.841797 70.517578,129.72266 Z M 150.60742,95.126953 H 260.8457 v 8.302737 H 150.60742 Z m -79.839842,42.878907 45.968752,29.63867 -46.218752,29.87891 z m 79.839842,25.35742 H 260.8457 v 8.30078 H 150.60742 Z m -79.839842,42.44336 45.968752,29.63867 -46.218752,29.87891 z m 79.839842,27.60742 H 260.8457 v 8.30274 H 150.60742 Z"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none" />
+  </g>
+</svg>
