@@ -8,8 +8,12 @@ export default class Estimate {
   public set date(v: Date) {
     this.date_ = v
   }
+
+  /**
+   * M/Dの形式で日付文字列を返す
+   */
   public get dateStr(): string {
-    return DateUtil.getDateString(this.date_)
+    return `${this.date_.getMonth() + 1}/${this.date_.getDate()}`
   }
 
   private dayLabel_: string = ''
