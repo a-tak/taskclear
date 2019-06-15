@@ -5,7 +5,7 @@
       <div id="day-and-estimate">
         <v-layout v-bind="topRowLayoutAttributes" fill-height>
           <v-flex>
-            <v-card>
+            <v-card class="elevation-3">
               <v-menu
                 :close-on-content-click="false"
                 v-model="menu2"

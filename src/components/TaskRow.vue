@@ -3,9 +3,9 @@
     <div id="next-task" v-if="task_.isNext === true"></div>
     <v-layout align-center row v-if="!isEdit_">
       <v-flex>
-        <v-card v-bind="rowColor">
+        <v-card v-bind="rowColor" class="elevation-1">
           <v-layout align-center justify-space-between row fill-height>
-            <v-flex xs2 sm2 md1>
+            <v-flex xs1 sm1 md1 shrink>
               <v-btn
                 v-bind:id="'start-btn-' + task_.id"
                 icon
@@ -27,7 +27,7 @@
                 <v-icon color="purple">pause_circle_filled</v-icon>
               </v-btn>
             </v-flex>
-            <v-flex nowrap sm5 xs9 md5>
+            <v-flex nowrap sm5 xs9 md5 grow>
               <v-card-actions @click.stop="startEdit()">
                 <div
                   v-bind:class="{ done: task_.endTime!=undefined}"
@@ -40,7 +40,7 @@
             </v-flex>
             <v-spacer></v-spacer>
             <v-layout v-bind="topRowLayoutAttributes">
-              <v-flex xs4 sm2 md1 class="text-xs-right">
+              <v-flex shrink xs1 sm1 md1 class="text-xs-right">
                 <v-menu
                   :close-on-content-click="true"
                   v-model="displayedTaskCal"
@@ -67,18 +67,18 @@
                   ></v-date-picker>
                 </v-menu>
               </v-flex>
-              <v-flex xs4 sm2 md1 class="text-xs-right">
+              <v-flex shrink xs1 sm1 md1 class="text-xs-right">
                 <v-btn icon ripple @click.stop="copyTask(task_)">
                   <v-icon color="grey darken-1">file_copy</v-icon>
                 </v-btn>
               </v-flex>
-              <v-flex xs4 sm2 md1 class="text-xs-right">
+              <v-flex shrink xs1 sm1 md1 class="text-xs-right">
                 <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
                   <v-icon v-if="task_.repeatId===''" color="grey darken-1">repeat</v-icon>
                   <v-icon v-if="task_.repeatId!==''" color="purple">repeat</v-icon>
                 </v-btn>
               </v-flex>
-              <v-flex xs4 sm2 md1 class="text-xs-right">
+              <v-flex shrink xs1 sm1 md1 class="text-xs-right">
                 <v-btn icon ripple @click.stop="deleteTask(task_)">
                   <v-icon color="grey darken-1">delete</v-icon>
                 </v-btn>
@@ -120,8 +120,8 @@ import Task from '../lib/Task';
   components: {
     NewTask,
     TaskEdit,
-    RepeatEdit
-  }
+    RepeatEdit,
+  },
 })
 export default class TaskRow extends Vue {
   get displayedTaskCal(): boolean {
