@@ -89,23 +89,23 @@
 }
 </style>
 
-<script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
-import firebase, { firestore } from "firebase";
-import NewTask from "@/components/NewTask.vue";
-import TaskRow from "@/components/TaskRow.vue";
-import EstimateList from "@/components/EstimateList.vue";
-import Header from "@/components/Header.vue";
-import Footer from "@/components/Footer.vue";
-import DateUtil from "@/util/DateUtil";
-import FirestoreUtil from "@/util/FirestoreUtil";
-import uuid from "uuid";
-import Task from "@/lib/Task";
-import TaskController from "@/lib/TaskController";
-import Repeat from "@/lib/Repeat";
-import RepeatCreator from "@/lib/RepeatCreator";
-import Migration from "@/util/Migration";
-import SectionConnector from "@/lib/SectionConnector";
+<script lang='ts'>
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import firebase, { firestore } from 'firebase';
+import NewTask from '@/components/NewTask.vue';
+import TaskRow from '@/components/TaskRow.vue';
+import EstimateList from '@/components/EstimateList.vue';
+import Header from '@/components/Header.vue';
+import Footer from '@/components/Footer.vue';
+import DateUtil from '@/util/DateUtil';
+import FirestoreUtil from '@/util/FirestoreUtil';
+import uuid from 'uuid';
+import Task from '@/lib/Task';
+import TaskController from '@/lib/TaskController';
+import Repeat from '@/lib/Repeat';
+import RepeatCreator from '@/lib/RepeatCreator';
+import Migration from '@/util/Migration';
+import SectionConnector from '@/lib/SectionConnector';
 
 @Component({
   components: {
@@ -113,26 +113,26 @@ import SectionConnector from "@/lib/SectionConnector";
     TaskRow,
     EstimateList,
     Header,
-    Footer
-  }
+    Footer,
+  },
 })
 export default class TaskListMain extends Vue {
   get tasks(): Task[] {
-    return this.$store.getters["taskList/taskCtrl"].tasks;
+    return this.$store.getters['taskList/taskCtrl'].tasks;
   }
 
   set tasks(value: Task[]) {
     const tc: TaskController = new TaskController();
     tc.tasks = value;
-    this.$store.commit("taskList/setTaskCtrl", tc);
+    this.$store.commit('taskList/setTaskCtrl', tc);
   }
 
   get targetDate(): string {
-    return DateUtil.getDateString(this.$store.getters["taskList/targetDate"]);
+    return DateUtil.getDateString(this.$store.getters['taskList/targetDate']);
   }
 
   set targetDate(value: string) {
-    this.$store.commit("taskList/setTargetDate", new Date(value));
+    this.$store.commit('taskList/setTargetDate', new Date(value));
   }
 
   get menu2(): boolean {
@@ -146,15 +146,15 @@ export default class TaskListMain extends Vue {
   get topRowLayoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
-      case "xs":
+      case 'xs':
         return { column: true };
-      case "sm":
+      case 'sm':
         return { column: true };
-      case "md":
+      case 'md':
         return { row: true };
-      case "lg":
+      case 'lg':
         return { row: true };
-      case "xl":
+      case 'xl':
         return { row: true };
       default:
         return { row: true };
@@ -165,7 +165,7 @@ export default class TaskListMain extends Vue {
   private menu2_: boolean = false;
 
   // 日付を変更したのを監視してタスクを読み込み直し
-  @Watch("targetDate")
+  @Watch('targetDate')
   private onValueChange(newValue: string, oldValue: string): void {
     this.loadTasks();
   }
@@ -175,28 +175,28 @@ export default class TaskListMain extends Vue {
 
     // 当日分のリピートタスクを作る
     const rc: RepeatCreator = new RepeatCreator(
-      this.$store.getters["taskList/user"].uid,
-      this.$store.getters["taskList/targetDate"]
+      this.$store.getters['taskList/user'].uid,
+      this.$store.getters['taskList/targetDate'],
     );
     await rc.creaetRepeat(1);
     // 今日のデータを読み込み(同期的に)
     const tc: TaskController = await FirestoreUtil.loadTasks(
-      self.$store.getters["taskList/user"].uid,
-      self.$store.getters["taskList/targetDate"]
+      self.$store.getters['taskList/user'].uid,
+      self.$store.getters['taskList/targetDate'],
     );
     tc.sort();
-    self.$store.commit("taskList/setTaskCtrl", tc);
+    self.$store.commit('taskList/setTaskCtrl', tc);
 
     this.reCreateRepeatTask();
   }
 
   private async reCreateRepeatTask(): Promise<void> {
     // 非同期で明日以降1週間分のデータを作る
-    const d = new Date(this.$store.getters["taskList/targetDate"]);
+    const d = new Date(this.$store.getters['taskList/targetDate']);
     d.setDate(d.getDate() + 1);
     const rc2: RepeatCreator = new RepeatCreator(
-      this.$store.getters["taskList/user"].uid,
-      d
+      this.$store.getters['taskList/user'].uid,
+      d,
     );
     try {
       rc2.creaetRepeat(6);
@@ -207,10 +207,10 @@ export default class TaskListMain extends Vue {
   }
 
   private deleteTask(task: Task): void {
-    this.$store.commit("taskList/deleteTask", task);
+    this.$store.commit('taskList/deleteTask', task);
     FirestoreUtil.logicalDeleteTask(
-      this.$store.getters["taskList/user"].uid,
-      task
+      this.$store.getters['taskList/user'].uid,
+      task,
     );
   }
 
@@ -218,8 +218,8 @@ export default class TaskListMain extends Vue {
     const newTask: Task = task.createPauseTask();
     newTask.startTime = undefined;
     newTask.endTime = undefined;
-    this.$store.commit("taskList/addTask", newTask);
-    this.$store.commit("taskList/sortTask");
+    this.$store.commit('taskList/addTask', newTask);
+    this.$store.commit('taskList/sortTask');
     this.save();
   }
 
@@ -228,7 +228,7 @@ export default class TaskListMain extends Vue {
     for (const otherTask of this.tasks) {
       if (otherTask.isDoing === true) {
         this.tasks.push(otherTask.createPauseTask());
-        otherTask.title = otherTask.title + "(中断)";
+        otherTask.title = otherTask.title + '(中断)';
         this.changeStopTask(otherTask);
       }
     }
@@ -239,22 +239,22 @@ export default class TaskListMain extends Vue {
       newTask.isDoing = true;
       newTask.startTime = new Date();
       newTask.endTime = undefined;
-      this.$store.commit("taskList/addTask", newTask);
+      this.$store.commit('taskList/addTask', newTask);
     } else {
       task.needSave = true;
       task.isDoing = true;
       task.startTime = new Date();
     }
 
-    this.$store.commit("taskList/sortTask");
+    this.$store.commit('taskList/sortTask');
 
     this.save();
   }
 
   private save(): void {
     FirestoreUtil.saveTasks(
-      this.$store.getters["taskList/user"].uid,
-      this.$store.getters["taskList/taskCtrl"]
+      this.$store.getters['taskList/user'].uid,
+      this.$store.getters['taskList/taskCtrl'],
     );
   }
 
@@ -266,7 +266,7 @@ export default class TaskListMain extends Vue {
   }
   private endEditTask(task: Task, index: number) {
     this.$set(this.tasks, index, task);
-    this.$store.getters["taskList/taskCtrl"].sort();
+    this.$store.getters['taskList/taskCtrl'].sort();
     // needSaveフラグは子コンポーネントで保存したときのみ設定しているのでここでは設定しない
     this.save();
     this.reCreateRepeatTask();
@@ -275,9 +275,9 @@ export default class TaskListMain extends Vue {
   private addTask(): void {
     this.addingTask_ = true;
     this.$nextTick(() => {
-      this.$vuetify.goTo("#newtask", {
+      this.$vuetify.goTo('#newtask', {
         duration: 350,
-        easing: "easeInOutCubic"
+        easing: 'easeInOutCubic',
       });
     });
   }
@@ -294,16 +294,16 @@ export default class TaskListMain extends Vue {
 
     // 変更先の日付のdocを取ってくる
     FirestoreUtil.loadTasks(
-      this.$store.getters["taskList/user"].uid,
-      task.date
-    ).then(tc => {
+      this.$store.getters['taskList/user'].uid,
+      task.date,
+    ).then((tc: TaskController) => {
       // タスクを追加してsave
       task.needSave = true;
       tc.tasks.push(task);
-      FirestoreUtil.saveTasks(this.$store.getters["taskList/user"].uid, tc);
+      FirestoreUtil.saveTasks(this.$store.getters['taskList/user'].uid, tc);
 
       // 今開いている日付のdocから削除
-      this.$store.commit("taskList/deleteTask", task);
+      this.$store.commit('taskList/deleteTask', task);
     });
   }
 
@@ -311,7 +311,7 @@ export default class TaskListMain extends Vue {
    * 日付を一日進める
    */
   private forwardTargetDate(): void {
-    const d = new Date(this.$store.getters["taskList/targetDate"]);
+    const d = new Date(this.$store.getters['taskList/targetDate']);
     d.setDate(d.getDate() + 1);
     this.targetDate = d.toString();
   }
@@ -320,7 +320,7 @@ export default class TaskListMain extends Vue {
    * 日付を一日戻す
    */
   private returnTargetDate(): void {
-    const d = new Date(this.$store.getters["taskList/targetDate"]);
+    const d = new Date(this.$store.getters['taskList/targetDate']);
     d.setDate(d.getDate() - 1);
     this.targetDate = d.toString();
   }
@@ -345,10 +345,10 @@ export default class TaskListMain extends Vue {
 
   private initialLoad() {
     firebase.auth().onAuthStateChanged(async (user: firebase.User | null) => {
-      this.$store.commit("taskList/setUser", user);
-      await Migration.run(this.$store.getters["taskList/user"].uid);
+      this.$store.commit('taskList/setUser', user);
+      await Migration.run(this.$store.getters['taskList/user'].uid);
       // セクション読み込み
-      await this.$store.dispatch("section/load");
+      await this.$store.dispatch('section/load');
       // 日付指定
       this.targetDate = DateUtil.calcBaseDate(new Date()).toString();
       this.loadTasks();
@@ -363,15 +363,15 @@ export default class TaskListMain extends Vue {
    */
   private entryShortcut(): void {
     document.onkeyup = (e: KeyboardEvent) => {
-      if (e.key === "d") {
+      if (e.key === 'd') {
         this.jumpToNextTask();
-      } else if (e.key === "t") {
+      } else if (e.key === 't') {
         this.jumpToTop();
-      } else if (e.key === "a") {
+      } else if (e.key === 'a') {
         this.addTask();
-      } else if (e.key === "f") {
+      } else if (e.key === 'f') {
         this.forwardTargetDate();
-      } else if (e.key === "r") {
+      } else if (e.key === 'r') {
         this.returnTargetDate();
       }
     };
@@ -392,20 +392,21 @@ export default class TaskListMain extends Vue {
 
   private jumpToNextTask(): void {
     this.$nextTick(() => {
-      this.$vuetify.goTo("#next-task", {
+      this.$vuetify.goTo('#next-task', {
         duration: 350,
-        easing: "easeInOutCubic",
-        offset: 200
+        easing: 'easeInOutCubic',
+        offset: 200,
       });
     });
   }
   private jumpToTop(): void {
     this.$nextTick(() => {
-      this.$vuetify.goTo("#header", {
+      this.$vuetify.goTo('#header', {
         duration: 350,
-        easing: "easeInOutCubic"
+        easing: 'easeInOutCubic',
       });
     });
   }
 }
 </script>
+
