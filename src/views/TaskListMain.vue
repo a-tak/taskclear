@@ -46,7 +46,7 @@
         <span>Aキーでもタスク追加できます</span>
       </v-tooltip>
     </v-btn>
-    <div id="list" claas="list">
+    <div id="list" v-bind="listClass">
       <v-slide-y-transition class="py-0" group tag="v-list">
         <TaskRow
           v-for="(task, index) in tasks"
@@ -77,19 +77,20 @@
 </template>
 
 <style>
-.done {
-  text-decoration: line-through;
-}
 .fixed-header {
   position: fixed;
-  width: 100%
+  width: 100%;
+  z-index: 100;
 }
-.list {
-  overflow: hidden;
+.listSp {
+  padding-top: 200px;
+}
+.listPc {
+  padding-top: 150px;
 }
 </style>
 
-<script lang='ts'>
+て<script lang='ts'>
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import firebase, { firestore } from 'firebase';
 import NewTask from '@/components/NewTask.vue';
@@ -158,6 +159,18 @@ export default class TaskListMain extends Vue {
         return { row: true };
       default:
         return { row: true };
+    }
+  }
+
+  get listClass(): {} {
+    // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+    switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return {class: 'listSp'};
+        case 'sm': return {class: 'listSp'};
+        case 'md': return {class: 'listPc'};
+        case 'lg': return {class: 'listPc'};
+        case 'xl': return {class: 'listPc'};
+        default  : return {class: 'listPc'};
     }
   }
 
