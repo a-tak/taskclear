@@ -2,7 +2,7 @@
   <v-toolbar color="teal lighten-3" id="header" >
     <v-img src="/img/top-logo.svg" aspect-ratio="1" max-height="30px" max-width="30px"></v-img>
     <v-spacer></v-spacer>
-    <v-menu offset-y>
+    <v-menu offset-y class="menu">
       <v-btn id="more"
         slot="activator"
         icon>
@@ -25,6 +25,12 @@
     </v-menu>
   </v-toolbar>
 </template>
+
+<style>
+.menu {
+  z-index: 200;
+}
+</style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
