@@ -4,24 +4,32 @@
       <v-flex>
         <v-card>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
-            <v-flex ma-2>
-              <v-text-field v-bind:id="'section-title-field-' + section_.id" placeholder="セクション名" single-line outline clearable v-model="section_.title" @change="changeSection(section_)" ></v-text-field>
+            <v-flex>
+              <v-layout row>
+                <v-flex ma-2>
+                  <v-text-field v-bind:id="'section-title-field-' + section_.id" placeholder="セクション名" single-line outline clearable v-model="section_.title" @change="changeSection(section_)" ></v-text-field>
+                </v-flex>
+                <v-flex ma-2>
+                  <v-text-field v-bind:id="'section-start-field-' + section_.id" type="number" placeholder="開始時間" single-line outline clearable hint="数字3または4桁。9時20分は「920」と入力" v-model="startTime_" @change="changeStartTime()"></v-text-field>
+                </v-flex>
+              </v-layout>
             </v-flex>
-            <v-flex ma-2>
-              <v-text-field v-bind:id="'section-start-field-' + section_.id" type="number" placeholder="開始時間" single-line outline clearable hint="数字3または4桁。9時20分は「920」と入力" v-model="startTime_" @change="changeStartTime()"></v-text-field>
-            </v-flex>
-            <v-flex xs4 sm2 md1 class="text-xs-right">
-              <v-btn icon ripple @click.stop="deleteSection(section_)">
-                  <v-icon color="grey darken-1">delete</v-icon>
-                </v-btn>
-            </v-flex>
-            <v-flex xs4 sm2 md1 class="text-xs-right">
-              <v-tooltip bottom  v-if="index_!==0">
-                <v-btn slot="activator" icon ripple @click.stop="setFirtstSection(section_)">
-                  <v-icon color="grey darken-1">vertical_align_top</v-icon>
-                </v-btn>
-                <span>一日の開始セクションに指定</span>
-              </v-tooltip>
+            <v-flex md3 xs3 sm3>
+              <v-layout row>
+                <v-flex xs4 sm2 md1>
+                  <v-btn icon ripple @click.stop="deleteSection(section_)">
+                      <v-icon color="grey darken-1">delete</v-icon>
+                    </v-btn>
+                </v-flex>
+                <v-flex xs4 sm2 md1>
+                  <v-tooltip bottom  v-if="index_!==0">
+                    <v-btn slot="activator" icon ripple @click.stop="setFirtstSection(section_)">
+                      <v-icon color="grey darken-1">vertical_align_top</v-icon>
+                    </v-btn>
+                    <span>一日の開始セクションに指定</span>
+                  </v-tooltip>
+                </v-flex>
+              </v-layout>
             </v-flex>
           </v-layout>
         </v-card>
