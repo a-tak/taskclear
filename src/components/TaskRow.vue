@@ -5,7 +5,7 @@
       <v-flex>
         <v-card v-bind="rowColor" class="elevation-1">
           <v-layout align-center justify-space-between row fill-height>
-            <v-flex xs1 sm1 md1 shrink>
+            <v-flex xs2 sm2 md1 shrink>
               <v-btn
                 v-bind:id="'start-btn-' + task_.id"
                 icon
