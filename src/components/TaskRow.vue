@@ -4,8 +4,9 @@
     <v-layout align-center row v-if="!isEdit_">
       <v-flex>
         <v-card v-bind="rowColor" class="elevation-1">
-          <v-layout align-center justify-space-between row fill-height>
-            <v-flex xs2 sm2 md1 shrink>
+          <v-layout align-center justify-space-between row fill-height pr-4>
+            <!-- Start/End Buttom -->
+            <v-flex xs2 sm2 md2 lg2 xl2 >
               <v-btn
                 v-bind:id="'start-btn-' + task_.id"
                 icon
@@ -27,7 +28,8 @@
                 <v-icon color="purple">pause_circle_filled</v-icon>
               </v-btn>
             </v-flex>
-            <v-flex nowrap sm5 xs9 md5 grow>
+            <!-- TaskName -->
+            <v-flex nowrap xs15 sm5 md5 lg5 xl5 grow>
               <v-card-actions @click.stop="startEdit()">
                 <div
                   v-bind:class="{ done: task_.endTime!=undefined}"
@@ -38,52 +40,57 @@
                 <span>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
               </v-card-actions>
             </v-flex>
-            <v-spacer></v-spacer>
-            <v-layout v-bind="topRowLayoutAttributes">
-              <v-flex shrink xs1 sm1 md1 class="text-xs-right">
-                <v-menu
-                  :close-on-content-click="true"
-                  v-model="displayedTaskCal"
-                  :nudge-right="40"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  min-width="290px"
-                >
-                  <v-btn
-                    slot="activator"
-                    icon
-                    ripple
-                    @click.stop="displayedTaskCal = !displayedTaskCal"
+            <v-flex xs2 sm1 md6 lg7 xl8 shrink>
+              <v-spacer></v-spacer>
+            </v-flex>
+            <!-- icon -->
+            <v-flex xs2 sm5 md6 lg7 xl8>
+              <v-layout row wrap>
+                <v-flex xs6 sm2 md1 lg1 xl1>
+                  <v-menu
+                    :close-on-content-click="true"
+                    v-model="displayedTaskCal"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
                   >
-                    <v-icon color="grey darken-1">calendar_today</v-icon>
+                    <v-btn
+                      slot="activator"
+                      icon
+                      ripple
+                      @click.stop="displayedTaskCal = !displayedTaskCal"
+                    >
+                      <v-icon color="grey darken-1">calendar_today</v-icon>
+                    </v-btn>
+                    <v-date-picker
+                      v-model="targetDate"
+                      @input="selectDate()"
+                      locale="jp"
+                      :day-format="date => new Date(date).getDate()"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-flex>
+                <v-flex xs6 sm2 md1 lg1 xl1>
+                  <v-btn icon ripple @click.stop="copyTask(task_)">
+                    <v-icon color="grey darken-1">file_copy</v-icon>
                   </v-btn>
-                  <v-date-picker
-                    v-model="targetDate"
-                    @input="selectDate()"
-                    locale="jp"
-                    :day-format="date => new Date(date).getDate()"
-                  ></v-date-picker>
-                </v-menu>
-              </v-flex>
-              <v-flex shrink xs1 sm1 md1 class="text-xs-right">
-                <v-btn icon ripple @click.stop="copyTask(task_)">
-                  <v-icon color="grey darken-1">file_copy</v-icon>
-                </v-btn>
-              </v-flex>
-              <v-flex shrink xs1 sm1 md1 class="text-xs-right">
-                <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
-                  <v-icon v-if="task_.repeatId===''" color="grey darken-1">repeat</v-icon>
-                  <v-icon v-if="task_.repeatId!==''" color="purple">repeat</v-icon>
-                </v-btn>
-              </v-flex>
-              <v-flex shrink xs1 sm1 md1 class="text-xs-right">
-                <v-btn icon ripple @click.stop="deleteTask(task_)">
-                  <v-icon color="grey darken-1">delete</v-icon>
-                </v-btn>
-              </v-flex>
-            </v-layout>
+                </v-flex>
+                <v-flex xs6 sm2 md1 lg1 xl1>
+                  <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
+                    <v-icon v-if="task_.repeatId===''" color="grey darken-1">repeat</v-icon>
+                    <v-icon v-if="task_.repeatId!==''" color="purple">repeat</v-icon>
+                  </v-btn>
+                </v-flex>
+                <v-flex xs6 sm2 md1 lg1 xl1>
+                  <v-btn icon ripple @click.stop="deleteTask(task_)">
+                    <v-icon color="grey darken-1">delete</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+            </v-flex>
           </v-layout>
         </v-card>
       </v-flex>
