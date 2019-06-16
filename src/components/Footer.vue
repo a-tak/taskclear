@@ -2,7 +2,7 @@
   <v-footer
     color="teal lighten-3"
     height="auto"
-    class="mt-2"
+    class="mt-2 elevation-5"
   >
     <v-card
       flat
@@ -13,7 +13,7 @@
         &copy;2019 a-tak.com  ver. <span id="ver">{{ version_ }}</span>
       </v-card-text>
     </v-card>
-  </v-footer> 
+  </v-footer>
 </template>
 
 <script lang="ts">

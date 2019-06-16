@@ -1,29 +1,49 @@
 <template>
   <div id="main">
-    <Header></Header>
-    <span>セクション設定</span>
+    <div class="fixed-header">
+      <Header></Header>
+    </div>
     <v-btn fab dark color="red" fixed floating bottom right @click="addSection()">
       <v-icon dark>add</v-icon>
     </v-btn>
-    <v-slide-y-transition
-      class="py-0"
-      group
-      tag="v-list"
-    >
-      <SectionRow
-        v-for="(section, index) in sections"
-        :key="section.id"
-        :section_="section"
-        :index_="index"
-        v-on:clickDeleteButtomEvent="deleteSection"
-        v-on:changeEvent="changeSection"
-        v-on:setFirstSectionEvent="setFirstSection"
+    <div id="list" v-bind="listClass">
+      <div id="title" class="headline ma-3">
+        セクション設定
+      </div>
+      <v-slide-y-transition
+        class="py-0"
+        group
+        tag="v-list"
       >
-      </SectionRow>
-    </v-slide-y-transition>
+        <SectionRow
+          v-for="(section, index) in sections"
+          :key="section.id"
+          :section_="section"
+          :index_="index"
+          v-on:clickDeleteButtomEvent="deleteSection"
+          v-on:changeEvent="changeSection"
+          v-on:setFirstSectionEvent="setFirstSection"
+        >
+        </SectionRow>
+      </v-slide-y-transition>
+    </div>
     <Footer></Footer>
   </div>
 </template>
+
+<style>
+.fixed-header {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+}
+.listSp {
+  padding-top: 50px;
+}
+.listPc {
+  padding-top: 70px;
+}
+</style>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
@@ -81,6 +101,18 @@ export default class SectionList extends Vue {
 
   private setFirstSection(section: Section): void {
     this.$store.dispatch('section/setFirst', section)
+  }
+
+  get listClass(): {} {
+    // 画面サイズによってツールバーとのマージンを変更
+    switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return {class: 'listSp'};
+        case 'sm': return {class: 'listSp'};
+        case 'md': return {class: 'listPc'};
+        case 'lg': return {class: 'listPc'};
+        case 'xl': return {class: 'listPc'};
+        default  : return {class: 'listPc'};
+    }
   }
 }
 </script>
