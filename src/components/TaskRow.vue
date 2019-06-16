@@ -4,7 +4,7 @@
     <v-layout align-center row v-if="!isEdit_">
       <v-flex>
         <v-card v-bind="rowColor" class="elevation-3">
-          <v-layout align-center justify-space-between row fill-height pr-auto>
+          <v-layout align-center justify-space-between row fill-height pr-4>
             <!-- Start/End Buttom -->
             <v-flex xs2 sm1 md1 lg1 xl1 >
               <v-btn
