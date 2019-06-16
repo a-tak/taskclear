@@ -2,7 +2,7 @@
   <v-container grid-list-md text-xs-center pa-1>
     <v-layout row wrap>
       <v-flex>
-        <v-card>
+        <v-card class="elevation-3 ma-1">
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
             <v-flex>
               <v-layout row>

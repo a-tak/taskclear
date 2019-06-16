@@ -1,11 +1,11 @@
 <template>
   <div id="main">
-    <div class="fixed-header">
+    <div class="tasklist-fixed-header">
       <Header></Header>
       <div id="day-and-estimate">
         <v-layout v-bind="topRowLayoutAttributes" fill-height>
           <v-flex>
-            <v-card class="elevation-3">
+            <v-card class="elevation-5">
               <v-menu
                 :close-on-content-click="false"
                 v-model="menu2"
@@ -77,20 +77,20 @@
 </template>
 
 <style>
-.fixed-header {
+.tasklist-fixed-header {
   position: fixed;
   width: 100%;
   z-index: 100;
 }
-.listSp {
-  padding-top: 200px;
+.tasklist-listSp {
+  padding-top: 210px;
 }
-.listPc {
+.tasklist-listPc {
   padding-top: 150px;
 }
 </style>
 
-て<script lang='ts'>
+<script lang='ts'>
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import firebase, { firestore } from 'firebase';
 import NewTask from '@/components/NewTask.vue';
@@ -163,14 +163,14 @@ export default class TaskListMain extends Vue {
   }
 
   get listClass(): {} {
-    // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+    // 画面サイズによってツールバーとのマージンを変更
     switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return {class: 'listSp'};
-        case 'sm': return {class: 'listSp'};
-        case 'md': return {class: 'listPc'};
-        case 'lg': return {class: 'listPc'};
-        case 'xl': return {class: 'listPc'};
-        default  : return {class: 'listPc'};
+        case 'xs': return {class: 'tasklist-listSp'};
+        case 'sm': return {class: 'tasklist-listSp'};
+        case 'md': return {class: 'tasklist-listPc'};
+        case 'lg': return {class: 'tasklist-listPc'};
+        case 'xl': return {class: 'tasklist-listPc'};
+        default  : return {class: 'tasklist-listPc'};
     }
   }
 
