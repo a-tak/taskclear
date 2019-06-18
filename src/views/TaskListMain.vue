@@ -408,7 +408,7 @@ export default class TaskListMain extends Vue {
       this.$vuetify.goTo('#next-task', {
         duration: 350,
         easing: 'easeInOutCubic',
-        offset: 200,
+        offset: 325,
       });
     });
   }
