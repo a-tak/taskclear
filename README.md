@@ -54,6 +54,11 @@ npm run minor
 ```
 npm run major
 ```
+### ビルドのみ(バージョン上げない)
+```
+npm run stay
+```
+
 
 ### リリース
 

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "stay": "vue-cli-service build",
     "build": "npm version patch && vue-cli-service build",
     "minor": "npm version minor && vue-cli-service build",
     "major": "npm version major && vue-cli-service build",
