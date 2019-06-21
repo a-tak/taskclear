@@ -1,18 +1,33 @@
 {
   "indexes": [
     {
-      "collectionId": "tasks",
+      "collectionGroup": "tasks",
+      "queryScope": "COLLECTION",
       "fields": [
-        {"fieldPath": "repeatId", "mode": "ASCENDING"},
-        {"fieldPath": "date", "mode": "ASCENDING"}
+        {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
-      "collectionId": "tasks",
+      "collectionGroup": "tasks",
+      "queryScope": "COLLECTION",
       "fields": [
-        {"fieldPath": "isDeleted", "mode": "ASCENDING"},
-        {"fieldPath": "date", "mode": "ASCENDING"}
+        {
+          "fieldPath": "repeatId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
+          "order": "ASCENDING"
+        }
       ]
     }
-  ]
+  ],
+  "fieldOverrides": []
 }
