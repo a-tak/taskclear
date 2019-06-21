@@ -2,14 +2,18 @@
   <v-toolbar color="teal lighten-3" id="header" class="elevation-5">
     <v-img src="/img/top-logo.svg" aspect-ratio="1" max-height="30px" max-width="30px"></v-img>
     <v-spacer></v-spacer>
-    <v-btn id="go-doing" icon>
-      <v-icon>arrow_drop_down_circle</v-icon>
+    <v-btn id="go-doing"
+      icon
+      @click="junpToNextTask()"
+    >
+      <v-icon>forward</v-icon>
     </v-btn>
     <v-menu offset-y class="menu">
       <v-btn id="more"
         slot="activator"
-        icon>
-          <v-icon>more_vert</v-icon>
+        icon
+      >
+        <v-icon>more_vert</v-icon>
       </v-btn>
       <v-list>
         <v-list-tile @click="jumpToTaskList()">
@@ -36,11 +40,15 @@
 </style>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Emit } from 'vue-property-decorator';
 import firebase from 'firebase';
 
 @Component
 export default class Header extends Vue {
+  @Emit('clickjumpToNextTaskButtomEvent')
+  // tslint:disable-next-line:no-empty
+  private junpToNextTask(): void {}
+
   private logout(): void {
     firebase.auth().signOut().then(() => {
       this.$router.push('/login');
