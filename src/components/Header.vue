@@ -2,6 +2,9 @@
   <v-toolbar color="teal lighten-3" id="header" class="elevation-5">
     <v-img src="/img/top-logo.svg" aspect-ratio="1" max-height="30px" max-width="30px"></v-img>
     <v-spacer></v-spacer>
+    <v-btn id="go-doing" icon>
+      <v-icon>arrow_drop_down_circle</v-icon>
+    </v-btn>
     <v-menu offset-y class="menu">
       <v-btn id="more"
         slot="activator"
