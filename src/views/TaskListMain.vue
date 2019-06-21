@@ -1,7 +1,9 @@
 <template>
   <div id="main">
     <div class="tasklist-fixed-header">
-      <Header></Header>
+      <Header
+        v-on:clickjumpToNextTaskButtomEvent="jumpToNextTask()"
+      ></Header>
       <div id="day-and-estimate">
         <v-layout v-bind="topRowLayoutAttributes" fill-height>
           <v-flex>
@@ -404,13 +406,21 @@ export default class TaskListMain extends Vue {
   }
 
   private jumpToNextTask(): void {
+    let offsetValue: number = 0
+    switch (this.$vuetify.breakpoint.name) {
+      case 'xs':
+        offsetValue = 480;
+        break;
+      default  :
+        offsetValue = 325;
+    }
     this.$nextTick(() => {
-      this.$vuetify.goTo('#next-task', {
-        duration: 350,
-        easing: 'easeInOutCubic',
-        offset: 325,
+        this.$vuetify.goTo('#next-task', {
+          duration: 350,
+          easing: 'easeInOutCubic',
+          offset: offsetValue,
+        });
       });
-    });
   }
   private jumpToTop(): void {
     this.$nextTick(() => {
