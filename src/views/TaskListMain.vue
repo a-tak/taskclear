@@ -74,8 +74,9 @@
     </div>
     <v-snackbar
       v-model="snackbarDisplay"
-      :bottom="true"
+      :top="true"
       :timeout="5000"
+      :multi-line="multiLine"
     >
       {{ snackbarText }}
       <v-btn
@@ -196,6 +197,18 @@ export default class TaskListMain extends Vue {
         case 'lg': return {class: 'tasklist-listPc'}
         case 'xl': return {class: 'tasklist-listPc'}
         default  : return {class: 'tasklist-listPc'}
+    }
+  }
+
+  get multiLine(): boolean {
+    // 画面サイズによってツールバーとのマージンを変更
+    switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return true
+        case 'sm': return false
+        case 'md': return false
+        case 'lg': return false
+        case 'xl': return false
+        default  : return false
     }
   }
 
