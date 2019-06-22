@@ -72,6 +72,20 @@
         v-on:end-edit-task-name-event="endEditTaskName"
       ></NewTask>
     </div>
+    <v-snackbar
+      v-model="snackbarDisplay"
+      :bottom="true"
+      :timeout="5000"
+    >
+      {{ snackbarText }}
+      <v-btn
+        color="pink"
+        flat
+        @click=""
+      >
+        元に戻す
+      </v-btn>
+    </v-snackbar>
     <div>
       <Footer></Footer>
     </div>
@@ -120,6 +134,25 @@ import SectionConnector from '@/lib/SectionConnector';
   },
 })
 export default class TaskListMain extends Vue {
+
+  public get snackbarDisplay(): boolean {
+    return this.snackbarDisplay_
+  }
+  public set snackbarDisplay(value: boolean) {
+    this.snackbarDisplay_ = value
+  }
+
+  public get snackbarText(): string {
+    return this.snackbarText_
+  }
+  public set snackbarText(value: string) {
+    this.snackbarText_ = value
+  }
+
+  get snackbarText(): string {
+    return 'テストテストテスト'
+  }
+
   get tasks(): Task[] {
     return this.$store.getters['taskList/taskCtrl'].tasks;
   }
@@ -176,8 +209,10 @@ export default class TaskListMain extends Vue {
     }
   }
 
-  private addingTask_: boolean = false;
-  private menu2_: boolean = false;
+  private snackbarDisplay_: boolean = false
+  private snackbarText_: string = ''
+  private addingTask_: boolean = false
+  private menu2_: boolean = false
 
   // 日付を変更したのを監視してタスクを読み込み直し
   @Watch('targetDate')
