@@ -72,6 +72,21 @@
         v-on:end-edit-task-name-event="endEditTaskName"
       ></NewTask>
     </div>
+    <v-snackbar
+      v-model="snackbarDisplay"
+      :top="true"
+      :timeout="5000"
+      :multi-line="multiLine"
+    >
+      {{ snackbarText }}
+      <v-btn
+        color="pink"
+        flat
+        @click="undoTask()"
+      >
+        元に戻す
+      </v-btn>
+    </v-snackbar>
     <div>
       <Footer></Footer>
     </div>
@@ -93,22 +108,22 @@
 </style>
 
 <script lang='ts'>
-import { Component, Vue, Watch } from 'vue-property-decorator';
-import firebase, { firestore } from 'firebase';
-import NewTask from '@/components/NewTask.vue';
-import TaskRow from '@/components/TaskRow.vue';
-import EstimateList from '@/components/EstimateList.vue';
-import Header from '@/components/Header.vue';
-import Footer from '@/components/Footer.vue';
-import DateUtil from '@/util/DateUtil';
-import FirestoreUtil from '@/util/FirestoreUtil';
-import uuid from 'uuid';
-import Task from '@/lib/Task';
-import TaskController from '@/lib/TaskController';
-import Repeat from '@/lib/Repeat';
-import RepeatCreator from '@/lib/RepeatCreator';
-import Migration from '@/util/Migration';
-import SectionConnector from '@/lib/SectionConnector';
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import firebase, { firestore } from 'firebase'
+import NewTask from '@/components/NewTask.vue'
+import TaskRow from '@/components/TaskRow.vue'
+import EstimateList from '@/components/EstimateList.vue'
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
+import DateUtil from '@/util/DateUtil'
+import FirestoreUtil from '@/util/FirestoreUtil'
+import uuid from 'uuid'
+import Task from '@/lib/Task'
+import TaskController from '@/lib/TaskController'
+import Repeat from '@/lib/Repeat'
+import RepeatCreator from '@/lib/RepeatCreator'
+import Migration from '@/util/Migration'
+import SectionConnector from '@/lib/SectionConnector'
 
 @Component({
   components: {
@@ -120,191 +135,233 @@ import SectionConnector from '@/lib/SectionConnector';
   },
 })
 export default class TaskListMain extends Vue {
+
+  public get snackbarDisplay(): boolean {
+    return this.snackbarDisplay_
+  }
+
+  public get snackbarText(): string {
+    return this.snackbarText_
+  }
+
   get tasks(): Task[] {
-    return this.$store.getters['taskList/taskCtrl'].tasks;
+    return this.$store.getters['taskList/taskCtrl'].tasks
   }
 
   set tasks(value: Task[]) {
-    const tc: TaskController = new TaskController();
-    tc.tasks = value;
-    this.$store.commit('taskList/setTaskCtrl', tc);
+    const tc: TaskController = new TaskController()
+    tc.tasks = value
+    this.$store.commit('taskList/setTaskCtrl', tc)
   }
 
   get targetDate(): string {
-    return DateUtil.getDateString(this.$store.getters['taskList/targetDate']);
+    return DateUtil.getDateString(this.$store.getters['taskList/targetDate'])
   }
 
   set targetDate(value: string) {
-    this.$store.commit('taskList/setTargetDate', new Date(value));
+    this.$store.commit('taskList/setTargetDate', new Date(value))
   }
 
   get menu2(): boolean {
-    return this.menu2_;
+    return this.menu2_
   }
 
   set menu2(value: boolean) {
-    this.menu2_ = value;
+    this.menu2_ = value
   }
 
   get topRowLayoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
       case 'xs':
-        return { column: true };
+        return { column: true }
       case 'sm':
-        return { column: true };
+        return { column: true }
       case 'md':
-        return { row: true };
+        return { row: true }
       case 'lg':
-        return { row: true };
+        return { row: true }
       case 'xl':
-        return { row: true };
+        return { row: true }
       default:
-        return { row: true };
+        return { row: true }
     }
   }
 
   get listClass(): {} {
     // 画面サイズによってツールバーとのマージンを変更
     switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return {class: 'tasklist-listSp'};
-        case 'sm': return {class: 'tasklist-listSp'};
-        case 'md': return {class: 'tasklist-listPc'};
-        case 'lg': return {class: 'tasklist-listPc'};
-        case 'xl': return {class: 'tasklist-listPc'};
-        default  : return {class: 'tasklist-listPc'};
+        case 'xs': return {class: 'tasklist-listSp'}
+        case 'sm': return {class: 'tasklist-listSp'}
+        case 'md': return {class: 'tasklist-listPc'}
+        case 'lg': return {class: 'tasklist-listPc'}
+        case 'xl': return {class: 'tasklist-listPc'}
+        default  : return {class: 'tasklist-listPc'}
     }
   }
 
-  private addingTask_: boolean = false;
-  private menu2_: boolean = false;
+  get multiLine(): boolean {
+    // 画面サイズによってツールバーとのマージンを変更
+    switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return true
+        case 'sm': return false
+        case 'md': return false
+        case 'lg': return false
+        case 'xl': return false
+        default  : return false
+    }
+  }
+
+  private snackbarDisplay_: boolean = false
+  private snackbarText_: string = ''
+  private deletedTask_: Task | undefined = undefined
+  private addingTask_: boolean = false
+  private menu2_: boolean = false
 
   // 日付を変更したのを監視してタスクを読み込み直し
   @Watch('targetDate')
   private onValueChange(newValue: string, oldValue: string): void {
-    this.loadTasks();
+    this.deletedTask_ = undefined
+    this.loadTasks()
   }
 
   private async loadTasks(): Promise<void> {
-    const self: TaskListMain = this;
+    const self: TaskListMain = this
 
     // 当日分のリピートタスクを作る
     const rc: RepeatCreator = new RepeatCreator(
       this.$store.getters['taskList/user'].uid,
       this.$store.getters['taskList/targetDate'],
-    );
-    await rc.creaetRepeat(1);
+    )
+    await rc.creaetRepeat(1)
     // 今日のデータを読み込み(同期的に)
     const tc: TaskController = await FirestoreUtil.loadTasks(
       self.$store.getters['taskList/user'].uid,
       self.$store.getters['taskList/targetDate'],
-    );
-    tc.sort();
-    self.$store.commit('taskList/setTaskCtrl', tc);
+    )
+    tc.sort()
+    self.$store.commit('taskList/setTaskCtrl', tc)
 
-    this.reCreateRepeatTask();
+    this.reCreateRepeatTask()
   }
 
   private async reCreateRepeatTask(): Promise<void> {
     // 非同期で明日以降1週間分のデータを作る
-    const d = new Date(this.$store.getters['taskList/targetDate']);
-    d.setDate(d.getDate() + 1);
+    const d = new Date(this.$store.getters['taskList/targetDate'])
+    d.setDate(d.getDate() + 1)
     const rc2: RepeatCreator = new RepeatCreator(
       this.$store.getters['taskList/user'].uid,
       d,
-    );
+    )
     try {
-      rc2.creaetRepeat(6);
+      rc2.creaetRepeat(6)
     } catch (e) {
       // tslint:disable-next-line:no-console
-      console.error(`repeate task create error! `, e);
+      console.error(`repeate task create error! `, e)
     }
   }
 
   private deleteTask(task: Task): void {
-    this.$store.commit('taskList/deleteTask', task);
+    this.$store.commit('taskList/deleteTask', task)
     FirestoreUtil.logicalDeleteTask(
       this.$store.getters['taskList/user'].uid,
       task,
-    );
+    )
+    // 元に戻したときに保存されないので各種フラグ直しておく
+    task.needSave = true
+    task.isDeleted = false
+    this.deletedTask_ = task
+    // 元に戻すボタン表示
+    this.snackbarText_ = `「${task.title}」を削除しました`
+    this.snackbarDisplay_ = true
+  }
+
+  private undoTask(): void {
+    if (this.deletedTask_ == undefined) {
+      return
+    }
+    this.snackbarDisplay_ = false
+    this.$store.commit('taskList/addTask', this.deletedTask_)
+    this.$store.commit('taskList/sortTask')
+    this.save()
   }
 
   private copyTask(task: Task): void {
-    const newTask: Task = task.createPauseTask();
-    newTask.startTime = undefined;
-    newTask.endTime = undefined;
-    this.$store.commit('taskList/addTask', newTask);
-    this.$store.commit('taskList/sortTask');
-    this.save();
+    const newTask: Task = task.createPauseTask()
+    newTask.startTime = undefined
+    newTask.endTime = undefined
+    this.$store.commit('taskList/addTask', newTask)
+    this.$store.commit('taskList/sortTask')
+    this.save()
   }
 
   private startTask(task: Task): void {
     // 開始しているタスクがあれば中断処理する
     for (const otherTask of this.tasks) {
       if (otherTask.isDoing === true) {
-        this.tasks.push(otherTask.createPauseTask());
-        otherTask.title = otherTask.title + '(中断)';
-        this.changeStopTask(otherTask);
+        this.tasks.push(otherTask.createPauseTask())
+        otherTask.title = otherTask.title + '(中断)'
+        this.changeStopTask(otherTask)
       }
     }
 
     // 既に終了しているタスクであればコピーしてタスクを開始する
     if (task.endTime != undefined) {
-      const newTask: Task = task.createPauseTask();
-      newTask.isDoing = true;
-      newTask.startTime = new Date();
-      newTask.endTime = undefined;
-      this.$store.commit('taskList/addTask', newTask);
+      const newTask: Task = task.createPauseTask()
+      newTask.isDoing = true
+      newTask.startTime = new Date()
+      newTask.endTime = undefined
+      this.$store.commit('taskList/addTask', newTask)
     } else {
-      task.needSave = true;
-      task.isDoing = true;
-      task.startTime = new Date();
+      task.needSave = true
+      task.isDoing = true
+      task.startTime = new Date()
     }
 
-    this.$store.commit('taskList/sortTask');
+    this.$store.commit('taskList/sortTask')
 
-    this.save();
+    this.save()
   }
 
   private save(): void {
     FirestoreUtil.saveTasks(
       this.$store.getters['taskList/user'].uid,
       this.$store.getters['taskList/taskCtrl'],
-    );
+    )
   }
 
   private startEditTaskName() {
-    this.deleteShortcut();
+    this.deleteShortcut()
   }
   private endEditTaskName() {
-    this.entryShortcut();
+    this.entryShortcut()
   }
   private endEditTask(task: Task, index: number) {
-    this.$set(this.tasks, index, task);
-    this.$store.getters['taskList/taskCtrl'].sort();
+    this.$set(this.tasks, index, task)
+    this.$store.getters['taskList/taskCtrl'].sort()
     // needSaveフラグは子コンポーネントで保存したときのみ設定しているのでここでは設定しない
-    this.save();
-    this.reCreateRepeatTask();
+    this.save()
+    this.reCreateRepeatTask()
   }
 
   private addTask(): void {
-    this.addingTask_ = true;
+    this.addingTask_ = true
     this.$nextTick(() => {
       this.$vuetify.goTo('#newtask', {
         duration: 350,
         easing: 'easeInOutCubic',
-      });
-    });
+      })
+    })
   }
 
   private addedTask(): void {
-    this.addingTask_ = false;
+    this.addingTask_ = false
   }
 
   private changeTaskDate(task: Task): void {
     // 編集中の日付と同じならば何もしない
     if (DateUtil.getDateString(task.date) === this.targetDate) {
-      return;
+      return
     }
 
     // 変更先の日付のdocを取ってくる
@@ -313,64 +370,64 @@ export default class TaskListMain extends Vue {
       task.date,
     ).then((tc: TaskController) => {
       // タスクを追加してsave
-      task.needSave = true;
-      tc.tasks.push(task);
-      FirestoreUtil.saveTasks(this.$store.getters['taskList/user'].uid, tc);
+      task.needSave = true
+      tc.tasks.push(task)
+      FirestoreUtil.saveTasks(this.$store.getters['taskList/user'].uid, tc)
 
       // 今開いている日付のdocから削除
-      this.$store.commit('taskList/deleteTask', task);
-    });
+      this.$store.commit('taskList/deleteTask', task)
+    })
   }
 
   /**
    * 日付を一日進める
    */
   private forwardTargetDate(): void {
-    const d = new Date(this.$store.getters['taskList/targetDate']);
-    d.setDate(d.getDate() + 1);
-    this.targetDate = d.toString();
+    const d = new Date(this.$store.getters['taskList/targetDate'])
+    d.setDate(d.getDate() + 1)
+    this.targetDate = d.toString()
   }
 
   /**
    * 日付を一日戻す
    */
   private returnTargetDate(): void {
-    const d = new Date(this.$store.getters['taskList/targetDate']);
-    d.setDate(d.getDate() - 1);
-    this.targetDate = d.toString();
+    const d = new Date(this.$store.getters['taskList/targetDate'])
+    d.setDate(d.getDate() - 1)
+    this.targetDate = d.toString()
   }
 
   private stopTask(task: Task): void {
-    this.changeStopTask(task);
-    this.save();
+    this.changeStopTask(task)
+    this.save()
   }
 
   /**
    * タスクの状態を停止状態に変える(保存はしない)
    */
   private changeStopTask(task: Task): void {
-    task.needSave = true;
-    task.isDoing = false;
-    task.endTime = new Date();
+    task.needSave = true
+    task.isDoing = false
+    task.endTime = new Date()
   }
 
   private created(): void {
-    this.initialLoad();
+    this.initialLoad()
   }
 
   private initialLoad() {
     firebase.auth().onAuthStateChanged(async (user: firebase.User | null) => {
-      this.$store.commit('taskList/setUser', user);
-      await Migration.run(this.$store.getters['taskList/user'].uid);
+      this.$store.commit('taskList/setUser', user)
+      await Migration.run(this.$store.getters['taskList/user'].uid)
       // セクション読み込み
-      await this.$store.dispatch('section/load');
+      await this.$store.dispatch('section/load')
       // 日付指定
-      this.targetDate = DateUtil.calcBaseDate(new Date()).toString();
-      this.loadTasks();
-    });
+      this.targetDate = DateUtil.calcBaseDate(new Date()).toString()
+      this.loadTasks()
+    })
   }
   private mounted(): void {
-    this.entryShortcut();
+    this.entryShortcut()
   }
 
   /**
@@ -379,17 +436,19 @@ export default class TaskListMain extends Vue {
   private entryShortcut(): void {
     document.onkeyup = (e: KeyboardEvent) => {
       if (e.key === 'd') {
-        this.jumpToNextTask();
+        this.jumpToNextTask()
       } else if (e.key === 't') {
-        this.jumpToTop();
+        this.jumpToTop()
       } else if (e.key === 'a') {
-        this.addTask();
+        this.addTask()
       } else if (e.key === 'f') {
-        this.forwardTargetDate();
+        this.forwardTargetDate()
       } else if (e.key === 'r') {
-        this.returnTargetDate();
+        this.returnTargetDate()
+      } else if (e.key === 'z') {
+        this.undoTask()
       }
-    };
+    }
   }
 
   /**
@@ -397,38 +456,38 @@ export default class TaskListMain extends Vue {
    */
   private deleteShortcut(): void {
     // tslint:disable-next-line:no-empty
-    document.onkeyup = (e: KeyboardEvent) => {};
+    document.onkeyup = (e: KeyboardEvent) => {}
   }
 
   private beforeDestroy(): void {
     // tslint:disable-next-line:no-null-keyword
-    document.onkeydown = null;
+    document.onkeydown = null
   }
 
   private jumpToNextTask(): void {
     let offsetValue: number = 0
     switch (this.$vuetify.breakpoint.name) {
       case 'xs':
-        offsetValue = 480;
-        break;
+        offsetValue = 480
+        break
       default  :
-        offsetValue = 325;
+        offsetValue = 325
     }
     this.$nextTick(() => {
         this.$vuetify.goTo('#next-task', {
           duration: 350,
           easing: 'easeInOutCubic',
           offset: offsetValue,
-        });
-      });
+        })
+      })
   }
   private jumpToTop(): void {
     this.$nextTick(() => {
       this.$vuetify.goTo('#header', {
         duration: 350,
         easing: 'easeInOutCubic',
-      });
-    });
+      })
+    })
   }
 }
 </script>
