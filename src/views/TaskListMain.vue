@@ -149,10 +149,6 @@ export default class TaskListMain extends Vue {
     this.snackbarText_ = value
   }
 
-  get snackbarText(): string {
-    return 'テストテストテスト'
-  }
-
   get tasks(): Task[] {
     return this.$store.getters['taskList/taskCtrl'].tasks;
   }
