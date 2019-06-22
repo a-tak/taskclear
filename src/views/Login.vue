@@ -3,9 +3,9 @@
         <v-container>
             <v-layout align-center justify-center column fill-height>
                 <v-flex ma-2>
-                  <img src="/img/logo.svg">
+                  <v-img src="/img/logo.svg" aspect-ratio="1" v-bind="logoSize" ></v-img>
                 </v-flex>
-                <v-flex v-bind="logoSize" ma-2>
+                <v-flex v-bind="titleSize" ma-2>
                     Taskclear
                 </v-flex>
                 <v-flex v-if="!isLogin">
@@ -79,8 +79,7 @@ export default class Login extends Vue {
     })
   }
 
-    get logoSize(): {} {
-        // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+    get titleSize(): {} {
         switch (this.$vuetify.breakpoint.name) {
             case 'xs': return {'display-2': true}
             case 'sm': return {'display-2': true}
@@ -88,6 +87,17 @@ export default class Login extends Vue {
             case 'lg': return {'display-3': true}
             case 'xl': return {'display-3': true}
             default  : return {'display-3': true}
+        }
+    }
+
+    get logoSize(): {} {
+        switch (this.$vuetify.breakpoint.name) {
+            case 'xs': return {width: '250'}
+            case 'sm': return {width: '400'}
+            case 'md': return {width: '500'}
+            case 'lg': return {width: '600'}
+            case 'xl': return {width: '700'}
+            default  : return {width: '700'}
         }
     }
 
