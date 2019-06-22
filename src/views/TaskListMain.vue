@@ -81,7 +81,7 @@
       <v-btn
         color="pink"
         flat
-        @click=""
+        @click="undoTask()"
       >
         元に戻す
       </v-btn>
@@ -138,15 +138,9 @@ export default class TaskListMain extends Vue {
   public get snackbarDisplay(): boolean {
     return this.snackbarDisplay_
   }
-  public set snackbarDisplay(value: boolean) {
-    this.snackbarDisplay_ = value
-  }
 
   public get snackbarText(): string {
     return this.snackbarText_
-  }
-  public set snackbarText(value: string) {
-    this.snackbarText_ = value
   }
 
   get tasks(): Task[] {
@@ -207,12 +201,14 @@ export default class TaskListMain extends Vue {
 
   private snackbarDisplay_: boolean = false
   private snackbarText_: string = ''
+  private deletedTask_: Task | undefined = undefined
   private addingTask_: boolean = false
   private menu2_: boolean = false
 
   // 日付を変更したのを監視してタスクを読み込み直し
   @Watch('targetDate')
   private onValueChange(newValue: string, oldValue: string): void {
+    this.deletedTask_ = undefined
     this.loadTasks()
   }
 
@@ -258,6 +254,23 @@ export default class TaskListMain extends Vue {
       this.$store.getters['taskList/user'].uid,
       task,
     )
+    // 元に戻したときに保存されないので各種フラグ直しておく
+    task.needSave = true
+    task.isDeleted = false
+    this.deletedTask_ = task
+    // 元に戻すボタン表示
+    this.snackbarText_ = `「${task.title}」を削除しました`
+    this.snackbarDisplay_ = true
+  }
+
+  private undoTask(): void {
+    if (this.deletedTask_ == undefined) {
+      return
+    }
+    this.snackbarDisplay_ = false
+    this.$store.commit('taskList/addTask', this.deletedTask_)
+    this.$store.commit('taskList/sortTask')
+    this.save()
   }
 
   private copyTask(task: Task): void {
@@ -419,6 +432,8 @@ export default class TaskListMain extends Vue {
         this.forwardTargetDate()
       } else if (e.key === 'r') {
         this.returnTargetDate()
+      } else if (e.key === 'z') {
+        this.undoTask()
       }
     }
   }
