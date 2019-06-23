@@ -1,17 +1,10 @@
-import DateUtil from '@/util/DateUtil'
-jest.mock('vuex', () => {
-  getters: jest.fn(() => {
-    [{startTime: new Date(1970, 0, 1, 5, 0)}]
-  })
-})
-jest.mock('vue', () => {
-  use: jest.fn(() => {
-    //
-  })
-})
+jest.mock('@/store/StoreUtil', () => ({
+  // セクションの開始時間は朝5時にする
+  getSectionList: jest.fn(() => [{startTime: new Date(1970, 0, 1, 5, 0)}]),
+}))
 
-import Vuex from 'vuex'
-import Vue from 'vue'
+import StoreUtil from '@/store/StoreUtil'
+import DateUtil from '@/util/DateUtil'
 
 describe('DateUtil.ts', () => {
   describe('getDateObjectByDate', () => {
@@ -28,28 +21,6 @@ describe('DateUtil.ts', () => {
     })
 
     describe('Store定義ありパターン', () => {
-      // let sectionSpy
-      beforeEach(() => {
-        // store = require('@/store/Store')
-        // store.get.mockReturnValueOnce('[{startTime: new Date(1970, 0, 1, 5, 0)}]')
-
-        // これももだめ
-        // store = require('@/store/Store')
-        // sectionSpy = jest.spyOn(store, 'getters')
-        // sectionSpy.mockImplementationOnce(() => new Date(1970, 0, 1, 5, 0))
-
-        // これだとどこでもセットしてない
-        // store = new Vuex.Store({
-        //   modules: {
-        //     section: {
-        //       state: {
-        //         // 朝五時が最初のセクション
-        //         sections: [{startTime: new Date(1970, 0, 1, 5, 0)}],
-        //       },
-        //     },
-        //   },
-        // })
-      })
 
       it('一日の開始セクションより後なので単純にがっちゃんこされるはず', () => {
         // 2019-2-1 0:00
