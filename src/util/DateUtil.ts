@@ -1,5 +1,5 @@
 import Section from '@/lib/Section'
-import Store from '@/store/Store'
+import StoreUtil from '@/store/StoreUtil';
 
 export default class DateUtil {
   // 現地時間のyyyy-mm-dd形式の文字列を返す
@@ -113,7 +113,7 @@ export default class DateUtil {
    * 年月は1970年1月
    */
   public static getFirstSectionTime(): Date {
-    const sections: Section[] = Store.getters['section/sections']
+    const sections: Section[] = StoreUtil.getSectionList()
     if (sections.length > 0) {
       return sections[0].startTime
     } else {
