@@ -26,3 +26,4 @@ yarn-error.log*
 firebase-debug.log
 .firebase/hosting.*.cache
 *.icloud
+*.log
