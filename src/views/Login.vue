@@ -96,8 +96,8 @@ export default class Login extends Vue {
             case 'sm': return {width: '400'}
             case 'md': return {width: '500'}
             case 'lg': return {width: '600'}
-            case 'xl': return {width: '700'}
-            default  : return {width: '700'}
+            case 'xl': return {width: '600'}
+            default  : return {width: '600'}
         }
     }
 
