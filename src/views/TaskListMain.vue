@@ -289,6 +289,7 @@ export default class TaskListMain extends Vue {
     this.$store.commit('taskList/addTask', this.deletedTask_)
     this.$store.commit('taskList/sortTask')
     this.save()
+    this.deletedTask_ = undefined
   }
 
   private copyTask(task: Task): void {
