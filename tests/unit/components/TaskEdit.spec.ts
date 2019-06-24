@@ -1,11 +1,11 @@
-import { shallowMount, Wrapper, mount } from '@vue/test-utils';
-import TaskEdit from '@/components/TaskEdit.vue';
-import Vue from 'vue';
-import Vuetify from 'vuetify';
-import Task from '@/lib/Task';
+import { shallowMount, Wrapper, mount } from '@vue/test-utils'
+import TaskEdit from '@/components/TaskEdit.vue'
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+import Task from '@/lib/Task'
+import Store from '@/store/Store'
 
 Vue.use(Vuetify);
-Vue.config.silent = true;
 
 describe('TaskEdit.vue', () => {
 
@@ -16,9 +16,7 @@ describe('TaskEdit.vue', () => {
 
   beforeEach(() => {
     wrapper = mount(TaskEdit, {
-      mocks: {
-        $vuetify: { breakpoint: {} },
-      },
+      store: Store,
       propsData: {
         task_: task,
       },
