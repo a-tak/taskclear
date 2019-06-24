@@ -3,6 +3,7 @@
     <v-layout row wrap>
       <v-flex>
         <v-card>
+          <v-card-title class="title teal lighten-3 white--text">タスク編集</v-card-title>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
             <v-flex ma-2 grow>
               <span>タスク名</span>
