@@ -35,6 +35,10 @@
                   v-bind:class="{ done: task_.endTime!=undefined}"
                   class="font-weight-bold"
                 >{{ task_.title }}</div>
+                <!-- note -->
+                <v-btn icon @click.stop="noteDialog=true">
+                  <v-icon color="grey darken-1">note</v-icon>
+                </v-btn>
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
                 <span>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
@@ -107,6 +111,12 @@
     <v-layout align-center row v-if="editingRepeat_">
       <RepeatEdit v-bind:task_="task_" v-on:endRepeatEditEvent="endRepeatEditEvent"></RepeatEdit>
     </v-layout>
+    <v-dialog v-model="noteDialog" max-width="500px">
+      <v-card>
+        <v-card-title class="title teal lighten-3 white--text">メモ</v-card-title>
+        <v-card-text>テスト</v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -146,6 +156,13 @@ export default class TaskRow extends Vue {
     this.task_.date = new Date(value);
   }
 
+  public get noteDialog(): boolean {
+    return this.noteDialog_
+  }
+  public set noteDialog(value: boolean) {
+    this.noteDialog_ = value
+  }
+
   @Prop() public task_!: Task;
   @Prop() public index_!: number;
 
@@ -155,6 +172,8 @@ export default class TaskRow extends Vue {
   private displayedTaskCal_: boolean = false;
 
   private targetDate_: Date = new Date();
+
+  private noteDialog_: boolean = false
 
   @Emit('clickStartButtomEvent')
   // tslint:disable-next-line:no-empty
