@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md text-xs-center pa-2>
     <v-card class="ma-2">
-      <v-card-title>リピート設定</v-card-title>
+      <v-card-title class="title teal lighten-3 white--text">リピート設定</v-card-title>
       <v-layout v-bind="layoutAttributes" fill-height align-center justify-center row>
         <v-flex ml-3>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
