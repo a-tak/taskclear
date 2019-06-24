@@ -272,8 +272,13 @@ export default class TaskListMain extends Vue {
     task.isDeleted = false
     this.deletedTask_ = task
     // 元に戻すボタン表示
-    this.snackbarText_ = `「${task.title}」を削除しました`
-    this.snackbarDisplay_ = true
+    // タイムアウトリセットするため一度消す
+    this.snackbarDisplay_ = false
+    this.$nextTick(() => {
+      // 画面更新がされたの待ってから処理しないとタイムアウトかリセットされない
+      this.snackbarText_ = `「${task.title}」を削除しました`
+      this.snackbarDisplay_ = true
+    })
   }
 
   private undoTask(): void {
