@@ -36,7 +36,7 @@
                   class="font-weight-bold"
                 >{{ task_.title }}</div>
                 <!-- note -->
-                <v-btn icon @click.stop="noteDialog=true">
+                <v-btn icon @click.stop="openNote(task_)">
                   <v-icon color="grey darken-1">note</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -111,8 +111,10 @@
     <v-layout align-center row v-if="editingRepeat_">
       <RepeatEdit v-bind:task_="task_" v-on:endRepeatEditEvent="endRepeatEditEvent"></RepeatEdit>
     </v-layout>
-    <v-dialog v-model="noteDialog" max-width="500px">
-      <Memo></Memo>
+    <v-dialog v-model="noteDialog_" max-width="500px">
+      <Note
+        v-bind:task_="noteTask_"
+      ></Note>
     </v-dialog>
   </v-container>
 </template>
@@ -128,16 +130,17 @@ import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator';
 import NewTask from '@/components/NewTask.vue';
 import TaskEdit from '@/components/TaskEdit.vue';
 import RepeatEdit from '@/components/RepeatEdit.vue';
-import Memo from '@/components/Memo.vue'
+import Note from '@/components/Note.vue'
 import DateUtil from '../util/DateUtil';
 import Task from '../lib/Task';
+import { truncate } from 'fs';
 
 @Component({
   components: {
     NewTask,
     TaskEdit,
     RepeatEdit,
-    Memo,
+    Note,
   },
 })
 export default class TaskRow extends Vue {
@@ -155,13 +158,6 @@ export default class TaskRow extends Vue {
     this.task_.date = new Date(value);
   }
 
-  public get noteDialog(): boolean {
-    return this.noteDialog_
-  }
-  public set noteDialog(value: boolean) {
-    this.noteDialog_ = value
-  }
-
   @Prop() public task_!: Task;
   @Prop() public index_!: number;
 
@@ -173,6 +169,7 @@ export default class TaskRow extends Vue {
   private targetDate_: Date = new Date();
 
   private noteDialog_: boolean = false
+  private noteTask_: Task = new Task(new Date(), '')
 
   @Emit('clickStartButtomEvent')
   // tslint:disable-next-line:no-empty
@@ -270,6 +267,11 @@ export default class TaskRow extends Vue {
     } else {
       return { color: 'white' };
     }
+  }
+
+  private openNote(task: Task) {
+    this.noteTask_ = task
+    this.noteDialog_ = true
   }
 }
 </script>
