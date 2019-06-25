@@ -112,10 +112,7 @@
       <RepeatEdit v-bind:task_="task_" v-on:endRepeatEditEvent="endRepeatEditEvent"></RepeatEdit>
     </v-layout>
     <v-dialog v-model="noteDialog" max-width="500px">
-      <v-card>
-        <v-card-title class="title teal lighten-3 white--text">メモ</v-card-title>
-        <v-card-text>テスト</v-card-text>
-      </v-card>
+      <Memo></Memo>
     </v-dialog>
   </v-container>
 </template>
@@ -131,6 +128,7 @@ import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator';
 import NewTask from '@/components/NewTask.vue';
 import TaskEdit from '@/components/TaskEdit.vue';
 import RepeatEdit from '@/components/RepeatEdit.vue';
+import Memo from '@/components/Memo.vue'
 import DateUtil from '../util/DateUtil';
 import Task from '../lib/Task';
 
@@ -139,6 +137,7 @@ import Task from '../lib/Task';
     NewTask,
     TaskEdit,
     RepeatEdit,
+    Memo,
   },
 })
 export default class TaskRow extends Vue {
