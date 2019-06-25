@@ -30,6 +30,7 @@ export default class Task {
   private estimateSeparateEnd_: boolean
   private createTime_: Date
   private updateTime_: Date
+  private note_: string
 
   constructor(date: Date, title: string) {
     this.id_ = date.getFullYear() +
@@ -53,6 +54,7 @@ export default class Task {
     this.estimateSeparateEnd_ = false
     this.createTime_ = new Date()
     this.updateTime_ = this.createTime_
+    this.note_ = ''
   }
 
   get id(): string { return this.id_ }
@@ -68,6 +70,12 @@ export default class Task {
   get endTime(): Date | undefined { return this.endTime_ }
   set endTime(value: Date | undefined) { this.endTime_ = value }
 
+  public get note(): string {
+    return this.note_
+  }
+  public set note(value: string) {
+    this.note_ = value
+  }
   public get repeatId(): string {
     return this.repeatId_
   }
@@ -210,6 +218,8 @@ export default class Task {
     newTask.estimateSeparateStart = this.estimateSeparateStart
     // 区切りタスクを開始したがイレギュラーで前の作業に戻ることを想定して元タスクのフラグをコピーする
     newTask.estimateSeparateEnd = this.estimateSeparateEnd
+    // メモはそのままコピー
+    newTask.note = this.note_
     return newTask
   }
 
@@ -244,6 +254,7 @@ export default class Task {
     newTask.estimateSeparateEnd = this.estimateSeparateEnd_
     newTask.createTime = new Date(this.createTime_)
     newTask.updateTime = new Date(this.updateTime_)
+    newTask.note = this.note_
 
     return newTask
 

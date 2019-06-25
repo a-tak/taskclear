@@ -36,7 +36,7 @@
                   class="font-weight-bold"
                 >{{ task_.title }}</div>
                 <!-- note -->
-                <v-btn icon @click.stop="openNote(task_)">
+                <v-btn icon @click.stop="noteDialog_=true">
                   <v-icon color="grey darken-1">note</v-icon>
                 </v-btn>
               </v-card-actions>
@@ -113,7 +113,11 @@
     </v-layout>
     <v-dialog v-model="noteDialog_" max-width="500px">
       <Note
-        v-bind:task_="noteTask_"
+        v-bind:task_="task_"
+        v-on:endEditEvent="endEditEvent"
+        v-on:start-edit-task-name-event="startEditTaskName"
+        v-on:end-edit-task-name-event="endEditTaskName"
+        v-on:close-dialog-event="noteDialog_=false"
       ></Note>
     </v-dialog>
   </v-container>
@@ -169,7 +173,6 @@ export default class TaskRow extends Vue {
   private targetDate_: Date = new Date();
 
   private noteDialog_: boolean = false
-  private noteTask_: Task = new Task(new Date(), '')
 
   @Emit('clickStartButtomEvent')
   // tslint:disable-next-line:no-empty
@@ -267,11 +270,6 @@ export default class TaskRow extends Vue {
     } else {
       return { color: 'white' };
     }
-  }
-
-  private openNote(task: Task) {
-    this.noteTask_ = task
-    this.noteDialog_ = true
   }
 }
 </script>

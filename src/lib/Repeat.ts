@@ -46,6 +46,12 @@ export default class Repeat {
     this.estimateSeparateEnd_ = value
   }
 
+  public get note(): string {
+    return this.note_
+  }
+  public set note(value: string) {
+    this.note_ = value
+  }
   private id_: string
 
   private title_: string
@@ -63,6 +69,7 @@ export default class Repeat {
 
   private estimateSeparateStart_: boolean
   private estimateSeparateEnd_: boolean
+  private note_: string
 
   /**
    * リピートの開始日
@@ -82,6 +89,7 @@ export default class Repeat {
     this.section_ = DateUtil.getMinDate()
     this.estimateSeparateStart_ = false
     this.estimateSeparateEnd_ = false
+    this.note_ = ''
   }
 
   /**
@@ -98,6 +106,7 @@ export default class Repeat {
     newRepeat.section = this.section_
     newRepeat.estimateSeparateStart = this.estimateSeparateStart_
     newRepeat.estimateSeparateEnd = this.estimateSeparateEnd_
+    newRepeat.note = this.note_
     return newRepeat
   }
 
