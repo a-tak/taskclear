@@ -16,4 +16,5 @@ export default interface ITask {
   estimateSeparateEnd: boolean
   createTime: firestore.Timestamp
   updateTime: firestore.Timestamp
+  note: string
 }

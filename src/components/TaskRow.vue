@@ -35,6 +35,11 @@
                   v-bind:class="{ done: task_.endTime!=undefined}"
                   class="font-weight-bold"
                 >{{ task_.title }}</div>
+                <!-- note -->
+                <v-btn icon @click.stop="noteDialog_=true">
+                  <v-icon v-if="task_.note===''" color="grey darken-1">note</v-icon>
+                  <v-icon v-if="task_.note!==''" color="purple">note</v-icon>
+                </v-btn>
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
                 <span>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
@@ -107,6 +112,15 @@
     <v-layout align-center row v-if="editingRepeat_">
       <RepeatEdit v-bind:task_="task_" v-on:endRepeatEditEvent="endRepeatEditEvent"></RepeatEdit>
     </v-layout>
+    <v-dialog v-model="noteDialog_" max-width="500px">
+      <TaskNote
+        v-bind:task_="task_"
+        v-on:endEditEvent="endEditEvent"
+        v-on:start-edit-task-name-event="startEditTaskName"
+        v-on:end-edit-task-name-event="endEditTaskName"
+        v-on:close-dialog-event="noteDialog_=false"
+      ></TaskNote>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -121,6 +135,7 @@ import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator';
 import NewTask from '@/components/NewTask.vue';
 import TaskEdit from '@/components/TaskEdit.vue';
 import RepeatEdit from '@/components/RepeatEdit.vue';
+import TaskNote from '@/components/TaskNote.vue'
 import DateUtil from '../util/DateUtil';
 import Task from '../lib/Task';
 
@@ -129,6 +144,7 @@ import Task from '../lib/Task';
     NewTask,
     TaskEdit,
     RepeatEdit,
+    TaskNote,
   },
 })
 export default class TaskRow extends Vue {
@@ -155,6 +171,8 @@ export default class TaskRow extends Vue {
   private displayedTaskCal_: boolean = false;
 
   private targetDate_: Date = new Date();
+
+  private noteDialog_: boolean = false
 
   @Emit('clickStartButtomEvent')
   // tslint:disable-next-line:no-empty
