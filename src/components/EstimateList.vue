@@ -73,14 +73,14 @@ export default class EstimateList extends Vue {
     for (let n = 0; n <= 6; n++) {
       // 一日ずつ日付を進めてデータを取得
       const targetDate: Date = new Date(
-        this.$store.getters['taskList/targetDate']
+        this.$store.getters['taskList/targetDate'],
       )
       targetDate.setDate(targetDate.getDate() + n)
 
       // Promiseを配列に溜めておく
       fsdsPromises[n] = FirestoreUtil.loadTasks(
         this.$store.getters['taskList/user'].uid,
-        targetDate
+        targetDate,
       )
 
       // 非同期処理の登録
@@ -109,14 +109,14 @@ export default class EstimateList extends Vue {
           } else {
             return a.date.getTime() - b.date.getTime()
           }
-        }
+        },
       )
 
       // ドキュメントのリッスン
       for (let n = 0; n <= 6; n++) {
         // 一日ずつ日付を進めてデータを取得
         const targetDate: Date = new Date(
-          this.$store.getters['taskList/targetDate']
+          this.$store.getters['taskList/targetDate'],
         )
         targetDate.setDate(targetDate.getDate() + n)
 
