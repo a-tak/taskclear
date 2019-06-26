@@ -2,7 +2,11 @@
   <v-card>
     <v-card-title class="title teal lighten-3 white--text">メモ</v-card-title>
     <v-layout v-if="!isEdit_">
-      <v-card-text>{{ note }}</v-card-text>
+      <v-card-text>
+        <div class="wrap text-left">
+          {{ note }}
+        </div>
+      </v-card-text>
       <v-card-actions>
         <v-btn icon @click="isEdit_=true"><v-icon color="purple">edit</v-icon></v-btn>
         <v-btn icon @click="closeDialog()" ><v-icon color="purple">close</v-icon></v-btn>
@@ -22,6 +26,11 @@
   </v-card>
 </template>
 
+<style>
+.wrap {
+  white-space: pre-line;
+}</style>
+
 <script lang="ts">
 import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
 import Task from '../lib/Task'
@@ -33,8 +42,7 @@ export default class Note extends Vue {
   @Prop() public task_!: Task;
 
   private get note(): string {
-    const text = this.editTask_.note.replace(/\r?\n/g, '<br>')
-    console.log(`${text}`)
+    const text = this.editTask_.note
     return text
   }
 
