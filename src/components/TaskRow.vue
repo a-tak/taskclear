@@ -6,7 +6,7 @@
         <v-card v-bind="rowColor" class="elevation-3">
           <v-layout align-center justify-space-between row fill-height pr-4>
             <!-- Start/End Buttom -->
-            <v-flex xs2 sm1 md1 lg1 xl1 >
+            <v-flex xs2 sm1 md1 lg1 xl1>
               <v-btn
                 v-bind:id="'start-btn-' + task_.id"
                 icon
@@ -131,13 +131,13 @@
 </style>
 
 <script lang='ts'>
-import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator';
-import NewTask from '@/components/NewTask.vue';
-import TaskEdit from '@/components/TaskEdit.vue';
-import RepeatEdit from '@/components/RepeatEdit.vue';
+import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
+import NewTask from '@/components/NewTask.vue'
+import TaskEdit from '@/components/TaskEdit.vue'
+import RepeatEdit from '@/components/RepeatEdit.vue'
 import TaskNote from '@/components/TaskNote.vue'
-import DateUtil from '../util/DateUtil';
-import Task from '../lib/Task';
+import DateUtil from '../util/DateUtil'
+import Task from '../lib/Task'
 
 @Component({
   components: {
@@ -149,28 +149,28 @@ import Task from '../lib/Task';
 })
 export default class TaskRow extends Vue {
   get displayedTaskCal(): boolean {
-    return this.displayedTaskCal_;
+    return this.displayedTaskCal_
   }
   set displayedTaskCal(value: boolean) {
-    this.displayedTaskCal_ = value;
+    this.displayedTaskCal_ = value
   }
   get targetDate(): string {
-    return this.task_.date.toISOString().substr(0, 10);
+    return this.task_.date.toISOString().substr(0, 10)
   }
 
   set targetDate(value: string) {
-    this.task_.date = new Date(value);
+    this.task_.date = new Date(value)
   }
 
-  @Prop() public task_!: Task;
-  @Prop() public index_!: number;
+  @Prop() public task_!: Task
+  @Prop() public index_!: number
 
-  private isEdit_: boolean = false;
-  private editingRepeat_: boolean = false;
+  private isEdit_: boolean = false
+  private editingRepeat_: boolean = false
 
-  private displayedTaskCal_: boolean = false;
+  private displayedTaskCal_: boolean = false
 
-  private targetDate_: Date = new Date();
+  private targetDate_: Date = new Date()
 
   private noteDialog_: boolean = false
 
@@ -207,68 +207,68 @@ export default class TaskRow extends Vue {
   public endEditTaskNameEvent(): void {}
 
   public getTime(time: Date): string {
-    let timeStr: string = '';
+    let timeStr: string = ''
     if (time != undefined) {
-      timeStr = DateUtil.getTimeString(time);
+      timeStr = DateUtil.getTimeString(time)
     }
-    return timeStr;
+    return timeStr
   }
 
   public startEdit(): void {
-    this.isEdit_ = true;
+    this.isEdit_ = true
   }
 
   public endEditEvent(task: Task) {
-    this.isEdit_ = false;
-    this.endEdit(task, this.index_);
+    this.isEdit_ = false
+    this.endEdit(task, this.index_)
   }
 
   public endRepeatEditEvent(task: Task) {
-    this.editingRepeat_ = false;
-    this.endEdit(task, this.index_);
+    this.editingRepeat_ = false
+    this.endEdit(task, this.index_)
   }
 
   public startEditTaskName() {
-    this.startEditTaskNameEvent();
+    this.startEditTaskNameEvent()
   }
 
   public endEditTaskName() {
-    this.endEditTaskNameEvent();
+    this.endEditTaskNameEvent()
   }
 
   /**
    * タスクの日付を変更
    */
   public selectDate(): void {
-    this.displayedTaskCal = false;
-    this.changeDate(this.task_);
+    this.displayedTaskCal = false
+    this.changeDate(this.task_)
   }
 
   get topRowLayoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
       case 'xs':
-        return { column: true };
+        return { column: true }
       case 'sm':
-        return { column: true };
+        return { column: true }
       case 'md':
-        return { row: true };
+        return { row: true }
       case 'lg':
-        return { row: true };
+        return { row: true }
       case 'xl':
-        return { row: true };
+        return { row: true }
       default:
-        return { row: true };
+        return { row: true }
     }
   }
 
   get rowColor(): {} {
     if (this.task_.estimateSeparateStart === true) {
-      return { color: 'blue lighten-4' };
+      return { color: 'blue lighten-4' }
     } else if (this.task_.estimateSeparateEnd === true) {
-      return { color: 'amber accent-1' };
+      return { color: 'amber accent-1' }
     } else {
-      return { color: 'white' };
+      return { color: 'white' }
     }
   }
 }

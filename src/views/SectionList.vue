@@ -106,12 +106,12 @@ export default class SectionList extends Vue {
   get listClass(): {} {
     // 画面サイズによってツールバーとのマージンを変更
     switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return {class: 'listSp'};
-        case 'sm': return {class: 'listSp'};
-        case 'md': return {class: 'listPc'};
-        case 'lg': return {class: 'listPc'};
-        case 'xl': return {class: 'listPc'};
-        default  : return {class: 'listPc'};
+        case 'xs': return {class: 'listSp'}
+        case 'sm': return {class: 'listSp'}
+        case 'md': return {class: 'listPc'}
+        case 'lg': return {class: 'listPc'}
+        case 'xl': return {class: 'listPc'}
+        default  : return {class: 'listPc'}
     }
   }
 }

@@ -1,5 +1,5 @@
 import Section from '@/lib/Section'
-import StoreUtil from '@/store/StoreUtil';
+import StoreUtil from '@/store/StoreUtil'
 
 export default class DateUtil {
   // 現地時間のyyyy-mm-dd形式の文字列を返す
@@ -16,7 +16,7 @@ export default class DateUtil {
    */
   public static getTimeString(d: Date, zeroPadding: boolean = false): string {
     // なんでundifinedも通るし、stringの引数が渡ってくるの?
-    if (d === undefined) { return ''; }
+    if (d === undefined) { return '' }
     if (zeroPadding === false) {
       return `${d.getHours().toString()}:${('0' + d.getMinutes().toString()).slice(-2)}`
     } else {
@@ -126,7 +126,7 @@ export default class DateUtil {
    * 指定した日付の開始と終了時間を返す
    * @param date 対象の日付
    */
-  public static getDateFromToTime(date: Date): {from: Date, to: Date} {
+  public static getDateFromToTime(date: Date): { from: Date, to: Date } {
     const startTime: Date = this.getFirstSectionTime()
     const from: Date = new Date(date)
     from.setHours(startTime.getHours())
@@ -135,7 +135,7 @@ export default class DateUtil {
     from.setMilliseconds(0)
     const to: Date = new Date(from)
     to.setDate(to.getDate() + 1)
-    return {from, to}
+    return { from, to }
   }
 
   /**

@@ -1,6 +1,6 @@
-import firebase, { firestore } from 'firebase';
-import Section from '@/lib/Section';
-import fsUtil from '@/util/FirestoreUtil';
+import firebase, { firestore } from 'firebase'
+import Section from '@/lib/Section'
+import fsUtil from '@/util/FirestoreUtil'
 
 /**
  * セクションのFirebase操作を担うクラス
@@ -10,7 +10,7 @@ import fsUtil from '@/util/FirestoreUtil';
 export default class SectionConnector {
 
   // リスナー破棄用のコールバック保持変数
-  private unscribe_: (() => void) | undefined = undefined;
+  private unscribe_: (() => void) | undefined = undefined
 
   /**
    * Firestoreのスナップショットリッスンを開始する
@@ -33,27 +33,27 @@ export default class SectionConnector {
 
     // データ検索
     this.unscribe_ = this.getQuery(uid)
-                    .onSnapshot((snapshot) => {
-                      snapshot.docChanges().forEach((change: firestore.DocumentChange) => {
-                        let section: Section;
-                        const firedoc: firebase.firestore.DocumentData | undefined  = change.doc.data();
-                        if (firedoc != undefined) {
-                          section = this.convertClass(firedoc);
-                          // データ変更時に呼び出す関数群
-                          if (change.type === 'added') {
-                            addedFunc(section)
-                          } else if (change.type === 'modified') {
-                            modifiedFunc(section)
-                          } else if (change.type === 'removed') {
-                            removedFunc(section)
-                          }
-                        }
-                      },
-                      (error: Error) => {
-                        // tslint:disable-next-line:no-console
-                        console.error(`Section Read Error! ${error.name}`)
-                      })
-                    })
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change: firestore.DocumentChange) => {
+          let section: Section
+          const firedoc: firebase.firestore.DocumentData | undefined = change.doc.data()
+          if (firedoc != undefined) {
+            section = this.convertClass(firedoc)
+            // データ変更時に呼び出す関数群
+            if (change.type === 'added') {
+              addedFunc(section)
+            } else if (change.type === 'modified') {
+              modifiedFunc(section)
+            } else if (change.type === 'removed') {
+              removedFunc(section)
+            }
+          }
+        },
+          (error: Error) => {
+            // tslint:disable-next-line:no-console
+            console.error(`Section Read Error! ${error.name}`)
+          })
+      })
   }
 
   public async stopListener() {
@@ -84,12 +84,12 @@ export default class SectionConnector {
     // 保存時にTaskオブジェクトのupdateTimeも更新
     section.updateTime = new Date()
     firebase.firestore().collection('users').doc(uid)
-    .collection('sections').doc(section.id).set(this.converLiteral(section))
+      .collection('sections').doc(section.id).set(this.converLiteral(section))
   }
   public async delete(uid: string, section: Section): Promise<void> {
     try {
       await firebase.firestore().collection('users').doc(uid)
-      .collection('sections').doc(section.id).delete()
+        .collection('sections').doc(section.id).delete()
     } catch (error) {
       // tslint:disable-next-line:no-console
       console.error(`Delete Section error! Section id=${section.id}`, error)
@@ -98,29 +98,29 @@ export default class SectionConnector {
 
   private getQuery(uid: string): firestore.Query {
     return firestore()
-    .collection('users')
-    .doc(uid)
-    .collection('sections')
-    .orderBy('startTime', 'asc')
+      .collection('users')
+      .doc(uid)
+      .collection('sections')
+      .orderBy('startTime', 'asc')
   }
 
   private converLiteral(section: Section): object {
     return {
-        id: section.id,
-        title: section.title,
-        startTime: section.startTime,
-        createTime: section.createTime,
-        updateTime: section.updateTime,
+      id: section.id,
+      title: section.title,
+      startTime: section.startTime,
+      createTime: section.createTime,
+      updateTime: section.updateTime,
     }
   }
 
   private convertClass(doc: firestore.DocumentData): Section {
     const section = new Section()
-    section.id = doc.id;
-    section.title = doc.title;
-    section.startTime = fsUtil.toDate(doc.startTime);
-    section.createTime = fsUtil.toDate(doc.createTime);
-    section.updateTime = fsUtil.toDate(doc.updateTime);
-    return section;
+    section.id = doc.id
+    section.title = doc.title
+    section.startTime = fsUtil.toDate(doc.startTime)
+    section.createTime = fsUtil.toDate(doc.createTime)
+    section.updateTime = fsUtil.toDate(doc.updateTime)
+    return section
   }
 }

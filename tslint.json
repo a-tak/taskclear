@@ -17,7 +17,7 @@
     "object-literal-sort-keys": false,
     "no-consecutive-blank-lines": false,
     "variable-name": [true, "allow-trailing-underscore"],
-    "semicolon": [false],
+    "semicolon": [true, "never"],
     "no-null-keyword": [true],
     "triple-equals": [true, "allow-undefined-check"]
   }
