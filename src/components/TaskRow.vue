@@ -37,7 +37,8 @@
                 >{{ task_.title }}</div>
                 <!-- note -->
                 <v-btn icon @click.stop="noteDialog_=true">
-                  <v-icon color="grey darken-1">note</v-icon>
+                  <v-icon v-if="task_.note===''" color="grey darken-1">note</v-icon>
+                  <v-icon v-if="task_.note!==''" color="purple">note</v-icon>
                 </v-btn>
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
