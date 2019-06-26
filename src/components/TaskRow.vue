@@ -113,13 +113,13 @@
       <RepeatEdit v-bind:task_="task_" v-on:endRepeatEditEvent="endRepeatEditEvent"></RepeatEdit>
     </v-layout>
     <v-dialog v-model="noteDialog_" max-width="500px">
-      <Note
+      <TaskNote
         v-bind:task_="task_"
         v-on:endEditEvent="endEditEvent"
         v-on:start-edit-task-name-event="startEditTaskName"
         v-on:end-edit-task-name-event="endEditTaskName"
         v-on:close-dialog-event="noteDialog_=false"
-      ></Note>
+      ></TaskNote>
     </v-dialog>
   </v-container>
 </template>
@@ -135,17 +135,16 @@ import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator';
 import NewTask from '@/components/NewTask.vue';
 import TaskEdit from '@/components/TaskEdit.vue';
 import RepeatEdit from '@/components/RepeatEdit.vue';
-import Note from '@/components/Note.vue'
+import TaskNote from '@/components/TaskNote.vue'
 import DateUtil from '../util/DateUtil';
 import Task from '../lib/Task';
-import { truncate } from 'fs';
 
 @Component({
   components: {
     NewTask,
     TaskEdit,
     RepeatEdit,
-    Note,
+    TaskNote,
   },
 })
 export default class TaskRow extends Vue {
