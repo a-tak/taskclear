@@ -3,7 +3,7 @@
     <v-card-title class="title teal lighten-3 white--text">メモ</v-card-title>
     <v-layout v-if="!isEdit_">
       <v-card-text>
-        <div class="wrap text-left">
+        <div class="wrap body-1 text-xs-left">
           {{ note }}
         </div>
       </v-card-text>
@@ -12,7 +12,7 @@
         <v-btn icon @click="closeDialog()" ><v-icon color="purple">close</v-icon></v-btn>
       </v-card-actions>
     </v-layout>
-    <v-layout v-if="isEdit_">
+    <v-layout v-if="isEdit_" ma-3>
       <v-textarea
         v-model="editTask_.note"
         @focus="startEditTaskName()"
