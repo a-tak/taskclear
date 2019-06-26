@@ -17,16 +17,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import firebase from 'firebase';
-import packageJson from '../../package.json';
+import { Component, Vue } from 'vue-property-decorator'
+import firebase from 'firebase'
+import packageJson from '../../package.json'
 
 @Component
 export default class Footer extends Vue {
-  private version_: string = '';
+  private version_: string = ''
 
   private created(): void {
-    this.version_ = packageJson.version;
+    this.version_ = packageJson.version
   }
 
 }

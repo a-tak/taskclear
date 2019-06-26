@@ -17,9 +17,9 @@ export default {
     targetDate: new Date(),
   },
   getters: {
-    taskCtrl(state: State) { return state.taskCtrl; },
-    user(state: State) { return state.user; },
-    targetDate(state: State) { return state.targetDate; },
+    taskCtrl(state: State) { return state.taskCtrl },
+    user(state: State) { return state.user },
+    targetDate(state: State) { return state.targetDate },
   },
   mutations: {
     addTask(state: State, task: Task) {

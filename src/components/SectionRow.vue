@@ -39,17 +39,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
-import Section from '@/lib/Section';
-import DateUtil from '@/util/DateUtil';
+import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
+import Section from '@/lib/Section'
+import DateUtil from '@/util/DateUtil'
 
 @Component
 export default class SectionRow extends Vue {
 // !はundefinedやnullにならないことを示すもの
-  @Prop() public section_!: Section;
-  @Prop() public index_!: number;
+  @Prop() public section_!: Section
+  @Prop() public index_!: number
 
-  private startTime_: string = '';
+  private startTime_: string = ''
 
   @Emit('clickDeleteButtomEvent')
   // tslint:disable-next-line:no-empty
@@ -63,32 +63,32 @@ export default class SectionRow extends Vue {
   private setFirtstSection(section: Section): void {}
 
   private created() {
-    this.startTime_ = DateUtil.get4digitTime(this.section_.startTime);
+    this.startTime_ = DateUtil.get4digitTime(this.section_.startTime)
   }
 
   private changeStartTime(): void {
     if (this.startTime_.trim() !== '' ) {
       // getDateObjectがbaseDateを求めるのでややこしいことになってる
-      let baseDate: Date = new Date();
-      const sectionDate: Date | undefined = this.section_.startTime;
+      let baseDate: Date = new Date()
+      const sectionDate: Date | undefined = this.section_.startTime
       if (sectionDate !== undefined) {
-        baseDate = sectionDate;
+        baseDate = sectionDate
       }
-      this.section_.startTime = DateUtil.getDateObject(baseDate , this.startTime_);
+      this.section_.startTime = DateUtil.getDateObject(baseDate , this.startTime_)
     }
-    this.changeSection(this.section_);
+    this.changeSection(this.section_)
   }
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる
   get layoutAttributes(): {} {
       // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
       switch (this.$vuetify.breakpoint.name) {
-          case 'xs': return {column: true};
-          case 'sm': return {column: true};
-          case 'md': return {row: true};
-          case 'lg': return {row: true};
-          case 'xl': return {row: true};
-          default  : return {row: true};
+          case 'xs': return {column: true}
+          case 'sm': return {column: true}
+          case 'md': return {row: true}
+          case 'lg': return {row: true}
+          case 'xl': return {row: true}
+          default  : return {row: true}
       }
   }
 }

@@ -34,7 +34,7 @@ import uuid from 'uuid'
 import FirestoreUtil from '../util/FirestoreUtil'
 import ITask from '../lib/ITask'
 import Task from '../lib/Task'
-import DateUtil from '@/util/DateUtil';
+import DateUtil from '@/util/DateUtil'
 
 @Component
 export default class NewTask extends Vue {

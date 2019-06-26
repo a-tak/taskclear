@@ -40,8 +40,8 @@
 </style>
 
 <script lang="ts">
-import { Component, Vue, Emit } from 'vue-property-decorator';
-import firebase from 'firebase';
+import { Component, Vue, Emit } from 'vue-property-decorator'
+import firebase from 'firebase'
 
 @Component
 export default class Header extends Vue {
@@ -51,20 +51,20 @@ export default class Header extends Vue {
 
   private logout(): void {
     firebase.auth().signOut().then(() => {
-      this.$router.push('/login');
-    });
+      this.$router.push('/login')
+    })
   }
 
   private jumpToSectionSetting(): void {
-    this.$router.push('/sectionlist');
+    this.$router.push('/sectionlist')
   }
 
   private jumpToTaskList(): void {
-    this.$router.push('/tasklist');
+    this.$router.push('/tasklist')
   }
 
   private jumpToHelp(): void {
-    window.open('https://github.com/a-tak/taskclear/blob/master/help/README.md', 'newtab');
+    window.open('https://github.com/a-tak/taskclear/blob/master/help/README.md', 'newtab')
   }
 }
 </script>

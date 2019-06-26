@@ -5,8 +5,8 @@ export default class TaskController {
 
   private tasks_: Task[] = []
 
-  get tasks(): Task[] { return this.tasks_; }
-  set tasks(value: Task[]) { this.tasks_ = value; }
+  get tasks(): Task[] { return this.tasks_ }
+  set tasks(value: Task[]) { this.tasks_ = value }
 
   /**
    * タスクリストをソートする

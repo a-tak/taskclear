@@ -50,7 +50,7 @@ import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
 @Component
 export default class Note extends Vue {
 
-  @Prop() public note_!: string;
+  @Prop() public note_!: string
 
   private get note(): string {
     const text = this.note_

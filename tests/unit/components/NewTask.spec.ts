@@ -1,13 +1,11 @@
-import { mount, Wrapper, shallowMount, createLocalVue } from '@vue/test-utils';
-import Vue from 'vue';
-import Vuex from 'vuex';
-import Vuetify from 'vuetify';
-import NewTask from '@/components/NewTask.vue';
-import TaskController from '@/lib/TaskController';
+import { mount, Wrapper, shallowMount, createLocalVue } from '@vue/test-utils'
+import Vue from 'vue'
+import Vuex from 'vuex'
+import Vuetify from 'vuetify'
 
-const localVue = createLocalVue();
-localVue.use(Vuex);
-Vue.use(Vuetify);
+const localVue = createLocalVue()
+localVue.use(Vuex)
+Vue.use(Vuetify)
 
 // ストアが含まれているからだろうがテストが通らない
 // → TypeError: Cannot read property 'split' of undefined
@@ -55,12 +53,12 @@ describe('NewTask.vue', () => {
     // addBtn.trigger('click');
     // // 判定
     // expect(addStub).toHaveBeenCalled();
-  });
+  })
 
   it('登録イベント発生確認', () => {
     // //    wrapper.vm.$emit('addedEvent');
     //     const btn = wrapper.find('#newtask-add');
     //     btn.trigger('click');
     //     expect(wrapper.emitted().addedEvent).toBeTruthy();
-  });
-});
+  })
+})

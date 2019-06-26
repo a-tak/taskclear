@@ -104,7 +104,7 @@ export default class RepeatCreator {
    */
   private isExsistRepeat(repeat: Repeat, tasks: Task[]): boolean {
     for (const task of tasks) {
-      if (task.repeatId === repeat.id) { return true; }
+      if (task.repeatId === repeat.id) { return true }
     }
     return false
   }
@@ -117,7 +117,7 @@ export default class RepeatCreator {
    */
   private isMakeRepeat(repeat: Repeat, targetDate: Date): boolean {
     // まだ開始されないリピートタスクは作らない
-    if (targetDate < repeat.from) { return false; }
+    if (targetDate < repeat.from) { return false }
     return repeat.day.includes(targetDate.getDay().toString())
 
   }

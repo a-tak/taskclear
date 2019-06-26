@@ -3,7 +3,7 @@ import TaskController from '../lib/TaskController'
 import Task from '@/lib/Task'
 import Repeat from '@/lib/Repeat'
 import ITask from '@/lib/ITask'
-import DateUtil from './DateUtil';
+import DateUtil from './DateUtil'
 
 export default class FirestoreUtil {
   /**
@@ -17,23 +17,23 @@ export default class FirestoreUtil {
 
     const processStartTime: number = Date.now()
     for (const task of taskctrl.tasks) {
-      if ( task.needSave === true ) {
+      if (task.needSave === true) {
         promises.push(this.setTask(uid, task))
       }
     }
 
     Promise.all(promises)
-    .then((): void => {
-      // 保存が成功したら要セーブフラグをクリア
-      for (const task of taskctrl.tasks) {
-        task.needSave = false
-      }
-      // tslint:disable-next-line:no-console
-      console.log(`セーブ件数 ${promises.length} 件 / Save time ${Date.now() - processStartTime} ms `)
-    }).catch((error: Error): void => {
-      // tslint:disable-next-line:no-console
-      console.error(`Save Error! セーブ件数 ${promises.length} 件 / ${Date.now() - processStartTime} ms `, error)
-    })
+      .then((): void => {
+        // 保存が成功したら要セーブフラグをクリア
+        for (const task of taskctrl.tasks) {
+          task.needSave = false
+        }
+        // tslint:disable-next-line:no-console
+        console.log(`セーブ件数 ${promises.length} 件 / Save time ${Date.now() - processStartTime} ms `)
+      }).catch((error: Error): void => {
+        // tslint:disable-next-line:no-console
+        console.error(`Save Error! セーブ件数 ${promises.length} 件 / ${Date.now() - processStartTime} ms `, error)
+      })
   }
 
   /**
@@ -45,7 +45,7 @@ export default class FirestoreUtil {
 
     const repeats: Repeat[] = []
 
-    const {from} = DateUtil.getDateFromToTime(date)
+    const { from } = DateUtil.getDateFromToTime(date)
     const query: firestore.QuerySnapshot = await firebase
       .firestore()
       .collection('users')
@@ -82,7 +82,7 @@ export default class FirestoreUtil {
   }
 
   public static getQuery(uid: string, date: Date): firestore.Query {
-    const {from, to} = DateUtil.getDateFromToTime(date)
+    const { from, to } = DateUtil.getDateFromToTime(date)
 
     return firebase
       .firestore()
@@ -122,10 +122,10 @@ export default class FirestoreUtil {
     task.isDeleted = true
 
     this.setTask(uid, task)
-    .catch((error: Error) => {
-      // tslint:disable-next-line:no-console
-      console.error(`Delete Task error! task id=${task.id}`, error)
-    })
+      .catch((error: Error) => {
+        // tslint:disable-next-line:no-console
+        console.error(`Delete Task error! task id=${task.id}`, error)
+      })
   }
 
   /**
@@ -136,18 +136,18 @@ export default class FirestoreUtil {
    */
   public static physicalDeleteTask(uid: string, task: Task): void {
     firebase.firestore().collection('users').doc(uid)
-    .collection('tasks').doc(task.id).delete()
-    .catch((error: Error) => {
-      // tslint:disable-next-line:no-console
-      console.error(`Delete Task error! task id=${task.id}`, error)
-    })
+      .collection('tasks').doc(task.id).delete()
+      .catch((error: Error) => {
+        // tslint:disable-next-line:no-console
+        console.error(`Delete Task error! task id=${task.id}`, error)
+      })
   }
 
   public static async setTask(uid: string, task: Task): Promise<void> {
     // 保存時にTaskオブジェクトのupdateTimeも更新
     task.updateTime = new Date()
     firebase.firestore().collection('users').doc(uid)
-    .collection('tasks').doc(task.id).set(this.getTaskLiteral(task))
+      .collection('tasks').doc(task.id).set(this.getTaskLiteral(task))
   }
 
   /**
@@ -160,14 +160,14 @@ export default class FirestoreUtil {
 
     const batch: firestore.WriteBatch = firestore().batch()
 
-    const {from} = DateUtil.getDateFromToTime(dateFrom)
+    const { from } = DateUtil.getDateFromToTime(dateFrom)
 
     try {
       const snapshot = await firebase.firestore().collection('users').doc(uid)
-      .collection('tasks')
-      .where('date', '>=', firestore.Timestamp.fromDate(from))
-      .where('repeatId', '==', repeatId)
-      .get()
+        .collection('tasks')
+        .where('date', '>=', firestore.Timestamp.fromDate(from))
+        .where('repeatId', '==', repeatId)
+        .get()
 
       snapshot.forEach((doc: firestore.QueryDocumentSnapshot): void => {
         if (doc !== undefined) {
@@ -183,10 +183,10 @@ export default class FirestoreUtil {
     }
 
     batch.commit()
-    .catch((error: Error) => {
-      // tslint:disable-next-line:no-console
-      console.error(`Write repeat error! repeat id = ${repeatId}`, error)
-    })
+      .catch((error: Error) => {
+        // tslint:disable-next-line:no-console
+        console.error(`Write repeat error! repeat id = ${repeatId}`, error)
+      })
   }
 
   /**
@@ -201,7 +201,7 @@ export default class FirestoreUtil {
     const batch: firestore.WriteBatch = firestore().batch()
 
     let newId: string = 'Non New Rpeat'
-    if (repeat !== undefined ) {
+    if (repeat !== undefined) {
       newId = repeat.id
       const newRef: firestore.DocumentReference = firebase.firestore()
         .collection('users').doc(uid)
@@ -213,8 +213,8 @@ export default class FirestoreUtil {
     if (oldRepeat !== undefined) {
       oldId = oldRepeat.id
       const oldRef: firestore.DocumentReference = firebase.firestore()
-      .collection('users').doc(uid)
-      .collection('repeats').doc(oldRepeat.id)
+        .collection('users').doc(uid)
+        .collection('repeats').doc(oldRepeat.id)
       batch.delete(oldRef)
     }
 
@@ -290,7 +290,7 @@ export default class FirestoreUtil {
   private static getDeletedQuery(uid: string, date: Date): firestore.Query {
     // とりあえず今は一日の区切りを0時としてfrom,toを作る
     // 新たにnewしてセットしないと参照が書き換わるだけでendがおかしくなる
-    const {from, to} = DateUtil.getDateFromToTime(date)
+    const { from, to } = DateUtil.getDateFromToTime(date)
 
     return firebase
       .firestore()
@@ -347,49 +347,49 @@ export default class FirestoreUtil {
    * @param value
    */
   private static toString(value: string | undefined): string {
-      if (value === undefined) {
-          // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
-          return ''
-      } else {
-          return value
-      }
+    if (value === undefined) {
+      // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
+      return ''
+    } else {
+      return value
+    }
   }
 
   private static toNumber(value: string | undefined): number {
-      if (value === undefined) {
-          // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
-          return 0
-      } else {
-          return parseInt(value, 10)
-      }
+    if (value === undefined) {
+      // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
+      return 0
+    } else {
+      return parseInt(value, 10)
+    }
   }
 
   private static toBoolean(value: boolean | undefined): boolean {
-      if (value === undefined) {
-          // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
-          return false
-      } else {
-          return value
-      }
+    if (value === undefined) {
+      // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
+      return false
+    } else {
+      return value
+    }
   }
 
   private static converToTask(data: firestore.DocumentData): Task {
-      const task = new Task(data.date.toDate(), data.title)
-      task.id = data.id
-      task.startTime =  this.toDateUndefinable(data.startTime)
-      task.endTime = this.toDateUndefinable(data.endTime)
-      task.estimateTime = data.estimateTime
-      task.isDoing = data.isDoing
-      task.repeatId = this.toString(data.repeatId)
-      task.sortNo = this.toNumber(data.sortNo)
-      task.isDeleted = this.toBoolean(data.isDeleted)
-      task.needSave = false
-      task.estimateSeparateStart = this.toBoolean(data.estimateSeparateStart)
-      task.estimateSeparateEnd = this.toBoolean(data.estimateSeparateEnd)
-      task.createTime = this.toDate(data.createTime)
-      task.updateTime = this.toDate(data.updateTime)
-      task.note = this.toString(data.note)
-      return task
+    const task = new Task(data.date.toDate(), data.title)
+    task.id = data.id
+    task.startTime = this.toDateUndefinable(data.startTime)
+    task.endTime = this.toDateUndefinable(data.endTime)
+    task.estimateTime = data.estimateTime
+    task.isDoing = data.isDoing
+    task.repeatId = this.toString(data.repeatId)
+    task.sortNo = this.toNumber(data.sortNo)
+    task.isDeleted = this.toBoolean(data.isDeleted)
+    task.needSave = false
+    task.estimateSeparateStart = this.toBoolean(data.estimateSeparateStart)
+    task.estimateSeparateEnd = this.toBoolean(data.estimateSeparateEnd)
+    task.createTime = this.toDate(data.createTime)
+    task.updateTime = this.toDate(data.updateTime)
+    task.note = this.toString(data.note)
+    return task
   }
 
   /**
@@ -398,40 +398,40 @@ export default class FirestoreUtil {
    * @param data
    */
   private static converToRepeat(data: firestore.DocumentData | undefined): Repeat {
-      const repeat: Repeat = new Repeat()
-      if (data !== undefined) {
-          repeat.id = this.toString(data.id)
-          repeat.title = this.toString(data.title)
-          repeat.from = this.toDate(data.from)
-          repeat.day = data.day
-          repeat.estimateTime = this.toNumber(data.estimateTime)
-          const section: Date | undefined = this.toDateUndefinable(data.section)
-          if (section == undefined) {
-            repeat.section = DateUtil.getMinDate()
-          } else {
-            repeat.section = section
-          }
-          repeat.estimateSeparateStart = this.toBoolean(data.estimateSeparateStart)
-          repeat.estimateSeparateEnd = this.toBoolean(data.estimateSeparateEnd)
-          repeat.note = this.toString(data.note)
+    const repeat: Repeat = new Repeat()
+    if (data !== undefined) {
+      repeat.id = this.toString(data.id)
+      repeat.title = this.toString(data.title)
+      repeat.from = this.toDate(data.from)
+      repeat.day = data.day
+      repeat.estimateTime = this.toNumber(data.estimateTime)
+      const section: Date | undefined = this.toDateUndefinable(data.section)
+      if (section == undefined) {
+        repeat.section = DateUtil.getMinDate()
       } else {
-          // 仕様上存在しないrepeatIdが来ることもあるのでエラーとしないが、それを検知して処理するために空のidのRepeatを返す
-          repeat.id = ''
+        repeat.section = section
       }
-      return repeat
+      repeat.estimateSeparateStart = this.toBoolean(data.estimateSeparateStart)
+      repeat.estimateSeparateEnd = this.toBoolean(data.estimateSeparateEnd)
+      repeat.note = this.toString(data.note)
+    } else {
+      // 仕様上存在しないrepeatIdが来ることもあるのでエラーとしないが、それを検知して処理するために空のidのRepeatを返す
+      repeat.id = ''
+    }
+    return repeat
   }
 
   private static getRepeatLiteral(repeat: Repeat): object {
-      return {
-          id: repeat.id,
-          title: repeat.title,
-          from: repeat.from,
-          day: repeat.day,
-          estimateTime: repeat.estimateTime,
-          section: repeat.section,
-          estimateSeparateStart: repeat.estimateSeparateStart,
-          estimateSeparateEnd: repeat.estimateSeparateEnd,
-          note: repeat.note,
-      }
+    return {
+      id: repeat.id,
+      title: repeat.title,
+      from: repeat.from,
+      day: repeat.day,
+      estimateTime: repeat.estimateTime,
+      section: repeat.section,
+      estimateSeparateStart: repeat.estimateSeparateStart,
+      estimateSeparateEnd: repeat.estimateSeparateEnd,
+      note: repeat.note,
+    }
   }
 }

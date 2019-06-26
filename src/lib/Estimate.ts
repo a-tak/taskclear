@@ -1,5 +1,3 @@
-import DateUtil from '@/util/DateUtil'
-
 export default class Estimate {
   private date_: Date = new Date()
   public get date(): Date {

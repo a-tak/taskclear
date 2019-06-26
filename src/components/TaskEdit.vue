@@ -7,7 +7,19 @@
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
             <v-flex ma-2 grow>
               <span>タスク名</span>
-              <v-text-field v-bind:id="'task-edit-title-field-' + editTask_.id" placeholder="タスク名" single-line outline v-model="editTask_.title" clearable @focus="startEditTaskName()" @blur="endEditTaskName()" @keydown="keyDown($event)" @keyup.enter="keyUp()" @keyup.esc="cancel()"></v-text-field>
+              <v-text-field
+                v-bind:id="'task-edit-title-field-' + editTask_.id"
+                placeholder="タスク名"
+                single-line
+                outline
+                v-model="editTask_.title"
+                clearable
+                @focus="startEditTaskName()"
+                @blur="endEditTaskName()"
+                @keydown="keyDown($event)"
+                @keyup.enter="keyUp()"
+                @keyup.esc="cancel()"
+              ></v-text-field>
             </v-flex>
             <v-flex shrink>
               <v-checkbox v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
@@ -19,23 +31,81 @@
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
             <v-flex ma-2>
               <span>開始時間</span>
-              <v-text-field v-bind:id="'task-edit-start-field-' + editTask_.id" type="number" placeholder="開始時間" single-line outline hint="数字3または4桁。9時20分は「920」と入力" v-model="startTime_" clearable @keyup.enter="save" @keyup.esc="cancel()"></v-text-field>
+              <v-text-field
+                v-bind:id="'task-edit-start-field-' + editTask_.id"
+                type="number"
+                placeholder="開始時間"
+                single-line
+                outline
+                hint="数字3または4桁。9時20分は「920」と入力"
+                v-model="startTime_"
+                clearable
+                @keyup.enter="save"
+                @keyup.esc="cancel()"
+              ></v-text-field>
             </v-flex>
             <v-flex ma-2>
               <span>終了時間</span>
-              <v-text-field v-bind:id="'task-edit-end-field-' + editTask_.id" type="number" placeholder="終了時間" single-line outline mask="####" hint="数字3または4桁。9時20分は「920」と入力" v-model="endTime_" clearable  @keyup.enter="save" @keyup.esc="cancel()"></v-text-field>
+              <v-text-field
+                v-bind:id="'task-edit-end-field-' + editTask_.id"
+                type="number"
+                placeholder="終了時間"
+                single-line
+                outline
+                mask="####"
+                hint="数字3または4桁。9時20分は「920」と入力"
+                v-model="endTime_"
+                clearable
+                @keyup.enter="save"
+                @keyup.esc="cancel()"
+              ></v-text-field>
             </v-flex>
             <v-flex ma-2>
               <span>見積時間(分)</span>
-              <v-text-field v-bind:id="'task-edit-estimate-field-' + editTask_.id" type="number" placeholder="見積時間(分)" single-line outline mask="#####" hint="見積時間(分)を入力" v-model="estimateTime_" clearable @keyup.enter="save" @keyup.esc="cancel()"> </v-text-field>
+              <v-text-field
+                v-bind:id="'task-edit-estimate-field-' + editTask_.id"
+                type="number"
+                placeholder="見積時間(分)"
+                single-line
+                outline
+                mask="#####"
+                hint="見積時間(分)を入力"
+                v-model="estimateTime_"
+                clearable
+                @keyup.enter="save"
+                @keyup.esc="cancel()"
+              ></v-text-field>
             </v-flex>
             <v-flex ma-2>
               <span>予定時間帯</span>
-              <v-combobox :id="'task-edit-section-field-' + editTask_.id" type="number" placeholder="予定時間帯" single-line outline mask="#####" hint="数字3または4桁。9時20分は「920」と入力" v-model="section_" :items="sectionList_" @keyup.enter="save" @keyup.esc="cancel()"> </v-combobox>
+              <v-combobox
+                :id="'task-edit-section-field-' + editTask_.id"
+                type="number"
+                placeholder="予定時間帯"
+                single-line
+                outline
+                mask="#####"
+                hint="数字3または4桁。9時20分は「920」と入力"
+                v-model="section_"
+                :items="sectionList_"
+                @keyup.enter="save"
+                @keyup.esc="cancel()"
+              ></v-combobox>
             </v-flex>
             <v-flex ma-2>
               <span>ソート順</span>
-              <v-text-field v-bind:id="'task-edit-sortno-field-' + editTask_.id" type="number" placeholder="ソート順" single-line outline mask="#####" hint="ソート順を番号で入力" v-model="sortNo_"  @keyup.enter="save" @keyup.esc="cancel()"> </v-text-field>
+              <v-text-field
+                v-bind:id="'task-edit-sortno-field-' + editTask_.id"
+                type="number"
+                placeholder="ソート順"
+                single-line
+                outline
+                mask="#####"
+                hint="ソート順を番号で入力"
+                v-model="sortNo_"
+                @keyup.enter="save"
+                @keyup.esc="cancel()"
+              ></v-text-field>
             </v-flex>
           </v-layout>
           <v-layout row fill-height align-center justify-center>
@@ -62,7 +132,6 @@ import Section from '@/lib/Section'
 
 @Component
 export default class TaskEdit extends Vue {
-
   // !はundefinedやnullにならないことを示すもの
   @Prop() public task_!: Task
 
@@ -106,11 +175,17 @@ export default class TaskEdit extends Vue {
 
   private save(): void {
     // Vuetifyでxボタンを押すとnullになるみたい…
-    if (this.startTime_ != undefined && this.startTime_.trim() !== '' ) {
-      this.editTask_.startTime = DateUtil.getDateObject(this.$store.getters['taskList/targetDate'], this.startTime_)
+    if (this.startTime_ != undefined && this.startTime_.trim() !== '') {
+      this.editTask_.startTime = DateUtil.getDateObject(
+        this.$store.getters['taskList/targetDate'],
+        this.startTime_,
+      )
 
       if (this.endTime_ != undefined && this.endTime_.trim() !== '') {
-        this.editTask_.endTime = DateUtil.getDateObject(this.$store.getters['taskList/targetDate'], this.endTime_)
+        this.editTask_.endTime = DateUtil.getDateObject(
+          this.$store.getters['taskList/targetDate'],
+          this.endTime_,
+        )
         // 終了時間が入っていたら停止する
         this.editTask_.isDoing = false
       } else {
@@ -125,8 +200,10 @@ export default class TaskEdit extends Vue {
       this.editTask_.isDoing = false
     }
 
-    this.editTask_.date =
-      DateUtil.calcTaskDate(this.$store.getters['taskList/targetDate'], DateUtil.getDateByTimeString(this.section_))
+    this.editTask_.date = DateUtil.calcTaskDate(
+      this.$store.getters['taskList/targetDate'],
+      DateUtil.getDateByTimeString(this.section_),
+    )
 
     if (Util.isNumber(this.estimateTime_)) {
       this.editTask_.estimateTime = Number(this.estimateTime_)
@@ -169,19 +246,24 @@ export default class TaskEdit extends Vue {
     this.estimateSeparateEnd_ = this.task_.estimateSeparateEnd
 
     this.sections_ = this.$store.getters['section/sections']
-
   }
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる
   get layoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
-      case 'xs': return {column: true}
-      case 'sm': return {column: true}
-      case 'md': return {row: true}
-      case 'lg': return {row: true}
-      case 'xl': return {row: true}
-      default  : return {row: true}
+      case 'xs':
+        return { column: true }
+      case 'sm':
+        return { column: true }
+      case 'md':
+        return { row: true }
+      case 'lg':
+        return { row: true }
+      case 'xl':
+        return { row: true }
+      default:
+        return { row: true }
     }
   }
 

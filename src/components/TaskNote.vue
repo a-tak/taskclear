@@ -25,7 +25,7 @@ import Note from '@/components/Note.vue'
 })
 export default class TaskNote extends Vue {
 
-  @Prop() public task_!: Task;
+  @Prop() public task_!: Task
 
   private get note(): string {
     const text = this.task_.note
