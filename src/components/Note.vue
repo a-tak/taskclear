@@ -19,6 +19,7 @@
         <v-layout v-if="isEdit_" ma-3>
           <v-flex>
             <v-textarea
+              label="メモ"
               v-model="editNote_"
               @focus="startEditTaskName()"
               @blur="endEditTaskName()"
