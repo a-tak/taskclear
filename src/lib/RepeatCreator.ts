@@ -93,6 +93,7 @@ export default class RepeatCreator {
     task.estimateTime = repeat.estimateTime
     task.estimateSeparateStart = repeat.estimateSeparateStart
     task.estimateSeparateEnd = repeat.estimateSeparateEnd
+    task.note = repeat.note
     await FirestoreUtil.setTask(this.uid_, task)
     return
   }
