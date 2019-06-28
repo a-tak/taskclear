@@ -110,7 +110,12 @@
       ></TaskEdit>
     </v-layout>
     <v-layout align-center row v-if="editingRepeat_">
-      <RepeatEdit v-bind:task_="task_" v-on:endRepeatEditEvent="endRepeatEditEvent"></RepeatEdit>
+      <RepeatEdit
+        v-bind:task_="task_"
+        v-on:endRepeatEditEvent="endRepeatEditEvent"
+        v-on:start-edit-task-name-event="startEditTaskName"
+        v-on:end-edit-task-name-event="endEditTaskName"
+      ></RepeatEdit>
     </v-layout>
     <v-dialog v-model="noteDialog_" max-width="500px">
       <TaskNote

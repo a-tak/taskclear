@@ -86,6 +86,12 @@
               ></v-combobox>
             </v-flex>
             <v-flex>
+              <v-btn icon @click.stop="noteDialog_=true">
+                <v-icon v-if="note_===''" color="grey darken-1">note</v-icon>
+                <v-icon v-if="note_!==''" color="purple">note</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex>
               <v-checkbox v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
             </v-flex>
             <v-flex>
@@ -103,6 +109,15 @@
         </v-flex>
       </v-layout>
     </v-card>
+    <v-dialog v-model="noteDialog_" max-width="500px">
+      <Note
+        v-bind:note_="note_"
+        v-on:endEditEvent="endEditNoteEvent"
+        v-on:start-edit-task-name-event="startEditTaskNameEvent"
+        v-on:end-edit-task-name-event="endEditTaskNameEvent"
+        v-on:close-dialog-event="noteDialog_=false"
+      ></Note>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -114,8 +129,13 @@ import TaskController from '../lib/TaskController'
 import Repeat from '../lib/Repeat'
 import FirestoreUtil from '../util/FirestoreUtil'
 import Section from '@/lib/Section'
+import Note from '@/components/Note.vue'
 
-@Component
+@Component({
+  components: {
+    Note,
+  },
+})
 export default class RepeatEdit extends Vue {
   get dateFrom(): string {
     return DateUtil.getDateString(this.from_)
@@ -158,6 +178,20 @@ export default class RepeatEdit extends Vue {
   private section_: string = ''
   private estimateSeparateStart_: boolean = false
   private estimateSeparateEnd_: boolean = false
+  private note_: string = ''
+  private noteDialog_: boolean = false
+
+  @Emit('changeTaskDateChangeEvent')
+  // tslint:disable-next-line:no-empty
+  public changeDate(task: Task): void {}
+
+  @Emit('start-edit-task-name-event')
+  // tslint:disable-next-line:no-empty
+  public startEditTaskNameEvent(): void {}
+
+  @Emit('end-edit-task-name-event')
+  // tslint:disable-next-line:no-empty
+  public endEditTaskNameEvent(): void {}
 
   @Emit('endRepeatEditEvent')
   // tslint:disable-next-line:no-empty
@@ -173,6 +207,7 @@ export default class RepeatEdit extends Vue {
       this.repeat_.section = DateUtil.getDateObject(DateUtil.getMinDate() , this.section_)
       this.repeat_.estimateSeparateStart = this.estimateSeparateStart_
       this.repeat_.estimateSeparateEnd = this.estimateSeparateEnd_
+      this.repeat_.note = this.note_
       FirestoreUtil.saveRepeat(
         this.$store.getters['taskList/user'].uid,
         this.repeat_,
@@ -246,6 +281,7 @@ export default class RepeatEdit extends Vue {
     this.repeat_.section = this.task_.date
     this.repeat_.estimateSeparateStart = this.task_.estimateSeparateStart
     this.repeat_.estimateSeparateEnd = this.task_.estimateSeparateEnd
+    this.repeat_.note = this.task_.note
     this.oldRepeat_ = undefined
   }
 
@@ -256,6 +292,11 @@ export default class RepeatEdit extends Vue {
     this.section_ = DateUtil.get4digitTime(this.repeat_.section)
     this.estimateSeparateStart_ = this.repeat_.estimateSeparateStart
     this.estimateSeparateEnd_ = this.repeat_.estimateSeparateEnd
+    this.note_ = this.repeat_.note
+  }
+
+  private endEditNoteEvent(note: string): void {
+    this.note_ = note
   }
 }
 </script>
