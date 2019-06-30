@@ -1,6 +1,6 @@
 <template>
   <div id="main">
-    <div class="tasklist-fixed-header">
+    <div class="fixed-header">
       <Header
         v-on:clickjumpToNextTaskButtomEvent="jumpToNextTask()"
       ></Header>
@@ -93,16 +93,16 @@
   </div>
 </template>
 
-<style>
-.tasklist-fixed-header {
+<style scoped>
+.fixed-header {
   position: fixed;
   width: 100%;
   z-index: 100;
 }
-.tasklist-listSp {
+.listSp {
   padding-top: 210px;
 }
-.tasklist-listPc {
+.listPc {
   padding-top: 150px;
 }
 </style>
@@ -191,12 +191,12 @@ export default class TaskListMain extends Vue {
   get listClass(): {} {
     // 画面サイズによってツールバーとのマージンを変更
     switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return {class: 'tasklist-listSp'}
-        case 'sm': return {class: 'tasklist-listSp'}
-        case 'md': return {class: 'tasklist-listPc'}
-        case 'lg': return {class: 'tasklist-listPc'}
-        case 'xl': return {class: 'tasklist-listPc'}
-        default  : return {class: 'tasklist-listPc'}
+        case 'xs': return {class: 'listSp'}
+        case 'sm': return {class: 'listSp'}
+        case 'md': return {class: 'listPc'}
+        case 'lg': return {class: 'listPc'}
+        case 'xl': return {class: 'listPc'}
+        default  : return {class: 'listPc'}
     }
   }
 

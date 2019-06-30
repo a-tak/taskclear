@@ -97,7 +97,7 @@ export default class NewTask extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 </style>
 
 

@@ -301,7 +301,7 @@ export default class RepeatEdit extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 </style>
 
 

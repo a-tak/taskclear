@@ -31,7 +31,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .fixed-header {
   position: fixed;
   width: 100%;

@@ -33,7 +33,7 @@
   </v-toolbar>
 </template>
 
-<style>
+<style scoped>
 .menu {
   z-index: 200;
 }

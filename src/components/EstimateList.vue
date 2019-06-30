@@ -187,5 +187,5 @@ export default class EstimateList extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 </style>

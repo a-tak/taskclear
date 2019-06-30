@@ -40,7 +40,7 @@
   </v-layout>
 </template>
 
-<style>
+<style scoped>
 .wrap {
   white-space: pre-line;
 }</style>

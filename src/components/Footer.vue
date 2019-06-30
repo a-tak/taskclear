@@ -16,6 +16,10 @@
   </v-footer>
 </template>
 
+<style scoped>
+
+</style>
+
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import firebase from 'firebase'
