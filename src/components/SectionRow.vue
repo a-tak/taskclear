@@ -94,7 +94,7 @@ export default class SectionRow extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 </style>
 
 

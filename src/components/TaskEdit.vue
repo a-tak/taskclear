@@ -283,7 +283,7 @@ export default class TaskEdit extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 </style>
 
 

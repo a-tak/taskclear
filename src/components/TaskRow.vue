@@ -129,7 +129,7 @@
   </v-container>
 </template>
 
-<style>
+<style scoped>
 .done {
   text-decoration: line-through;
 }
