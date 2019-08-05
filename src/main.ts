@@ -2,10 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from '@/store/Store'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
-import firebase from 'firebase'
 import './registerServiceWorker'
+import vuetify from './plugins/vuetify'
+import firebase from 'firebase'
 import { RouteRecord } from 'vue-router'
 
 Vue.config.productionTip = false
@@ -25,13 +24,13 @@ firebase.firestore().enablePersistence()
     console.error(err.code)
   })
 
-Vue.use(Vuetify)
 
 const firestore = firebase.firestore()
 
 new Vue({
   router,
   store,
+  vuetify,
   render: (h) => h(App),
 }).$mount('#app')
 
