@@ -1,5 +1,6 @@
 <template>
   <v-footer
+    app
     color="teal lighten-3"
     height="auto"
     class="mt-2 elevation-5"
