@@ -63,14 +63,16 @@
                     full-width
                     min-width="290px"
                   >
-                    <v-btn
-                      slot="activator"
-                      icon
-                      ripple
-                      @click.stop="displayedTaskCal = !displayedTaskCal"
-                    >
-                      <v-icon color="grey darken-1">calendar_today</v-icon>
-                    </v-btn>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-on="on"
+                        icon
+                        ripple
+                        @click.stop="displayedTaskCal = !displayedTaskCal"
+                      >
+                        <v-icon color="grey darken-1">calendar_today</v-icon>
+                      </v-btn>
+                    </template>
                     <v-date-picker
                       v-model="targetDate"
                       @input="selectDate()"

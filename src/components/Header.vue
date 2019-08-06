@@ -9,12 +9,14 @@
       <v-icon>forward</v-icon>
     </v-btn>
     <v-menu offset-y class="menu">
-      <v-btn id="more"
-        slot="activator"
-        icon
-      >
-        <v-icon>more_vert</v-icon>
-      </v-btn>
+      <template v-slot:activator="{ on }">
+        <v-btn id="more"
+          v-on="on"
+          icon
+        >
+          <v-icon>more_vert</v-icon>
+        </v-btn>
+      </template>
       <v-list>
         <v-list-tile @click="jumpToTaskList()">
           <v-list-tile-title>タスクリスト</v-list-tile-title>
