@@ -7,10 +7,16 @@
         </v-flex>
         <v-flex v-bind="titleSize" ma-2>Taskclear</v-flex>
         <v-flex v-if="!isLogin">
-          <v-btn @click="googleLogin">Googleアカウントでログイン</v-btn>
+          <v-btn
+            @click="googleLogin"
+            color="accent"
+            elevation="10"
+          >
+            Googleアカウントでログイン
+          </v-btn>
         </v-flex>
         <v-flex v-if="!isLoginChecked">
-          <v-progress-circular indeterminate color="primary"></v-progress-circular>ログイン処理中
+          <v-progress-circular indeterminate color="accent"></v-progress-circular>ログイン処理中
         </v-flex>
         <v-flex ma-5>
           <v-card>

@@ -3,7 +3,7 @@
     <div class="fixed-header">
       <Header></Header>
     </div>
-    <v-btn fab dark color="red" fixed floating bottom right @click="addSection()">
+    <v-btn fab dark color="accent" fixed floating bottom right @click="addSection()">
       <v-icon dark>add</v-icon>
     </v-btn>
     <div id="list" v-bind="listClass">

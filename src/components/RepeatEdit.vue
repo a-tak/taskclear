@@ -88,8 +88,8 @@
             </v-flex>
             <v-flex>
               <v-btn icon @click.stop="noteDialog_=true">
-                <v-icon v-if="note_===''" color="grey darken-1">note</v-icon>
-                <v-icon v-if="note_!==''" color="purple">note</v-icon>
+                <v-icon v-if="note_===''" color="deactive">note</v-icon>
+                <v-icon v-if="note_!==''" color="accent">note</v-icon>
               </v-btn>
             </v-flex>
             <v-flex>

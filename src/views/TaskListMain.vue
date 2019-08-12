@@ -41,7 +41,7 @@
         </v-layout>
       </div>
     </div>
-    <v-btn fab dark color="red" fixed floating bottom right @click="addTask()">
+    <v-btn fab dark color="accent" fixed floating bottom right @click="addTask()">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-icon dark v-on="on">add</v-icon>
@@ -81,7 +81,7 @@
     >
       {{ snackbarText }}
       <v-btn
-        color="pink"
+        color="accent"
         text
         @click="undoTask()"
       >

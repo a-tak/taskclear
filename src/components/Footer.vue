@@ -1,14 +1,14 @@
 <template>
   <v-footer
     app
-    color="teal lighten-3"
+    color="primary"
     height="auto"
     class="mt-2 elevation-5"
   >
     <v-card
       flat
       tile
-      color="teal lighten-3"
+      color="primary"
     >
       <v-card-text>
         &copy;2019 a-tak.com  ver. <span id="ver">{{ version_ }}</span>

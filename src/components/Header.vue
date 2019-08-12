@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="teal lighten-3" id="header" class="elevation-5">
+  <v-app-bar app color="primary" id="header" class="elevation-5">
     <v-img src="/img/top-logo.svg" aspect-ratio="1" max-height="30px" max-width="30px"></v-img>
     <v-spacer></v-spacer>
     <v-btn id="go-doing"
