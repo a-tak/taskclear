@@ -5,17 +5,18 @@
         <v-flex ma-2>
           <v-img src="/img/logo.svg" aspect-ratio="1" v-bind="logoSize"></v-img>
         </v-flex>
-        <v-flex v-bind="titleSize" ma-2>Taskclear</v-flex>
-        <v-flex v-if="!isLogin">
+        <v-flex v-bind="titleSize" ma-5>Taskclear</v-flex>
+        <v-flex v-if="!isLogin" ma-5>
           <v-btn
             @click="googleLogin"
             color="accent"
             elevation="10"
+            x-large
           >
             Googleアカウントでログイン
           </v-btn>
         </v-flex>
-        <v-flex v-if="!isLoginChecked">
+        <v-flex v-if="!isLoginChecked" ma-3>
           <v-progress-circular indeterminate color="accent"></v-progress-circular>ログイン処理中
         </v-flex>
         <v-flex ma-5>

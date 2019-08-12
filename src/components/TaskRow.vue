@@ -29,7 +29,7 @@
               </v-btn>
             </v-flex>
             <!-- TaskName -->
-            <v-flex nowrap xs9 sm15 md15 lg15 xl15>
+            <v-flex nowrap xs7 sm6 md7 lg8 xl8>
               <v-card-actions @click.stop="startEdit()">
                 <div
                   v-bind:class="{ done: task_.endTime!=undefined}"
@@ -50,7 +50,7 @@
               <v-spacer></v-spacer>
             </v-flex>
             <!-- icon -->
-            <v-flex xs2 sm4 md4 lg4 xl3>
+            <v-flex xs2 sm4 md3 lg2 xl2>
               <v-layout row wrap>
                 <v-flex xs6 sm2 md2 lg2 xl2>
                   <v-menu

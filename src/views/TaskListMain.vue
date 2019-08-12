@@ -24,6 +24,7 @@
                     label="日付を選択してください"
                     prepend-icon="event"
                     readonly
+                    class="pt-5 pl-5 pr-5"
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -101,10 +102,10 @@
   z-index: 100;
 }
 .listSp {
-  padding-top: 210px;
+  padding-top: 190px;
 }
 .listPc {
-  padding-top: 150px;
+  padding-top: 110px;
 }
 </style>
 
