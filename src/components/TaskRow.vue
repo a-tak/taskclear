@@ -57,7 +57,6 @@
                     :close-on-content-click="true"
                     v-model="displayedTaskCal"
                     :nudge-right="40"
-                    lazy
                     transition="scale-transition"
                     offset-y
                     full-width
