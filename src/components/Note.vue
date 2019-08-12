@@ -6,7 +6,7 @@
         <v-layout v-if="!isEdit_" ma-3>
           <v-flex>
             <v-card-text>
-              <div class="wrap body-1 text-xs-left">
+              <div class="wrap body-1 text-left">
                 {{ note }}
               </div>
             </v-card-text>
