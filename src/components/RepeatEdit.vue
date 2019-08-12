@@ -36,19 +36,20 @@
                 :close-on-content-click="false"
                 v-model="menufrom_"
                 :nudge-right="40"
-                lazy
                 transition="scale-transition"
                 offset-y
                 full-width
                 min-width="290px"
               >
-                <v-text-field
-                  slot="activator"
-                  v-model="dateFrom"
-                  label="開始日"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-on="on"
+                    v-model="dateFrom"
+                    label="開始日"
+                    prepend-icon="event"
+                    readonly
+                  ></v-text-field>
+                </template>
                 <v-date-picker
                   v-model="dateFrom"
                   @input="menufrom_ = false"

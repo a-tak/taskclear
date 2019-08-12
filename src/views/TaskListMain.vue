@@ -12,7 +12,6 @@
                 :close-on-content-click="false"
                 v-model="menu2"
                 :nudge-right="40"
-                lazy
                 transition="scale-transition"
                 offset-y
                 full-width
