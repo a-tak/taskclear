@@ -83,7 +83,7 @@
       {{ snackbarText }}
       <v-btn
         color="pink"
-        flat
+        text
         @click="undoTask()"
       >
         元に戻す
