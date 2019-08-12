@@ -42,14 +42,14 @@
         </v-layout>
       </div>
     </div>
-    <v-btn fab dark color="accent" fixed floating bottom right @click="addTask()">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
-          <v-icon dark v-on="on">add</v-icon>
-        </template>
+          <v-btn v-on="on" fab dark color="accent" fixed floating bottom right @click="addTask()">
+            <v-icon dark>add</v-icon>
+          </v-btn>
+          </template>
         <span>Aキーでもタスク追加できます</span>
       </v-tooltip>
-    </v-btn>
     <div id="list" v-bind="listClass">
       <v-slide-y-transition class="py-0" group>
         <TaskRow
