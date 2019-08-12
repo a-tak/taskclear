@@ -23,9 +23,14 @@
                 </v-flex>
                 <v-flex xs4 sm2 md1>
                   <v-tooltip bottom  v-if="index_!==0">
-                    <v-btn slot="activator" icon ripple @click.stop="setFirtstSection(section_)">
-                      <v-icon color="grey darken-1">vertical_align_top</v-icon>
-                    </v-btn>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-on="on"
+                        icon ripple @click.stop="setFirtstSection(section_)"
+                      >
+                        <v-icon color="grey darken-1">vertical_align_top</v-icon>
+                      </v-btn>
+                    </template>
                     <span>一日の開始セクションに指定</span>
                   </v-tooltip>
                 </v-flex>
