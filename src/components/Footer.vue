@@ -1,8 +1,6 @@
 <template>
   <v-footer
-    app
     color="primary"
-    height="auto"
     class="mt-2 elevation-5"
   >
     <v-card
