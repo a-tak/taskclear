@@ -82,7 +82,7 @@
     >
       {{ snackbarText }}
       <v-btn
-        color="accent"
+        color="primary"
         text
         @click="undoTask()"
       >
