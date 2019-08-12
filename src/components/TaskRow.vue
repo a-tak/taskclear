@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md text-xs-center pa-2>
+  <v-container grid-list-xl text-xs-center pa-2>
     <div id="next-task" v-if="task_.isNext === true"></div>
     <v-layout align-center row v-if="!isEdit_">
       <v-flex>

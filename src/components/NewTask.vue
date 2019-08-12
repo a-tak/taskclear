@@ -1,29 +1,35 @@
 <template>
   <div id="newtask">
-    <v-card>
-      <v-layout row fill-height align-center justify-center>
-        <v-flex mt-4 ml-2>
-          <v-text-field
-            placeholder="新しいタスクを追加"
-            single-line
-            outline
-            v-model="inputvalue_"
-            autofocus
-            clearable
-            hint="記載したらEnterか追加ボタン"
-            @keydown="keyDown($event)"
-            @keyup.enter="keyUpEnter()"
-            @keyup.esc="cancel"
-            @focus="startEditTaskName()"
-            @blur="endEditTaskName()"
-          ></v-text-field>
-        </v-flex>
-        <v-flex ma-2>
-          <v-btn id="newtask-add" @click="addTask">追加</v-btn>
-          <v-btn @click="cancel">キャンセル</v-btn>
+    <v-container grid-list-md text-xs-center>
+      <v-layout row align-center>
+        <v-flex>
+          <v-card>
+            <v-layout v-bind="layoutAttributes" align-center justify-space-between fill-height pr-4>
+              <v-flex ma-3 xs6 sm6 md7 lg8>
+                <v-text-field
+                  placeholder="新しいタスクを追加"
+                  single-line
+                  outline
+                  v-model="inputvalue_"
+                  autofocus
+                  clearable
+                  hint="記載したらEnterか追加ボタン"
+                  @keydown="keyDown($event)"
+                  @keyup.enter="keyUpEnter()"
+                  @keyup.esc="cancel"
+                  @focus="startEditTaskName()"
+                  @blur="endEditTaskName()"
+                ></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-btn class="ma-3 accent" min-width="120" id="newtask-add" @click="addTask">追加</v-btn>
+                <v-btn class="ma-3" min-width="120" @click="cancel">キャンセル</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card>
         </v-flex>
       </v-layout>
-    </v-card>
+    </v-container>
   </div>
 </template>
 
@@ -94,6 +100,25 @@ export default class NewTask extends Vue {
       this.keyDownCode_ = 0
     }
   }
+
+  private get layoutAttributes(): {} {
+    // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
+    switch (this.$vuetify.breakpoint.name) {
+      case 'xs':
+        return { column: true }
+      case 'sm':
+        return { row: true }
+      case 'md':
+        return { row: true }
+      case 'lg':
+        return { row: true }
+      case 'xl':
+        return { row: true }
+      default:
+        return { row: true }
+    }
+  }
+
 }
 </script>
 
