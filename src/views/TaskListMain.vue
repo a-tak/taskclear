@@ -142,6 +142,10 @@ export default class TaskListMain extends Vue {
     return this.snackbarDisplay_
   }
 
+  public set snackbarDisplay(value: boolean) {
+    this.snackbarDisplay_ = value
+  }
+
   public get snackbarText(): string {
     return this.snackbarText_
   }
