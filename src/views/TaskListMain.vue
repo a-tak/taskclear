@@ -36,7 +36,7 @@
               </v-menu>
             </v-card>
           </v-flex>
-          <v-flex>
+          <v-flex class="elevation-5">
             <EstimateList></EstimateList>
           </v-flex>
         </v-layout>
@@ -90,7 +90,7 @@
       </v-btn>
     </v-snackbar>
     <div>
-      <Footer></Footer>
+      <Footer class="elevation-5"></Footer>
     </div>
   </div>
 </template>
@@ -102,10 +102,10 @@
   z-index: 100;
 }
 .listSp {
-  padding-top: 190px;
+  padding-top: 180px;
 }
 .listPc {
-  padding-top: 110px;
+  padding-top: 100px;
 }
 </style>
 

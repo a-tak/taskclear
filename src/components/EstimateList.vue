@@ -1,6 +1,6 @@
 <template>
   <div id="estimate-list">
-    <v-card class="elevation-3 pa-1">
+    <v-card>
       <v-layout row>
         <v-flex>
           <v-layout column>

@@ -1,7 +1,7 @@
 <template>
   <v-footer
     color="primary"
-    class="mt-2 elevation-5"
+    class="mt-2"
   >
     <v-card
       flat
