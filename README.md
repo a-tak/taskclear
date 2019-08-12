@@ -11,7 +11,8 @@
   * https://github.com/a-tak/taskclear/tree/master/help/README.md
 
 ## リリースノート
-
+* 2019-08-12 ver. 0.11.0
+  * Vuetify2.0導入に伴ってUIを修正
 * 2019-06-22 ver. 0.10.2
   * オフライン対応のキャンセル(速度面の問題が出たため)
 * 2019-06-22 ver. 0.10.0
