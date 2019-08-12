@@ -13,7 +13,6 @@
       <v-slide-y-transition
         class="py-0"
         group
-        tag="v-list"
       >
         <SectionRow
           v-for="(section, index) in sections"
