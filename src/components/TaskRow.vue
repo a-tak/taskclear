@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl text-xs-center pa-2>
+  <v-container grid-list-md text-left pa-1>
     <div id="next-task" v-if="task_.isNext === true"></div>
     <v-layout align-center row v-if="!isEdit_">
       <v-flex>
@@ -29,11 +29,11 @@
               </v-btn>
             </v-flex>
             <!-- TaskName -->
-            <v-flex nowrap xs7 sm6 md7 lg8 xl8>
-              <v-card-actions @click.stop="startEdit()">
+            <v-flex nowrap xs7 sm6 md7 lg8 xl8 pa-0>
+              <v-card-actions @click.stop="startEdit()" class="pa-0">
                 <div
                   v-bind:class="{ done: task_.endTime!=undefined}"
-                  class="font-weight-bold"
+                  class="font-weight-bold subtitle-1"
                 >{{ task_.title }}</div>
                 <!-- note -->
                 <v-btn icon @click.stop="noteDialog_=true">
@@ -42,7 +42,7 @@
                 </v-btn>
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
-                <span>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
+                <span class="body-2">開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
               </v-card-actions>
             </v-flex>
             <!-- spacer -->
