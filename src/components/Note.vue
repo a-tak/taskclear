@@ -2,17 +2,17 @@
   <v-layout>
     <v-flex>
       <v-card>
-        <v-card-title class="title teal lighten-3 white--text">メモ</v-card-title>
+        <v-card-title class="titlewhite--text primary">メモ</v-card-title>
         <v-layout v-if="!isEdit_" ma-3>
           <v-flex>
             <v-card-text>
-              <div class="wrap body-1 text-xs-left">
+              <div class="wrap body-1 text-left">
                 {{ note }}
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn icon @click="isEdit_=true"><v-icon color="grey darken-1">edit</v-icon></v-btn>
-              <v-btn icon @click="closeDialog()" ><v-icon color="grey darken-1">close</v-icon></v-btn>
+              <v-btn icon @click="isEdit_=true"><v-icon color="deactive">edit</v-icon></v-btn>
+              <v-btn icon @click="closeDialog()" ><v-icon color="deactive">close</v-icon></v-btn>
             </v-card-actions>
           </v-flex>
         </v-layout>
@@ -30,8 +30,8 @@
               hint="control + enterで保存"
               ></v-textarea>
             <v-card-actions>
-              <v-btn icon @click="save()"><v-icon color="grey darken-1">check</v-icon></v-btn>
-              <v-btn icon @click="cancel()"><v-icon color="grey darken-1">cancel</v-icon></v-btn>
+              <v-btn icon @click="save()"><v-icon color="deactive">check</v-icon></v-btn>
+              <v-btn icon @click="cancel()"><v-icon color="deactive">cancel</v-icon></v-btn>
             </v-card-actions>
           </v-flex>
         </v-layout>

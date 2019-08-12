@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md text-xs-center pa-2>
+  <v-container grid-list-md text-left pa-1>
     <div id="next-task" v-if="task_.isNext === true"></div>
     <v-layout align-center row v-if="!isEdit_">
       <v-flex>
@@ -14,7 +14,7 @@
                 @click.stop="startTask(task_)"
                 v-if="task_.isDoing === false && task_.endTime==undefined"
               >
-                <v-icon color="purple">play_circle_filled</v-icon>
+                <v-icon color="accent">play_circle_filled</v-icon>
               </v-btn>
               <v-btn
                 icon
@@ -22,27 +22,27 @@
                 @click.stop="startTask(task_)"
                 v-else-if="task_.isDoing === false && task_.endTime!=undefined"
               >
-                <v-icon color="grey darken-1">play_circle_filled</v-icon>
+                <v-icon color="deactive">play_circle_filled</v-icon>
               </v-btn>
               <v-btn icon ripple @click.stop="stopTask(task_)" v-else-if="task_.isDoing === true">
-                <v-icon color="purple">pause_circle_filled</v-icon>
+                <v-icon color="accent">pause_circle_filled</v-icon>
               </v-btn>
             </v-flex>
             <!-- TaskName -->
-            <v-flex nowrap xs9 sm15 md15 lg15 xl15>
-              <v-card-actions @click.stop="startEdit()">
+            <v-flex nowrap xs7 sm6 md7 lg8 xl8 pa-0>
+              <v-card-actions @click.stop="startEdit()" class="pa-0">
                 <div
                   v-bind:class="{ done: task_.endTime!=undefined}"
-                  class="font-weight-bold"
+                  class="font-weight-bold subtitle-1"
                 >{{ task_.title }}</div>
                 <!-- note -->
                 <v-btn icon @click.stop="noteDialog_=true">
-                  <v-icon v-if="task_.note===''" color="grey darken-1">note</v-icon>
-                  <v-icon v-if="task_.note!==''" color="purple">note</v-icon>
+                  <v-icon v-if="task_.note===''" color="deactive">note</v-icon>
+                  <v-icon v-if="task_.note!==''" color="accent">note</v-icon>
                 </v-btn>
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
-                <span>開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
+                <span class="body-2">開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
               </v-card-actions>
             </v-flex>
             <!-- spacer -->
@@ -50,27 +50,28 @@
               <v-spacer></v-spacer>
             </v-flex>
             <!-- icon -->
-            <v-flex xs2 sm4 md4 lg4 xl3>
+            <v-flex xs2 sm4 md3 lg2 xl2>
               <v-layout row wrap>
                 <v-flex xs6 sm2 md2 lg2 xl2>
                   <v-menu
                     :close-on-content-click="true"
                     v-model="displayedTaskCal"
                     :nudge-right="40"
-                    lazy
                     transition="scale-transition"
                     offset-y
                     full-width
                     min-width="290px"
                   >
-                    <v-btn
-                      slot="activator"
-                      icon
-                      ripple
-                      @click.stop="displayedTaskCal = !displayedTaskCal"
-                    >
-                      <v-icon color="grey darken-1">calendar_today</v-icon>
-                    </v-btn>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-on="on"
+                        icon
+                        ripple
+                        @click.stop="displayedTaskCal = !displayedTaskCal"
+                      >
+                        <v-icon color="accent">calendar_today</v-icon>
+                      </v-btn>
+                    </template>
                     <v-date-picker
                       v-model="targetDate"
                       @input="selectDate()"
@@ -80,20 +81,30 @@
                   </v-menu>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg2 xl2>
-                  <v-btn icon ripple @click.stop="copyTask(task_)">
-                    <v-icon color="grey darken-1">file_copy</v-icon>
-                  </v-btn>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn v-on="on" icon ripple @click.stop="copyTask(task_)">
+                        <v-icon color="accent">file_copy</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>タスクを複写</span>
+                  </v-tooltip>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg2 xl2>
                   <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
-                    <v-icon v-if="task_.repeatId===''" color="grey darken-1">repeat</v-icon>
-                    <v-icon v-if="task_.repeatId!==''" color="purple">repeat</v-icon>
+                    <v-icon v-if="task_.repeatId===''" color="deactive">repeat</v-icon>
+                    <v-icon v-if="task_.repeatId!==''" color="accent">repeat</v-icon>
                   </v-btn>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg2 xl2>
-                  <v-btn icon ripple @click.stop="deleteTask(task_)">
-                    <v-icon color="grey darken-1">delete</v-icon>
-                  </v-btn>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn v-on="on" icon ripple @click.stop="deleteTask(task_)">
+                        <v-icon color="accent">delete</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>タスクを削除</span>
+                  </v-tooltip>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -269,9 +280,9 @@ export default class TaskRow extends Vue {
 
   get rowColor(): {} {
     if (this.task_.estimateSeparateStart === true) {
-      return { color: 'blue lighten-4' }
+      return { color: 'secondary lighten-1' }
     } else if (this.task_.estimateSeparateEnd === true) {
-      return { color: 'amber accent-1' }
+      return { color: 'secondary' }
     } else {
       return { color: 'white' }
     }

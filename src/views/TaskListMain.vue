@@ -12,19 +12,21 @@
                 :close-on-content-click="false"
                 v-model="menu2"
                 :nudge-right="40"
-                lazy
                 transition="scale-transition"
                 offset-y
                 full-width
                 min-width="290px"
               >
-                <v-text-field
-                  slot="activator"
-                  v-model="targetDate"
-                  label="日付を選択してください"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-on="on"
+                    v-model="targetDate"
+                    label="日付を選択してください"
+                    prepend-icon="event"
+                    readonly
+                    class="pt-5 pl-5 pr-5"
+                  ></v-text-field>
+                </template>
                 <v-date-picker
                   v-model="targetDate"
                   @input="menu2 = false"
@@ -34,22 +36,22 @@
               </v-menu>
             </v-card>
           </v-flex>
-          <v-flex>
+          <v-flex class="elevation-5">
             <EstimateList></EstimateList>
           </v-flex>
         </v-layout>
       </div>
     </div>
-    <v-btn fab dark color="red" fixed floating bottom right @click="addTask()">
       <v-tooltip top>
         <template v-slot:activator="{ on }">
-          <v-icon dark v-on="on">add</v-icon>
-        </template>
+          <v-btn v-on="on" fab dark color="accent" fixed floating bottom right @click="addTask()">
+            <v-icon dark>add</v-icon>
+          </v-btn>
+          </template>
         <span>Aキーでもタスク追加できます</span>
       </v-tooltip>
-    </v-btn>
     <div id="list" v-bind="listClass">
-      <v-slide-y-transition class="py-0" group tag="v-list">
+      <v-slide-y-transition class="py-0" group>
         <TaskRow
           v-for="(task, index) in tasks"
           :key="task.id"
@@ -80,15 +82,15 @@
     >
       {{ snackbarText }}
       <v-btn
-        color="pink"
-        flat
+        color="accent"
+        text
         @click="undoTask()"
       >
         元に戻す
       </v-btn>
     </v-snackbar>
     <div>
-      <Footer></Footer>
+      <Footer class="elevation-5"></Footer>
     </div>
   </div>
 </template>
@@ -100,10 +102,10 @@
   z-index: 100;
 }
 .listSp {
-  padding-top: 210px;
+  padding-top: 180px;
 }
 .listPc {
-  padding-top: 150px;
+  padding-top: 100px;
 }
 </style>
 
@@ -138,6 +140,10 @@ export default class TaskListMain extends Vue {
 
   public get snackbarDisplay(): boolean {
     return this.snackbarDisplay_
+  }
+
+  public set snackbarDisplay(value: boolean) {
+    this.snackbarDisplay_ = value
   }
 
   public get snackbarText(): string {
@@ -474,10 +480,10 @@ export default class TaskListMain extends Vue {
     let offsetValue: number = 0
     switch (this.$vuetify.breakpoint.name) {
       case 'xs':
-        offsetValue = 480
+        offsetValue = 320
         break
       default  :
-        offsetValue = 325
+        offsetValue = 185
     }
     this.$nextTick(() => {
         this.$vuetify.goTo('#next-task', {

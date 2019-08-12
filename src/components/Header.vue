@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar color="teal lighten-3" id="header" class="elevation-5">
+  <v-app-bar app color="primary" id="header">
     <v-img src="/img/top-logo.svg" aspect-ratio="1" max-height="30px" max-width="30px"></v-img>
     <v-spacer></v-spacer>
     <v-btn id="go-doing"
@@ -9,28 +9,30 @@
       <v-icon>forward</v-icon>
     </v-btn>
     <v-menu offset-y class="menu">
-      <v-btn id="more"
-        slot="activator"
-        icon
-      >
-        <v-icon>more_vert</v-icon>
-      </v-btn>
+      <template v-slot:activator="{ on }">
+        <v-btn id="more"
+          v-on="on"
+          icon
+        >
+          <v-icon>more_vert</v-icon>
+        </v-btn>
+      </template>
       <v-list>
-        <v-list-tile @click="jumpToTaskList()">
-          <v-list-tile-title>タスクリスト</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="jumpToSectionSetting()">
-          <v-list-tile-title>セクション設定</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="jumpToHelp()">
-          <v-list-tile-title>ヘルプ</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="logout()">
-          <v-list-tile-title>ログアウト</v-list-tile-title>
-        </v-list-tile>
+        <v-list-item @click="jumpToTaskList()">
+          <v-list-item-title>タスクリスト</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="jumpToSectionSetting()">
+          <v-list-item-title>セクション設定</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="jumpToHelp()">
+          <v-list-item-title>ヘルプ</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="logout()">
+          <v-list-item-title>ログアウト</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-menu>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <style scoped>

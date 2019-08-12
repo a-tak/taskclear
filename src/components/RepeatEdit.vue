@@ -6,49 +6,50 @@
         <v-flex ml-3>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
             <v-flex>
-              <v-checkbox v-model="selectedDay_" label="月曜日" value="1"></v-checkbox>
+              <v-checkbox hide-details v-model="selectedDay_" label="月曜日" value="1"></v-checkbox>
             </v-flex>
             <v-flex>
-              <v-checkbox v-model="selectedDay_" label="火曜日" value="2"></v-checkbox>
+              <v-checkbox hide-details v-model="selectedDay_" label="火曜日" value="2"></v-checkbox>
             </v-flex>
             <v-flex>
-              <v-checkbox v-model="selectedDay_" label="水曜日" value="3"></v-checkbox>
+              <v-checkbox hide-details v-model="selectedDay_" label="水曜日" value="3"></v-checkbox>
             </v-flex>
             <v-flex>
-              <v-checkbox v-model="selectedDay_" label="木曜日" value="4"></v-checkbox>
+              <v-checkbox hide-details v-model="selectedDay_" label="木曜日" value="4"></v-checkbox>
             </v-flex>
             <v-flex>
-              <v-checkbox v-model="selectedDay_" label="金曜日" value="5"></v-checkbox>
+              <v-checkbox hide-details v-model="selectedDay_" label="金曜日" value="5"></v-checkbox>
             </v-flex>
             <v-flex>
-              <v-checkbox v-model="selectedDay_" label="土曜日" value="6"></v-checkbox>
+              <v-checkbox hide-details v-model="selectedDay_" label="土曜日" value="6"></v-checkbox>
             </v-flex>
             <v-flex>
-              <v-checkbox v-model="selectedDay_" label="日曜日" value="0"></v-checkbox>
+              <v-checkbox hide-details v-model="selectedDay_" label="日曜日" value="0"></v-checkbox>
             </v-flex>
           </v-layout>
         </v-flex>
         <v-flex>
-          <v-layout column fill-height align-center justify-center>
+          <v-layout column fill-height align-center justify-center text-left>
             <v-flex>
-              <span>リピート開始日</span>
+              <span class="title">リピート開始日</span>
               <v-menu
                 :close-on-content-click="false"
                 v-model="menufrom_"
                 :nudge-right="40"
-                lazy
                 transition="scale-transition"
                 offset-y
                 full-width
                 min-width="290px"
               >
-                <v-text-field
-                  slot="activator"
-                  v-model="dateFrom"
-                  label="開始日"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-on="on"
+                    v-model="dateFrom"
+                    label="開始日"
+                    prepend-icon="event"
+                    readonly
+                  ></v-text-field>
+                </template>
                 <v-date-picker
                   v-model="dateFrom"
                   @input="menufrom_ = false"
@@ -58,7 +59,7 @@
               </v-menu>
             </v-flex>
             <v-flex>
-              <span>見積時間(分)</span>
+              <span class="title">見積時間(分)</span>
               <v-text-field
                 type="number"
                 placeholder="見積時間(分)"
@@ -72,7 +73,7 @@
               ></v-text-field>
             </v-flex>
             <v-flex>
-              <span>予定時間帯</span>
+              <span class="title">予定時間帯</span>
               <v-combobox
                 type="number"
                 placeholder="予定時間帯"
@@ -86,27 +87,24 @@
               ></v-combobox>
             </v-flex>
             <v-flex>
+              <span class="title">メモ編集</span>
               <v-btn icon @click.stop="noteDialog_=true">
-                <v-icon v-if="note_===''" color="grey darken-1">note</v-icon>
-                <v-icon v-if="note_!==''" color="purple">note</v-icon>
+                <v-icon v-if="note_===''" color="deactive">note</v-icon>
+                <v-icon v-if="note_!==''" color="accent">note</v-icon>
               </v-btn>
             </v-flex>
             <v-flex>
-              <v-checkbox v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
+              <v-checkbox hide-details v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
             </v-flex>
             <v-flex>
-              <v-checkbox v-model="estimateSeparateEnd_" label="見積の区切りのタスクにする"></v-checkbox>
+              <v-checkbox hide-details v-model="estimateSeparateEnd_" label="見積の区切りのタスクにする"></v-checkbox>
             </v-flex>
           </v-layout>
         </v-flex>
       </v-layout>
-      <v-layout row fill-height align-center justify-center>
-        <v-flex>
-          <v-btn @click.stop="save">保存</v-btn>
-        </v-flex>
-        <v-flex>
-          <v-btn @click.stop="cancel">キャンセル</v-btn>
-        </v-flex>
+      <v-layout row fill-height align-end justify-end>
+        <v-btn class="ma-3 accent" @click.stop="save">保存</v-btn>
+        <v-btn class="ma-3" @click.stop="cancel">キャンセル</v-btn>
       </v-layout>
     </v-card>
     <v-dialog v-model="noteDialog_" max-width="500px">

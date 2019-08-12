@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app >
     <v-content>
       <v-container fluid pa-0>
         <router-view/>

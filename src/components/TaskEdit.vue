@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-md text-xs-center pa-1>
     <v-layout row wrap>
-      <v-flex>
+      <v-flex text-left>
         <v-card>
           <v-card-title class="title teal lighten-3 white--text">タスク編集</v-card-title>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
@@ -22,10 +22,10 @@
               ></v-text-field>
             </v-flex>
             <v-flex shrink>
-              <v-checkbox v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
+              <v-checkbox hide-details v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
             </v-flex>
             <v-flex shrink>
-              <v-checkbox v-model="estimateSeparateEnd_" label="見積の区切りのタスクにする"></v-checkbox>
+              <v-checkbox hide-details v-model="estimateSeparateEnd_" label="見積の区切りのタスクにする"></v-checkbox>
             </v-flex>
           </v-layout>
           <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
@@ -108,13 +108,9 @@
               ></v-text-field>
             </v-flex>
           </v-layout>
-          <v-layout row fill-height align-center justify-center>
-            <v-flex>
-              <v-btn @click.stop="save">保存</v-btn>
-            </v-flex>
-            <v-flex>
-              <v-btn v-bind:id="'task-edit-cancelbtn-' + editTask_.id" @click.stop="cancel">キャンセル</v-btn>
-            </v-flex>
+          <v-layout row fill-height align-end justify-end pa-0>
+            <v-btn class="ma-3 accent" @click.stop="save">保存</v-btn>
+            <v-btn class="ma-3" v-bind:id="'task-edit-cancelbtn-' + editTask_.id" @click.stop="cancel">キャンセル</v-btn>
           </v-layout>
         </v-card>
       </v-flex>
