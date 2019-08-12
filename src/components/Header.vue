@@ -18,18 +18,18 @@
         </v-btn>
       </template>
       <v-list>
-        <v-list-tile @click="jumpToTaskList()">
-          <v-list-tile-title>タスクリスト</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="jumpToSectionSetting()">
-          <v-list-tile-title>セクション設定</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="jumpToHelp()">
-          <v-list-tile-title>ヘルプ</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="logout()">
-          <v-list-tile-title>ログアウト</v-list-tile-title>
-        </v-list-tile>
+        <v-list-item @click="jumpToTaskList()">
+          <v-list-item-title>タスクリスト</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="jumpToSectionSetting()">
+          <v-list-item-title>セクション設定</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="jumpToHelp()">
+          <v-list-item-title>ヘルプ</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="logout()">
+          <v-list-item-title>ログアウト</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
