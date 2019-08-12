@@ -18,13 +18,15 @@
                 full-width
                 min-width="290px"
               >
-                <v-text-field
-                  slot="activator"
-                  v-model="targetDate"
-                  label="日付を選択してください"
-                  prepend-icon="event"
-                  readonly
-                ></v-text-field>
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-on="on"
+                    v-model="targetDate"
+                    label="日付を選択してください"
+                    prepend-icon="event"
+                    readonly
+                  ></v-text-field>
+                </template>
                 <v-date-picker
                   v-model="targetDate"
                   @input="menu2 = false"
