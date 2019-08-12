@@ -81,9 +81,14 @@
                   </v-menu>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg2 xl2>
-                  <v-btn icon ripple @click.stop="copyTask(task_)">
-                    <v-icon color="accent">file_copy</v-icon>
-                  </v-btn>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn v-on="on" icon ripple @click.stop="copyTask(task_)">
+                        <v-icon color="accent">file_copy</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>タスクを複写</span>
+                  </v-tooltip>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg2 xl2>
                   <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
@@ -92,9 +97,14 @@
                   </v-btn>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg2 xl2>
-                  <v-btn icon ripple @click.stop="deleteTask(task_)">
-                    <v-icon color="accent">delete</v-icon>
-                  </v-btn>
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn v-on="on" icon ripple @click.stop="deleteTask(task_)">
+                        <v-icon color="accent">delete</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>タスクを削除</span>
+                  </v-tooltip>
                 </v-flex>
               </v-layout>
             </v-flex>

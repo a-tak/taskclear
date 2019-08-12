@@ -22,7 +22,7 @@
                     </v-btn>
                 </v-flex>
                 <v-flex xs4 sm2 md1>
-                  <v-tooltip bottom  v-if="index_!==0">
+                  <v-tooltip top v-if="index_!==0">
                     <template v-slot:activator="{ on }">
                       <v-btn
                         v-on="on"
