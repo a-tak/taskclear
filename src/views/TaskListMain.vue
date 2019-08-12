@@ -51,7 +51,7 @@
       </v-tooltip>
     </v-btn>
     <div id="list" v-bind="listClass">
-      <v-slide-y-transition class="py-0" group tag="v-list">
+      <v-slide-y-transition class="py-0" group>
         <TaskRow
           v-for="(task, index) in tasks"
           :key="task.id"
