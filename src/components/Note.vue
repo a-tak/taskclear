@@ -11,8 +11,8 @@
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn icon @click="isEdit_=true"><v-icon color="deactive">edit</v-icon></v-btn>
-              <v-btn icon @click="closeDialog()" ><v-icon color="deactive">close</v-icon></v-btn>
+              <v-btn icon @click="isEdit_=true"><v-icon color="accent">edit</v-icon></v-btn>
+              <v-btn icon @click="closeDialog()" ><v-icon color="accent">close</v-icon></v-btn>
             </v-card-actions>
           </v-flex>
         </v-layout>
@@ -30,8 +30,8 @@
               hint="control + enterで保存"
               ></v-textarea>
             <v-card-actions>
-              <v-btn icon @click="save()"><v-icon color="deactive">check</v-icon></v-btn>
-              <v-btn icon @click="cancel()"><v-icon color="deactive">cancel</v-icon></v-btn>
+              <v-btn icon @click="save()"><v-icon color="accent">check</v-icon></v-btn>
+              <v-btn icon @click="cancel()"><v-icon color="accent">cancel</v-icon></v-btn>
             </v-card-actions>
           </v-flex>
         </v-layout>

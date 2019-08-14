@@ -103,8 +103,8 @@
         </v-flex>
       </v-layout>
       <v-layout row fill-height align-end justify-end>
-        <v-btn class="ma-3 accent" @click.stop="save">保存</v-btn>
-        <v-btn class="ma-3" @click.stop="cancel">キャンセル</v-btn>
+        <v-btn class="ma-3 accent" min-width="120" @click.stop="save">保存</v-btn>
+        <v-btn class="ma-3" min-width="120" @click.stop="cancel">キャンセル</v-btn>
       </v-layout>
     </v-card>
     <v-dialog v-model="noteDialog_" max-width="500px">

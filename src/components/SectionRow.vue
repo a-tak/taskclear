@@ -16,12 +16,12 @@
             </v-flex>
             <v-flex md3 xs3 sm3>
               <v-layout row>
-                <v-flex xs4 sm2 md1>
+                <v-flex xs4 sm2 md2 lg2 lx2>
                   <v-btn icon ripple @click.stop="deleteSection(section_)">
                       <v-icon color="accent">delete</v-icon>
                     </v-btn>
                 </v-flex>
-                <v-flex xs4 sm2 md1>
+                <v-flex xs4 sm2 md2 lg2 lx2>
                   <v-tooltip top v-if="index_!==0">
                     <template v-slot:activator="{ on }">
                       <v-btn
