@@ -52,7 +52,7 @@
             <!-- icon -->
             <v-flex xs2 sm4 md3 lg2 xl2>
               <v-layout row wrap>
-                <v-flex xs6 sm2 md2 lg2 xl2>
+                <v-flex xs6 sm2 md2 lg3 xl3>
                   <v-menu
                     :close-on-content-click="true"
                     v-model="displayedTaskCal"
@@ -80,7 +80,7 @@
                     ></v-date-picker>
                   </v-menu>
                 </v-flex>
-                <v-flex xs6 sm2 md2 lg2 xl2>
+                <v-flex xs6 sm2 md2 lg3 xl3>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-btn v-on="on" icon ripple @click.stop="copyTask(task_)">
@@ -90,13 +90,13 @@
                     <span>タスクを複写</span>
                   </v-tooltip>
                 </v-flex>
-                <v-flex xs6 sm2 md2 lg2 xl2>
+                <v-flex xs6 sm2 md2 lg3 xl3>
                   <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
                     <v-icon v-if="task_.repeatId===''" color="deactive">repeat</v-icon>
                     <v-icon v-if="task_.repeatId!==''" color="accent">repeat</v-icon>
                   </v-btn>
                 </v-flex>
-                <v-flex xs6 sm2 md2 lg2 xl2>
+                <v-flex xs6 sm2 md2 lg3 xl3>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-btn v-on="on" icon ripple @click.stop="deleteTask(task_)">

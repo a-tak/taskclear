@@ -109,8 +109,8 @@
             </v-flex>
           </v-layout>
           <v-layout row fill-height align-end justify-end pa-0>
-            <v-btn class="ma-3 accent" @click.stop="save">保存</v-btn>
-            <v-btn class="ma-3" v-bind:id="'task-edit-cancelbtn-' + editTask_.id" @click.stop="cancel">キャンセル</v-btn>
+            <v-btn class="ma-3 accent" min-width="120" @click.stop="save">保存</v-btn>
+            <v-btn class="ma-3" min-width="120" v-bind:id="'task-edit-cancelbtn-' + editTask_.id" @click.stop="cancel">キャンセル</v-btn>
           </v-layout>
         </v-card>
       </v-flex>
