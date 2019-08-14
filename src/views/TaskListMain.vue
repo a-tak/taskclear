@@ -240,16 +240,22 @@ export default class TaskListMain extends Vue {
       this.$store.getters['taskList/targetDate'],
     )
     await rc.creaetRepeat(1)
+
     // 今日のデータを読み込み(同期的に)
     const tc: TaskController = await FirestoreUtil.loadTasks(
       self.$store.getters['taskList/user'].uid,
       self.$store.getters['taskList/targetDate'],
     )
     tc.sort()
+
     self.$store.commit('taskList/setTaskCtrl', tc)
 
+    // 実行中タスクにジャンプ
+    this.jumpToNextTask()
+
     this.reCreateRepeatTask()
-  }
+
+}
 
   private async reCreateRepeatTask(): Promise<void> {
     // 非同期で明日以降1週間分のデータを作る
