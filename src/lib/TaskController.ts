@@ -54,6 +54,12 @@ export default class TaskController {
     // 開始前タスクの中の一番目のタスクに「次のタスクフラグ」をつける
     if (beforeStartTasks.length > 0) {
       beforeStartTasks[0].isNext = true
+    // なければ実行中のタスクにフラグをつける
+    } else if (doingTask.length > 0) {
+      doingTask[0].isNext = true
+    // それもなければ完了したタスクの一番最後のタスクにフラグをつける
+    } else if (doneTasks.length > 0) {
+      doneTasks[doneTasks.length - 1].isNext = true
     }
 
     this.tasks_ = doneTasks.concat(doingTask).concat(beforeStartTasks)
