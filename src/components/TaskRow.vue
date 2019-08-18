@@ -50,7 +50,12 @@
                 </v-btn>
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
-                <span class="body-2">開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
+                <v-layout align-center justify-space-between row fill-height>
+                  <span v-if="multiLine === false" class="body-2">開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
+                  <span v-if="multiLine === true" class="body-2">開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}}</span>
+                  <span v-if="multiLine === true" class="body-2">実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分</span>
+                  <span v-if="multiLine === true" class="body-2">予定時間帯: {{ getTime(task_.date) }}〜</span>
+                </v-layout>
               </v-card-actions>
             </v-flex>
             <!-- spacer -->
@@ -287,6 +292,18 @@ export default class TaskRow extends Vue {
         return { row: true }
       default:
         return { row: true }
+    }
+  }
+
+  private get multiLine(): boolean {
+    // 画面サイズによってツールバーとのマージンを変更
+    switch (this.$vuetify.breakpoint.name) {
+        case 'xs': return true
+        case 'sm': return false
+        case 'md': return false
+        case 'lg': return false
+        case 'xl': return false
+        default  : return false
     }
   }
 
