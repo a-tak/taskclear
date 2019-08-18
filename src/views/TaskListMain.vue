@@ -339,6 +339,10 @@ export default class TaskListMain extends Vue {
     this.$store.commit('taskList/sortTask')
 
     this.save()
+
+    this.$nextTick(() => {
+      task.isProcessing = false
+    })
   }
 
   private save(): void {
@@ -418,6 +422,9 @@ export default class TaskListMain extends Vue {
   private stopTask(task: Task): void {
     this.changeStopTask(task)
     this.save()
+    this.$nextTick(() => {
+      task.isProcessing = false
+    })
   }
 
   /**
