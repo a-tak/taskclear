@@ -31,6 +31,7 @@ export default class Task {
   private createTime_: Date
   private updateTime_: Date
   private note_: string
+  private isProcessing_: boolean
 
   constructor(date: Date, title: string) {
     this.id_ = date.getFullYear() +
@@ -55,6 +56,7 @@ export default class Task {
     this.createTime_ = new Date()
     this.updateTime_ = this.createTime_
     this.note_ = ''
+    this.isProcessing_ = false
   }
 
   get id(): string { return this.id_ }
@@ -82,6 +84,7 @@ export default class Task {
   public set repeatId(value: string) {
     this.repeatId_ = value
   }
+
   /**
    * 削除フラグ(論理削除)
    */
@@ -193,6 +196,18 @@ export default class Task {
   }
 
   /**
+   * 処理中フラグ
+   * 開始・終了ボタンの二重イベント防止
+   * DBには保存しない表示制御用
+   */
+  public get isProcessing(): boolean {
+    return this.isProcessing_
+  }
+  public set isProcessing(value: boolean) {
+    this.isProcessing_ = value
+  }
+
+  /**
    * 中断タスクを作成
    * 元のタスクの見積から実績を引いた残り時間を入れて新たなタスクを戻す
    */
@@ -220,6 +235,8 @@ export default class Task {
     newTask.estimateSeparateEnd = this.estimateSeparateEnd
     // メモはそのままコピー
     newTask.note = this.note_
+    // 処理フラグは常にオフ
+    newTask.isProcessing = false
     return newTask
   }
 
@@ -255,6 +272,8 @@ export default class Task {
     newTask.createTime = new Date(this.createTime_)
     newTask.updateTime = new Date(this.updateTime_)
     newTask.note = this.note_
+    // タイミングによって変なフラグ状態をコピーしてしまいたくないので常にFalseにしてみる
+    newTask.isProcessing = false
 
     return newTask
 

@@ -9,6 +9,7 @@
             <v-flex xs2 sm1 md1 lg1 xl1>
               <v-btn
                 v-bind:id="'start-btn-' + task_.id"
+                v-bind:disabled="task_.isProcessing"
                 icon
                 ripple
                 @click.stop="startTask(task_)"
@@ -17,6 +18,7 @@
                 <v-icon color="accent">play_circle_filled</v-icon>
               </v-btn>
               <v-btn
+                v-bind:disabled="task_.isProcessing"
                 icon
                 ripple
                 @click.stop="startTask(task_)"
@@ -24,7 +26,13 @@
               >
                 <v-icon color="deactive">play_circle_filled</v-icon>
               </v-btn>
-              <v-btn icon ripple @click.stop="stopTask(task_)" v-else-if="task_.isDoing === true">
+              <v-btn
+                v-bind:disabled="task_.isProcessing"
+                icon
+                ripple
+                @click.stop="stopTask(task_)"
+                v-else-if="task_.isDoing === true"
+              >
                 <v-icon color="accent">pause_circle_filled</v-icon>
               </v-btn>
             </v-flex>
@@ -192,11 +200,15 @@ export default class TaskRow extends Vue {
 
   @Emit('clickStartButtomEvent')
   // tslint:disable-next-line:no-empty
-  public startTask(task: Task): void {}
+  public startTask(task: Task): void {
+    task.isProcessing = true
+  }
 
   @Emit('clickStopButtomEvent')
   // tslint:disable-next-line:no-empty
-  public stopTask(task: Task): void {}
+  public stopTask(task: Task): void {
+    task.isProcessing = true
+  }
 
   @Emit('clickDeleteButtomEvent')
   // tslint:disable-next-line:no-empty
