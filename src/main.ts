@@ -5,6 +5,7 @@ import store from '@/store/Store'
 import './registerServiceWorker'
 import vuetify from './plugins/vuetify'
 import firebase from 'firebase'
+import 'firebase/performance'
 import { RouteRecord } from 'vue-router'
 
 Vue.config.productionTip = false
@@ -23,8 +24,7 @@ firebase.initializeApp(config)
 //     // tslint:disable-next-line: no-console
 //     console.error(err.code)
 //   })
-
-
+const perf = firebase.performance()
 const firestore = firebase.firestore()
 
 new Vue({
