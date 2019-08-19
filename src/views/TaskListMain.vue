@@ -495,6 +495,9 @@ export default class TaskListMain extends Vue {
       case 'xs':
         offsetValue = 320
         break
+      case 'sm':
+        offsetValue = 270
+        break
       default  :
         offsetValue = 185
     }
