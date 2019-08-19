@@ -4,8 +4,10 @@ import router from './router'
 import store from '@/store/Store'
 import './registerServiceWorker'
 import vuetify from './plugins/vuetify'
-import firebase from 'firebase'
+import * as firebase from 'firebase/app'
 import 'firebase/performance'
+import 'firebase/auth'
+import 'firebase/firestore'
 import { RouteRecord } from 'vue-router'
 
 Vue.config.productionTip = false
@@ -17,6 +19,7 @@ const config = {
   projectId: process.env.VUE_APP_PROJECT_ID,
   storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_APP_ID,
 }
 firebase.initializeApp(config)
 // firebase.firestore().enablePersistence()
