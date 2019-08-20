@@ -249,9 +249,9 @@ export default class TaskEdit extends Vue {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
       case 'xs':
-        return { column: true }
+        return { row: true }
       case 'sm':
-        return { column: true }
+        return { row: true }
       case 'md':
         return { row: true }
       case 'lg':
