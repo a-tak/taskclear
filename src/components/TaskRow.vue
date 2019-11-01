@@ -156,6 +156,7 @@
 <style scoped>
 .done {
   text-decoration: line-through;
+  color: #aaaaaa;
 }
 </style>
 
