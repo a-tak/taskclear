@@ -97,6 +97,8 @@ export default class NewTask extends Vue {
   private keyUpEnter(): void {
     if (this.keyDownCode_ === 13) {
       this.addTask()
+      // 新しいVuetifyからblurイベントが発生しなくなったので強制発火
+      this.endEditTaskName()
       this.keyDownCode_ = 0
     }
   }
