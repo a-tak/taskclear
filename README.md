@@ -10,7 +10,7 @@
 * ヘルプ作成しました
   * https://github.com/a-tak/taskclear/tree/master/help/README.md
 
-## リリースノート
+## リリースノート (以後のリリースノートはGithubの「リリース」の中に記載していく)
 * 2019-08-12 ver. 0.11.0
   * Vuetify2.0導入に伴ってUIを修正
 * 2019-08-11 ver. 0.10.2
