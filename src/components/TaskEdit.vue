@@ -219,6 +219,7 @@ export default class TaskEdit extends Vue {
   private cancel(): void {
     this.editTask_ = this.backupedTask_
     this.endEdit(this.backupedTask_)
+    this.endEditTaskName()
   }
 
   private created(): void {
@@ -274,6 +275,7 @@ export default class TaskEdit extends Vue {
     if (this.keyDownCode_ === 13) {
       this.save()
       this.keyDownCode_ = 0
+      this.endEditTaskName()
     }
   }
 }

@@ -95,12 +95,14 @@ export default class Note extends Vue {
     this.endEdit(this.editNote_)
     // 次の編集に備える
     this.isEdit_ = false
+    this.endEditTaskName()
   }
 
   private cancel(): void {
     // 元に戻す
     this.editNote_ = this.note_
     this.isEdit_ = false
+    this.endEditTaskName()
   }
 }
 </script>
