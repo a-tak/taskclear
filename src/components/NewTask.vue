@@ -73,6 +73,8 @@ export default class NewTask extends Vue {
   public cancel(): void {
     // イベント発生
     this.addEnd()
+    // 新しいVuetifyからblurイベントが発生しなくなったので強制発火
+    this.endEditTaskName()
   }
 
   @Emit('start-edit-task-name-event')
