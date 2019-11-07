@@ -40,7 +40,7 @@
     "eslint-plugin-vuetify": "^1.0.0-beta.5",
     "material-design-icons-iconfont": "^5.0.1",
     "sass": "^1.23.3",
-    "sass-loader": "^7.3.1",
+    "sass-loader": "^8.0.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.7.2",
     "vue-cli-plugin-vuetify": "^2.0.2",
