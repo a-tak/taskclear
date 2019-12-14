@@ -68,8 +68,21 @@ npm run major
 npm run stay
 ```
 
-
 ### リリース
+
+現在は以下の手順を実施するとGithub Actionにより自動でデプロイされる
+
+1. ブランチで作業
+1. ビルド後
+1. ブランチをプッシュ
+1. タグもフォロー
+1. Githubでプルリクエスト作る
+1. masterブランチにマージし
+1. masterブランチをプル
+1. プッシュ(タグをフォロー)
+1. Githubでリリース
+
+### リリース(手動)
 
 ```
 firebase use release
