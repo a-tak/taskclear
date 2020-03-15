@@ -1,6 +1,6 @@
 # TaskClear ヘルプ
 
-![](../public/img/logo.svg)
+![](logo.svg)
 
 ## TaskClearとは
 
