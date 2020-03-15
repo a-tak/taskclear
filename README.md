@@ -88,15 +88,15 @@ npm run stay
 
 1. ブランチ作成
 1. マイナーバージョンアップ適用
-  ```
-  npm update
-  ```
+    ```
+    npm update
+    ```
 1. 一旦コミット
 1. メジャーアップデートが残るので確認して一つずつ適用。ただし、babel-coreは7.0.0-bridge.0から上げると動かなくなるのでやらない
-  ```
-  npm outdate
-  npm install パッケージ名@latest
-  ```
+    ```
+    npm outdate
+    npm install パッケージ名@latest
+    ```
 1. 動作確認して問題なければコミット & プッシュ
 
 ### リリース(手動)
