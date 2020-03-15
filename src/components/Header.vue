@@ -66,7 +66,7 @@ export default class Header extends Vue {
   }
 
   private jumpToHelp(): void {
-    window.open('https://github.com/a-tak/taskclear/blob/master/help/README.md', 'newtab')
+    window.open('https://a-tak.github.io/taskclear/', 'newtab')
   }
 }
 </script>
