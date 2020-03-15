@@ -81,6 +81,7 @@ npm run stay
 1. プッシュ
 1. プッシュ(タグをフォロー)
 1. Githubでリリース
+    * code > releases にさきほどプッシュしたタグがあるので、タグ名クリックしてEdit tagからPublish release
 
 ### セキュリティーアップデート手順
 
