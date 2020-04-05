@@ -148,7 +148,9 @@ export default class TaskEdit extends Vue {
 
   @Emit('endEditEvent')
   // tslint:disable-next-line:no-empty
-  private endEdit(task: Task): void {}
+  private endEdit(task: Task): void {
+    Util.assertIsDefined(task)
+  }
 
   // このコンポーネントだけ足してもダメ。親TaskRow側でもイベントをうけて親のTaskListMainに返す必要がある
   @Emit('start-edit-task-name-event')
@@ -213,11 +215,15 @@ export default class TaskEdit extends Vue {
     this.editTask_.needSave = true
 
     // 編集終了イベント発生
+    Util.assertIsDefined(this.editTask_)
     this.endEdit(this.editTask_)
   }
 
   private cancel(): void {
     this.editTask_ = this.backupedTask_
+
+    // 編集終了イベント発生
+    Util.assertIsDefined(this.backupedTask_)
     this.endEdit(this.backupedTask_)
     this.endEditTaskName()
   }
