@@ -165,8 +165,9 @@ import NewTask from '@/components/NewTask.vue'
 import TaskEdit from '@/components/TaskEdit.vue'
 import RepeatEdit from '@/components/RepeatEdit.vue'
 import TaskNote from '@/components/TaskNote.vue'
-import DateUtil from '../util/DateUtil'
-import Task from '../lib/Task'
+import DateUtil from '@/util/DateUtil'
+import Task from '@/lib/Task'
+import Util from '@/util/Util'
 
 @Component({
   components: {
@@ -252,6 +253,9 @@ export default class TaskRow extends Vue {
   }
 
   public endEditEvent(task: Task) {
+    Util.assertIsDefined(task)
+    Util.assertIsDefined(this.index_)
+
     this.isEdit_ = false
     this.endEdit(task, this.index_)
   }

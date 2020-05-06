@@ -125,6 +125,7 @@ import Repeat from '@/lib/Repeat'
 import RepeatCreator from '@/lib/RepeatCreator'
 import Migration from '@/util/Migration'
 import SectionConnector from '@/lib/SectionConnector'
+import Util from '@/util/Util'
 
 @Component({
   components: {
@@ -358,6 +359,9 @@ export default class TaskListMain extends Vue {
     this.entryShortcut()
   }
   private endEditTask(task: Task, index: number) {
+    Util.assertIsDefined(index)
+    Util.assertIsDefined(task)
+
     this.$set(this.tasks, index, task)
     this.$store.getters['taskList/taskCtrl'].sort()
     // needSaveフラグは子コンポーネントで保存したときのみ設定しているのでここでは設定しない
