@@ -15,7 +15,7 @@ jobs:
       - name: Build
         run: npm run stay
       - name: Archive Production Artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v1
         with:
           name: dist
           path: dist
@@ -27,7 +27,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Download Artifact
-        uses: actions/download-artifact@master
+        uses: actions/download-artifact@v1
         with:
           name: dist
       - name: Deploy to Firebase
