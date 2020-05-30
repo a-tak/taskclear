@@ -38,16 +38,17 @@
             </v-flex>
             <!-- TaskName -->
             <v-flex nowrap xs7 sm6 md7 lg8 xl8 pa-0>
-              <v-card-actions @click.stop="startEdit()" class="pa-0">
+              <v-card-actions @click.stop="startEdit()" class="d-flex flex-row pa-0">
                 <div
                   v-bind:class="{ done: task_.endTime!=undefined}"
-                  class="font-weight-bold subtitle-1"
+                  class="font-weight-bold subtitle-1 xs7 sm7 md7 lg7 xl7"
                 >{{ task_.title }}</div>
                 <!-- note -->
                 <v-btn icon @click.stop="noteDialog_=true">
                   <v-icon v-if="task_.note===''" color="deactive">note</v-icon>
                   <v-icon v-if="task_.note!==''" color="accent">note</v-icon>
                 </v-btn>
+                <span v-if="task_.note!=='' & multiLine===false" class="d-inline-block text-truncate caption" style="color: #777777">{{ note }}</span>
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
                 <v-layout align-center justify-space-between row fill-height>
@@ -190,6 +191,13 @@ export default class TaskRow extends Vue {
 
   set targetDate(value: string) {
     this.task_.date = new Date(value)
+  }
+
+  public get note(): string {
+    // 1行目のみ返す
+    const ret = this.task_.note.split('\n')
+    if (ret.length === 0) { return '' }
+    return ret[0]
   }
 
   @Prop() public task_!: Task
