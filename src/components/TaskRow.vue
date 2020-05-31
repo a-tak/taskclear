@@ -48,7 +48,7 @@
                   <v-icon v-if="task_.note===''" color="deactive">note</v-icon>
                   <v-icon v-if="task_.note!==''" color="accent">note</v-icon>
                 </v-btn>
-                <span v-if="task_.note!=='' & multiLine===false" class="d-inline-block text-truncate caption" style="color: #777777">{{ note }}</span>
+                <span v-if="task_.note!=='' & multiLine===false" class="d-inline-block text-truncate caption" style="max-width: 40%; color: #777777">{{ note }}</span>
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
                 <v-layout align-center justify-space-between row fill-height>
