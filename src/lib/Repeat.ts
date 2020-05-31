@@ -1,5 +1,5 @@
-import { v4 as uuid } from 'uuid'
-import DateUtil from '@/util/DateUtil'
+import { v4 as uuid } from "uuid"
+import DateUtil from "@/util/DateUtil"
 
 export default class Repeat {
   public get id(): string {
@@ -82,14 +82,14 @@ export default class Repeat {
 
   constructor() {
     this.id_ = uuid()
-    this.title_ = ''
+    this.title_ = ""
     this.from_ = new Date()
     this.day_ = []
     this.estimateTime_ = 0
     this.section_ = DateUtil.getMinDate()
     this.estimateSeparateStart_ = false
     this.estimateSeparateEnd_ = false
-    this.note_ = ''
+    this.note_ = ""
   }
 
   /**

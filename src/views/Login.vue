@@ -35,8 +35,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
-import firebase from 'firebase'
+import { Component, Vue, Prop } from "vue-property-decorator"
+import firebase from "firebase"
 
 @Component
 export default class Login extends Vue {
@@ -69,46 +69,46 @@ export default class Login extends Vue {
       this.isLoginChecked_ = true
       if (user) {
         this.isLogin = true
-        this.$store.commit('taskList/setUser', user)
-        this.$router.push('/tasklist')
+        this.$store.commit("taskList/setUser", user)
+        this.$router.push("/tasklist")
       } else {
         this.isLogin = false
-        this.$store.commit('taskList/setUser', undefined)
+        this.$store.commit("taskList/setUser", undefined)
       }
     })
   }
 
   get titleSize(): {} {
     switch (this.$vuetify.breakpoint.name) {
-      case 'xs':
-        return { 'display-2': true }
-      case 'sm':
-        return { 'display-2': true }
-      case 'md':
-        return { 'display-3': true }
-      case 'lg':
-        return { 'display-3': true }
-      case 'xl':
-        return { 'display-3': true }
+      case "xs":
+        return { "display-2": true }
+      case "sm":
+        return { "display-2": true }
+      case "md":
+        return { "display-3": true }
+      case "lg":
+        return { "display-3": true }
+      case "xl":
+        return { "display-3": true }
       default:
-        return { 'display-3': true }
+        return { "display-3": true }
     }
   }
 
   get logoSize(): {} {
     switch (this.$vuetify.breakpoint.name) {
-      case 'xs':
-        return { width: '250' }
-      case 'sm':
-        return { width: '400' }
-      case 'md':
-        return { width: '500' }
-      case 'lg':
-        return { width: '600' }
-      case 'xl':
-        return { width: '600' }
+      case "xs":
+        return { width: "250" }
+      case "sm":
+        return { width: "400" }
+      case "md":
+        return { width: "500" }
+      case "lg":
+        return { width: "600" }
+      case "xl":
+        return { width: "600" }
       default:
-        return { width: '600' }
+        return { width: "600" }
     }
   }
 }

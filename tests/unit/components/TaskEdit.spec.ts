@@ -1,16 +1,16 @@
-import { Wrapper, mount } from '@vue/test-utils'
-import TaskEdit from '@/components/TaskEdit.vue'
-import Vue from 'vue'
-import Vuetify from 'vuetify'
-import Task from '@/lib/Task'
-import Store from '@/store/Store'
+import { Wrapper, mount } from "@vue/test-utils"
+import TaskEdit from "@/components/TaskEdit.vue"
+import Vue from "vue"
+import Vuetify from "vuetify"
+import Task from "@/lib/Task"
+import Store from "@/store/Store"
 
 Vue.use(Vuetify)
 
-describe('TaskEdit.vue', () => {
+describe("TaskEdit.vue", () => {
 
 
-  const task: Task = new Task(new Date('2018-12-06 10:12:43'), 'テストタスク')
+  const task: Task = new Task(new Date("2018-12-06 10:12:43"), "テストタスク")
   let wrapper: Wrapper<TaskEdit>
   let cancelStub: () => {}
 
@@ -26,62 +26,62 @@ describe('TaskEdit.vue', () => {
 
   })
 
-  it('イベント発生確認', () => {
-    wrapper.vm.$emit('endEditEvent')
+  it("イベント発生確認", () => {
+    wrapper.vm.$emit("endEditEvent")
     expect(wrapper.emitted().endEditEvent).toBeTruthy()
   })
 
-  it('キャンセル押下確認', () => {
+  it("キャンセル押下確認", () => {
     wrapper.setMethods( { cancel: cancelStub})
-    const cancelBtn = wrapper.find('#task-edit-cancelbtn-' + task.id)
-    cancelBtn.trigger('click')
+    const cancelBtn = wrapper.find("#task-edit-cancelbtn-" + task.id)
+    cancelBtn.trigger("click")
     expect(cancelStub).toHaveBeenCalled()
   })
 
-  it('escでキャンセル タイトル', () => {
+  it("escでキャンセル タイトル", () => {
     wrapper.setMethods( { cancel: cancelStub})
-    const txtField = wrapper.find('#task-edit-title-field-' + task.id)
-    txtField.trigger('keyup.esc')
+    const txtField = wrapper.find("#task-edit-title-field-" + task.id)
+    txtField.trigger("keyup.esc")
     expect(cancelStub).toHaveBeenCalled()
   })
 
-  it('開始時間のINPUTフィールドがあるか?', () => {
-    const txtField = wrapper.find('#task-edit-start-field-' + task.id)
-    expect(txtField.element.tagName).toBe('INPUT')
+  it("開始時間のINPUTフィールドがあるか?", () => {
+    const txtField = wrapper.find("#task-edit-start-field-" + task.id)
+    expect(txtField.element.tagName).toBe("INPUT")
   })
 
-  it('escでキャンセル 開始時間', () => {
+  it("escでキャンセル 開始時間", () => {
     wrapper.setMethods( { cancel: cancelStub})
-    const txtField = wrapper.find('#task-edit-start-field-' + task.id)
-    txtField.trigger('keyup.esc')
+    const txtField = wrapper.find("#task-edit-start-field-" + task.id)
+    txtField.trigger("keyup.esc")
     expect(cancelStub).toHaveBeenCalled()
   })
 
-  it('escでキャンセル 終了時間', () => {
+  it("escでキャンセル 終了時間", () => {
     wrapper.setMethods( { cancel: cancelStub})
-    const txtField = wrapper.find('#task-edit-end-field-' + task.id)
-    txtField.trigger('keyup.esc')
+    const txtField = wrapper.find("#task-edit-end-field-" + task.id)
+    txtField.trigger("keyup.esc")
     expect(cancelStub).toHaveBeenCalled()
   })
 
-  it('escでキャンセル 見積時間', () => {
+  it("escでキャンセル 見積時間", () => {
     wrapper.setMethods( { cancel: cancelStub})
-    const txtField = wrapper.find('#task-edit-estimate-field-' + task.id)
-    txtField.trigger('keyup.esc')
+    const txtField = wrapper.find("#task-edit-estimate-field-" + task.id)
+    txtField.trigger("keyup.esc")
     expect(cancelStub).toHaveBeenCalled()
   })
 
-  it('escでキャンセル 予定時間帯', () => {
+  it("escでキャンセル 予定時間帯", () => {
     wrapper.setMethods( { cancel: cancelStub})
-    const txtField = wrapper.find('#task-edit-section-field-' + task.id)
-    txtField.trigger('keyup.esc')
+    const txtField = wrapper.find("#task-edit-section-field-" + task.id)
+    txtField.trigger("keyup.esc")
     expect(cancelStub).toHaveBeenCalled()
   })
 
-  it('escでキャンセル ソート順', () => {
+  it("escでキャンセル ソート順", () => {
     wrapper.setMethods( { cancel: cancelStub})
-    const txtField = wrapper.find('#task-edit-sortno-field-' + task.id)
-    txtField.trigger('keyup.esc')
+    const txtField = wrapper.find("#task-edit-sortno-field-" + task.id)
+    txtField.trigger("keyup.esc")
     expect(cancelStub).toHaveBeenCalled()
   })
 

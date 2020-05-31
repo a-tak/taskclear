@@ -13,7 +13,7 @@
                 icon
                 ripple
                 @click.stop="startTask(task_)"
-                v-if="task_.isDoing === false && task_.endTime==undefined"
+                v-if="task_.isDoing === false && task_.endTime == undefined"
               >
                 <v-icon color="accent">play_circle_filled</v-icon>
               </v-btn>
@@ -22,7 +22,9 @@
                 icon
                 ripple
                 @click.stop="startTask(task_)"
-                v-else-if="task_.isDoing === false && task_.endTime!=undefined"
+                v-else-if="
+                  task_.isDoing === false && task_.endTime != undefined
+                "
               >
                 <v-icon color="deactive">play_circle_filled</v-icon>
               </v-btn>
@@ -38,24 +40,49 @@
             </v-flex>
             <!-- TaskName -->
             <v-flex nowrap xs7 sm6 md7 lg8 xl8 pa-0>
-              <v-card-actions @click.stop="startEdit()" class="d-flex flex-row pa-0">
+              <v-card-actions
+                @click.stop="startEdit()"
+                class="d-flex flex-row pa-0"
+              >
                 <div
-                  v-bind:class="{ done: task_.endTime!=undefined}"
+                  v-bind:class="{ done: task_.endTime != undefined }"
                   class="font-weight-bold subtitle-1 xs7 sm7 md7 lg7 xl7"
-                >{{ task_.title }}</div>
+                >
+                  {{ task_.title }}
+                </div>
                 <!-- note -->
-                <v-btn icon @click.stop="noteDialog_=true">
-                  <v-icon v-if="task_.note===''" color="deactive">note</v-icon>
-                  <v-icon v-if="task_.note!==''" color="accent">note</v-icon>
+                <v-btn icon @click.stop="noteDialog_ = true">
+                  <v-icon v-if="task_.note === ''" color="deactive"
+                    >note</v-icon
+                  >
+                  <v-icon v-if="task_.note !== ''" color="accent">note</v-icon>
                 </v-btn>
-                <span v-if="task_.note!=='' & multiLine===false" class="d-inline-block text-truncate caption" style="max-width: 40%; color: #777777">{{ note }}</span>
+                <span
+                  v-if="(task_.note !== '') & (multiLine === false)"
+                  class="d-inline-block text-truncate caption"
+                  style="max-width: 40%; color: #777777;"
+                  >{{ note }}</span
+                >
               </v-card-actions>
               <v-card-actions @click.stop="startEdit()">
                 <v-layout align-center justify-space-between row fill-height>
-                  <span v-if="multiLine === false" class="body-2">開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}} / 実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分 予定時間帯: {{ getTime(task_.date) }}〜</span>
-                  <span v-if="multiLine === true" class="body-2">開始:{{ getTime(task_.startTime) }} / 終了: {{ getTime(task_.endTime)}}</span>
-                  <span v-if="multiLine === true" class="body-2">実績: {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分</span>
-                  <span v-if="multiLine === true" class="body-2">予定時間帯: {{ getTime(task_.date) }}〜</span>
+                  <span v-if="multiLine === false" class="body-2"
+                    >開始:{{ getTime(task_.startTime) }} / 終了:
+                    {{ getTime(task_.endTime) }} / 実績:
+                    {{ task_.actualTime }}分 / 見積: {{ task_.estimateTime }}分
+                    予定時間帯: {{ getTime(task_.date) }}〜</span
+                  >
+                  <span v-if="multiLine === true" class="body-2"
+                    >開始:{{ getTime(task_.startTime) }} / 終了:
+                    {{ getTime(task_.endTime) }}</span
+                  >
+                  <span v-if="multiLine === true" class="body-2"
+                    >実績: {{ task_.actualTime }}分 / 見積:
+                    {{ task_.estimateTime }}分</span
+                  >
+                  <span v-if="multiLine === true" class="body-2"
+                    >予定時間帯: {{ getTime(task_.date) }}〜</span
+                  >
                 </v-layout>
               </v-card-actions>
             </v-flex>
@@ -89,14 +116,19 @@
                       v-model="targetDate"
                       @input="selectDate()"
                       locale="jp"
-                      :day-format="date => new Date(date).getDate()"
+                      :day-format="(date) => new Date(date).getDate()"
                     ></v-date-picker>
                   </v-menu>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg3 xl3>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
-                      <v-btn v-on="on" icon ripple @click.stop="copyTask(task_)">
+                      <v-btn
+                        v-on="on"
+                        icon
+                        ripple
+                        @click.stop="copyTask(task_)"
+                      >
                         <v-icon color="accent">file_copy</v-icon>
                       </v-btn>
                     </template>
@@ -104,15 +136,28 @@
                   </v-tooltip>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg3 xl3>
-                  <v-btn icon ripple @click.stop="editingRepeat_=!editingRepeat_">
-                    <v-icon v-if="task_.repeatId===''" color="deactive">repeat</v-icon>
-                    <v-icon v-if="task_.repeatId!==''" color="accent">repeat</v-icon>
+                  <v-btn
+                    icon
+                    ripple
+                    @click.stop="editingRepeat_ = !editingRepeat_"
+                  >
+                    <v-icon v-if="task_.repeatId === ''" color="deactive"
+                      >repeat</v-icon
+                    >
+                    <v-icon v-if="task_.repeatId !== ''" color="accent"
+                      >repeat</v-icon
+                    >
                   </v-btn>
                 </v-flex>
                 <v-flex xs6 sm2 md2 lg3 xl3>
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
-                      <v-btn v-on="on" icon ripple @click.stop="deleteTask(task_)">
+                      <v-btn
+                        v-on="on"
+                        icon
+                        ripple
+                        @click.stop="deleteTask(task_)"
+                      >
                         <v-icon color="accent">delete</v-icon>
                       </v-btn>
                     </template>
@@ -147,7 +192,7 @@
         v-on:endEditEvent="endEditEvent"
         v-on:start-edit-task-name-event="startEditTaskName"
         v-on:end-edit-task-name-event="endEditTaskName"
-        v-on:close-dialog-event="noteDialog_=false"
+        v-on:close-dialog-event="noteDialog_ = false"
       ></TaskNote>
     </v-dialog>
   </v-container>
@@ -160,15 +205,15 @@
 }
 </style>
 
-<script lang='ts'>
-import { Component, Vue, Watch, Prop, Emit } from 'vue-property-decorator'
-import NewTask from '@/components/NewTask.vue'
-import TaskEdit from '@/components/TaskEdit.vue'
-import RepeatEdit from '@/components/RepeatEdit.vue'
-import TaskNote from '@/components/TaskNote.vue'
-import DateUtil from '@/util/DateUtil'
-import Task from '@/lib/Task'
-import Util from '@/util/Util'
+<script lang="ts">
+import { Component, Vue, Watch, Prop, Emit } from "vue-property-decorator"
+import NewTask from "@/components/NewTask.vue"
+import TaskEdit from "@/components/TaskEdit.vue"
+import RepeatEdit from "@/components/RepeatEdit.vue"
+import TaskNote from "@/components/TaskNote.vue"
+import DateUtil from "@/util/DateUtil"
+import Task from "@/lib/Task"
+import Util from "@/util/Util"
 
 @Component({
   components: {
@@ -195,8 +240,10 @@ export default class TaskRow extends Vue {
 
   public get note(): string {
     // 1行目のみ返す
-    const ret = this.task_.note.split('\n')
-    if (ret.length === 0) { return '' }
+    const ret = this.task_.note.split("\n")
+    if (ret.length === 0) {
+      return ""
+    }
     return ret[0]
   }
 
@@ -212,44 +259,44 @@ export default class TaskRow extends Vue {
 
   private noteDialog_: boolean = false
 
-  @Emit('clickStartButtomEvent')
+  @Emit("clickStartButtomEvent")
   // tslint:disable-next-line:no-empty
   public startTask(task: Task): void {
     task.isProcessing = true
   }
 
-  @Emit('clickStopButtomEvent')
+  @Emit("clickStopButtomEvent")
   // tslint:disable-next-line:no-empty
   public stopTask(task: Task): void {
     task.isProcessing = true
   }
 
-  @Emit('clickDeleteButtomEvent')
+  @Emit("clickDeleteButtomEvent")
   // tslint:disable-next-line:no-empty
   public deleteTask(task: Task): void {}
 
-  @Emit('clickCopyButtomEvent')
+  @Emit("clickCopyButtomEvent")
   // tslint:disable-next-line:no-empty
   public copyTask(task: Task): void {}
 
-  @Emit('endEditEvent')
+  @Emit("endEditEvent")
   // tslint:disable-next-line:no-empty
   public endEdit(task: Task, index: number): void {}
 
-  @Emit('changeTaskDateChangeEvent')
+  @Emit("changeTaskDateChangeEvent")
   // tslint:disable-next-line:no-empty
   public changeDate(task: Task): void {}
 
-  @Emit('start-edit-task-name-event')
+  @Emit("start-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   public startEditTaskNameEvent(): void {}
 
-  @Emit('end-edit-task-name-event')
+  @Emit("end-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   public endEditTaskNameEvent(): void {}
 
   public getTime(time: Date): string {
-    let timeStr: string = ''
+    let timeStr: string = ""
     if (time != undefined) {
       timeStr = DateUtil.getTimeString(time)
     }
@@ -292,15 +339,15 @@ export default class TaskRow extends Vue {
   get topRowLayoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
-      case 'xs':
+      case "xs":
         return { column: true }
-      case 'sm':
+      case "sm":
         return { column: true }
-      case 'md':
+      case "md":
         return { row: true }
-      case 'lg':
+      case "lg":
         return { row: true }
-      case 'xl':
+      case "xl":
         return { row: true }
       default:
         return { row: true }
@@ -310,22 +357,28 @@ export default class TaskRow extends Vue {
   private get multiLine(): boolean {
     // 画面サイズによってツールバーとのマージンを変更
     switch (this.$vuetify.breakpoint.name) {
-        case 'xs': return true
-        case 'sm': return false
-        case 'md': return false
-        case 'lg': return false
-        case 'xl': return false
-        default  : return false
+      case "xs":
+        return true
+      case "sm":
+        return false
+      case "md":
+        return false
+      case "lg":
+        return false
+      case "xl":
+        return false
+      default:
+        return false
     }
   }
 
   get rowColor(): {} {
     if (this.task_.estimateSeparateStart === true) {
-      return { color: 'secondary lighten-1' }
+      return { color: "secondary lighten-1" }
     } else if (this.task_.estimateSeparateEnd === true) {
-      return { color: 'secondary' }
+      return { color: "secondary" }
     } else {
-      return { color: 'white' }
+      return { color: "white" }
     }
   }
 }

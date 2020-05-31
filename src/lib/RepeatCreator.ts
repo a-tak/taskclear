@@ -1,8 +1,8 @@
-import Repeat from './Repeat'
-import FirestoreUtil from '@/util/FirestoreUtil'
-import TaskController from './TaskController'
-import Task from './Task'
-import DateUtil from '@/util/DateUtil'
+import Repeat from "./Repeat"
+import FirestoreUtil from "@/util/FirestoreUtil"
+import TaskController from "./TaskController"
+import Task from "./Task"
+import DateUtil from "@/util/DateUtil"
 
 export default class RepeatCreator {
 

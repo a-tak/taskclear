@@ -1,4 +1,4 @@
-import Task from './Task'
+import Task from "./Task"
 
 // Taskオブジェクトを束ねるクラス
 export default class TaskController {

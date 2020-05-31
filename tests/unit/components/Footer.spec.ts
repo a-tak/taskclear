@@ -1,11 +1,11 @@
-import { mount, Wrapper, shallowMount } from '@vue/test-utils'
-import Vue from 'vue'
-import Vuetify from 'vuetify'
-import Footer from '@/components/Footer.vue'
+import { mount, Wrapper, shallowMount } from "@vue/test-utils"
+import Vue from "vue"
+import Vuetify from "vuetify"
+import Footer from "@/components/Footer.vue"
 
 Vue.use(Vuetify)
 
-describe('SectionRow.vue', () => {
+describe("SectionRow.vue", () => {
   let wrapper: Wrapper<Footer>
 
   beforeEach(() => {
@@ -16,8 +16,8 @@ describe('SectionRow.vue', () => {
     })
   })
 
-  it('バージョンが表示されているか?', () => {
-    const txt = wrapper.find('#ver')
+  it("バージョンが表示されているか?", () => {
+    const txt = wrapper.find("#ver")
     expect(txt.text().length).toBeGreaterThan(0)
   })
 })

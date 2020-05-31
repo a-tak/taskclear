@@ -1,5 +1,5 @@
-import Task from '@/lib/Task'
-import TaskController from '@/lib/TaskController'
+import Task from "@/lib/Task"
+import TaskController from "@/lib/TaskController"
 
 export interface State {
   taskCtrl: TaskController

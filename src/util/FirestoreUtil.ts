@@ -1,9 +1,9 @@
-import firebase, { firestore } from 'firebase'
-import TaskController from '../lib/TaskController'
-import Task from '@/lib/Task'
-import Repeat from '@/lib/Repeat'
-import ITask from '@/lib/ITask'
-import DateUtil from './DateUtil'
+import firebase, { firestore } from "firebase"
+import TaskController from "../lib/TaskController"
+import Task from "@/lib/Task"
+import Repeat from "@/lib/Repeat"
+import ITask from "@/lib/ITask"
+import DateUtil from "./DateUtil"
 
 export default class FirestoreUtil {
   /**
@@ -48,10 +48,10 @@ export default class FirestoreUtil {
     const { from } = DateUtil.getDateFromToTime(date)
     const query: firestore.QuerySnapshot = await firebase
       .firestore()
-      .collection('users')
+      .collection("users")
       .doc(uid)
-      .collection('repeats')
-      .where('from', '<=', firestore.Timestamp.fromDate(from))
+      .collection("repeats")
+      .where("from", "<=", firestore.Timestamp.fromDate(from))
       .get()
 
     query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
@@ -86,12 +86,12 @@ export default class FirestoreUtil {
 
     return firebase
       .firestore()
-      .collection('users')
+      .collection("users")
       .doc(uid)
-      .collection('tasks')
-      .where('date', '>=', firestore.Timestamp.fromDate(from))
-      .where('date', '<', firestore.Timestamp.fromDate(to))
-      .where('isDeleted', '==', false)
+      .collection("tasks")
+      .where("date", ">=", firestore.Timestamp.fromDate(from))
+      .where("date", "<", firestore.Timestamp.fromDate(to))
+      .where("isDeleted", "==", false)
   }
 
   /**
@@ -135,8 +135,8 @@ export default class FirestoreUtil {
    * @param task 物理削除対象タスク
    */
   public static physicalDeleteTask(uid: string, task: Task): void {
-    firebase.firestore().collection('users').doc(uid)
-      .collection('tasks').doc(task.id).delete()
+    firebase.firestore().collection("users").doc(uid)
+      .collection("tasks").doc(task.id).delete()
       .catch((error: Error) => {
         // tslint:disable-next-line:no-console
         console.error(`Delete Task error! task id=${task.id}`, error)
@@ -146,8 +146,8 @@ export default class FirestoreUtil {
   public static async setTask(uid: string, task: Task): Promise<void> {
     // 保存時にTaskオブジェクトのupdateTimeも更新
     task.updateTime = new Date()
-    firebase.firestore().collection('users').doc(uid)
-      .collection('tasks').doc(task.id).set(this.getTaskLiteral(task))
+    firebase.firestore().collection("users").doc(uid)
+      .collection("tasks").doc(task.id).set(this.getTaskLiteral(task))
   }
 
   /**
@@ -163,10 +163,10 @@ export default class FirestoreUtil {
     const { from } = DateUtil.getDateFromToTime(dateFrom)
 
     try {
-      const snapshot = await firebase.firestore().collection('users').doc(uid)
-        .collection('tasks')
-        .where('date', '>=', firestore.Timestamp.fromDate(from))
-        .where('repeatId', '==', repeatId)
+      const snapshot = await firebase.firestore().collection("users").doc(uid)
+        .collection("tasks")
+        .where("date", ">=", firestore.Timestamp.fromDate(from))
+        .where("repeatId", "==", repeatId)
         .get()
 
       snapshot.forEach((doc: firestore.QueryDocumentSnapshot): void => {
@@ -200,21 +200,21 @@ export default class FirestoreUtil {
   public static saveRepeat(uid: string, repeat: Repeat | undefined, oldRepeat: Repeat | undefined): void {
     const batch: firestore.WriteBatch = firestore().batch()
 
-    let newId: string = 'Non New Rpeat'
+    let newId: string = "Non New Rpeat"
     if (repeat !== undefined) {
       newId = repeat.id
       const newRef: firestore.DocumentReference = firebase.firestore()
-        .collection('users').doc(uid)
-        .collection('repeats').doc(repeat.id)
+        .collection("users").doc(uid)
+        .collection("repeats").doc(repeat.id)
       batch.set(newRef, this.getRepeatLiteral(repeat))
     }
 
-    let oldId: string = 'Non Old Repeat'
+    let oldId: string = "Non Old Repeat"
     if (oldRepeat !== undefined) {
       oldId = oldRepeat.id
       const oldRef: firestore.DocumentReference = firebase.firestore()
-        .collection('users').doc(uid)
-        .collection('repeats').doc(oldRepeat.id)
+        .collection("users").doc(uid)
+        .collection("repeats").doc(oldRepeat.id)
       batch.delete(oldRef)
     }
 
@@ -232,14 +232,14 @@ export default class FirestoreUtil {
    * @param repeatId
    */
   public static async loadRepeat(uid: string, repeatId: string): Promise<Repeat> {
-    if (uid === '') {
-      throw new Error('uid is empty!')
+    if (uid === "") {
+      throw new Error("uid is empty!")
     }
     const doc = await firebase
       .firestore()
-      .collection('users')
+      .collection("users")
       .doc(uid)
-      .collection('repeats')
+      .collection("repeats")
       .doc(repeatId)
       .get()
 
@@ -294,11 +294,11 @@ export default class FirestoreUtil {
 
     return firebase
       .firestore()
-      .collection('users')
+      .collection("users")
       .doc(uid)
-      .collection('tasks')
-      .where('date', '>=', firestore.Timestamp.fromDate(from))
-      .where('date', '<', firestore.Timestamp.fromDate(to))
+      .collection("tasks")
+      .where("date", ">=", firestore.Timestamp.fromDate(from))
+      .where("date", "<", firestore.Timestamp.fromDate(to))
   }
 
   /**
@@ -349,7 +349,7 @@ export default class FirestoreUtil {
   private static toString(value: string | undefined): string {
     if (value === undefined) {
       // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
-      return ''
+      return ""
     } else {
       return value
     }
@@ -416,7 +416,7 @@ export default class FirestoreUtil {
       repeat.note = this.toString(data.note)
     } else {
       // 仕様上存在しないrepeatIdが来ることもあるのでエラーとしないが、それを検知して処理するために空のidのRepeatを返す
-      repeat.id = ''
+      repeat.id = ""
     }
     return repeat
   }

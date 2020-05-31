@@ -14,7 +14,7 @@ export default class Estimate {
     return `${this.date_.getMonth() + 1}/${this.date_.getDate()}`
   }
 
-  private dayLabel_: string = ''
+  private dayLabel_: string = ""
   public get dayLabel(): string {
     return this.dayLabel_
   }
@@ -22,7 +22,7 @@ export default class Estimate {
     this.dayLabel_ = v
   }
 
-  private estimateTime_: string = ''
+  private estimateTime_: string = ""
   public get estimateTime(): string {
     return this.estimateTime_
   }

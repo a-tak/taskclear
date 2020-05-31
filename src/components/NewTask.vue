@@ -34,37 +34,37 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Emit } from 'vue-property-decorator'
-import firebase, { firestore } from 'firebase'
-import uuid from 'uuid'
-import FirestoreUtil from '../util/FirestoreUtil'
-import ITask from '../lib/ITask'
-import Task from '../lib/Task'
-import DateUtil from '@/util/DateUtil'
+import { Component, Vue, Emit } from "vue-property-decorator"
+import firebase, { firestore } from "firebase"
+import uuid from "uuid"
+import FirestoreUtil from "../util/FirestoreUtil"
+import ITask from "../lib/ITask"
+import Task from "../lib/Task"
+import DateUtil from "@/util/DateUtil"
 
 @Component
 export default class NewTask extends Vue {
-  public inputvalue_: string = ''
+  public inputvalue_: string = ""
 
   private keyDownCode_: number = 0
 
   public addTask(): void {
-    if (this.inputvalue_.trim() === '') {
+    if (this.inputvalue_.trim() === "") {
       return
     }
 
     // 現在リストで開いている日付で時間は今の時間を使ってタスクを作成する
-    const d: Date = new Date(this.$store.getters['taskList/targetDate'])
+    const d: Date = new Date(this.$store.getters["taskList/targetDate"])
     const now = DateUtil.clearDate(new Date())
     const date = DateUtil.getDateObjectByDate(d, now)
     const task: Task = new Task(date, this.inputvalue_)
-    this.$store.commit('taskList/addTask', task)
+    this.$store.commit("taskList/addTask", task)
 
     FirestoreUtil.saveTasks(
-      this.$store.getters['taskList/user'].uid,
-      this.$store.getters['taskList/taskCtrl'])
+      this.$store.getters["taskList/user"].uid,
+      this.$store.getters["taskList/taskCtrl"])
 
-    this.inputvalue_ = ''
+    this.inputvalue_ = ""
 
     // イベント発生
     this.addEnd()
@@ -77,15 +77,15 @@ export default class NewTask extends Vue {
     this.endEditTaskName()
   }
 
-  @Emit('start-edit-task-name-event')
+  @Emit("start-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   private startEditTaskName(): void {}
 
-  @Emit('end-edit-task-name-event')
+  @Emit("end-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   private endEditTaskName(): void {}
 
-  @Emit('addedEvent')
+  @Emit("addedEvent")
   // tslint:disable-next-line:no-empty
   private addEnd(): void {}
 
@@ -108,15 +108,15 @@ export default class NewTask extends Vue {
   private get layoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
-      case 'xs':
+      case "xs":
         return { column: true }
-      case 'sm':
+      case "sm":
         return { row: true }
-      case 'md':
+      case "md":
         return { row: true }
-      case 'lg':
+      case "lg":
         return { row: true }
-      case 'xl':
+      case "xl":
         return { row: true }
       default:
         return { row: true }

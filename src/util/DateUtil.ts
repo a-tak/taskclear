@@ -1,12 +1,12 @@
-import Section from '@/lib/Section'
-import StoreUtil from '@/store/StoreUtil'
+import Section from "@/lib/Section"
+import StoreUtil from "@/store/StoreUtil"
 
 export default class DateUtil {
   // 現地時間のyyyy-mm-dd形式の文字列を返す
   public static getDateString(d: Date): string {
     return `${d.getFullYear().toString()}-${
-      ('0' + (d.getMonth() + 1).toString()).slice(-2)}-${
-      ('0' + d.getDate().toString()).slice(-2)}`
+      ("0" + (d.getMonth() + 1).toString()).slice(-2)}-${
+      ("0" + d.getDate().toString()).slice(-2)}`
   }
 
   /**
@@ -16,11 +16,11 @@ export default class DateUtil {
    */
   public static getTimeString(d: Date, zeroPadding: boolean = false): string {
     // なんでundifinedも通るし、stringの引数が渡ってくるの?
-    if (d === undefined) { return '' }
+    if (d === undefined) { return "" }
     if (zeroPadding === false) {
-      return `${d.getHours().toString()}:${('0' + d.getMinutes().toString()).slice(-2)}`
+      return `${d.getHours().toString()}:${("0" + d.getMinutes().toString()).slice(-2)}`
     } else {
-      return `${('0' + d.getHours().toString()).slice(-2)}:${('0' + d.getMinutes().toString()).slice(-2)}`
+      return `${("0" + d.getHours().toString()).slice(-2)}:${("0" + d.getMinutes().toString()).slice(-2)}`
     }
   }
 
@@ -29,7 +29,7 @@ export default class DateUtil {
    * @param date
    */
   public static get4digitTime(date: Date): string {
-    return this.getTimeString(date, true).replace(':', '')
+    return this.getTimeString(date, true).replace(":", "")
   }
 
   /**
@@ -46,7 +46,7 @@ export default class DateUtil {
     if (timeDate != undefined) {
       return this.getDateObjectByDate(baseDate, timeDate)
     } else {
-      throw new Error('timeString undefined error!')
+      throw new Error("timeString undefined error!")
     }
   }
 
@@ -105,7 +105,7 @@ export default class DateUtil {
    * readonlyも考えたがオブジェクトの中身書き換えられそうなので、毎回newして返す形にした
    */
   public static getMinDate(): Date {
-    return new Date('1970/01/01 0:00:00')
+    return new Date("1970/01/01 0:00:00")
   }
 
   /**
@@ -175,11 +175,11 @@ export default class DateUtil {
    * @param timeString 時間文字列(hhmm)。「:」は取り除く。   * @param timeString 解析対象の文字列
    */
   public static getDateByTimeString(timeString: string): Date | undefined {
-    if (timeString === '') {
+    if (timeString === "") {
       return undefined
     }
     let str: string = timeString
-    str = str.replace(':', '').trim()
+    str = str.replace(":", "").trim()
     const retDate: Date = this.getMinDate()
     // JSのsubstringの終了位置は実際は一つ前の桁までしか取れない!
     if (str.length === 3) {

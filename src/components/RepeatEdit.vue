@@ -119,14 +119,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
-import Task from '../lib/Task'
-import DateUtil from '../util/DateUtil'
-import TaskController from '../lib/TaskController'
-import Repeat from '../lib/Repeat'
-import FirestoreUtil from '../util/FirestoreUtil'
-import Section from '@/lib/Section'
-import Note from '@/components/Note.vue'
+import { Component, Vue, Prop, Emit } from "vue-property-decorator"
+import Task from "../lib/Task"
+import DateUtil from "../util/DateUtil"
+import TaskController from "../lib/TaskController"
+import Repeat from "../lib/Repeat"
+import FirestoreUtil from "../util/FirestoreUtil"
+import Section from "@/lib/Section"
+import Note from "@/components/Note.vue"
 
 @Component({
   components: {
@@ -145,15 +145,15 @@ export default class RepeatEdit extends Vue {
   get layoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
-      case 'xs':
+      case "xs":
         return { row: true }
-      case 'sm':
+      case "sm":
         return { row: true }
-      case 'md':
+      case "md":
         return { row: true }
-      case 'lg':
+      case "lg":
         return { row: true }
-      case 'xl':
+      case "xl":
         return { row: true }
       default:
         return { row: true }
@@ -172,25 +172,25 @@ export default class RepeatEdit extends Vue {
   private oldRepeat_: Repeat | undefined = undefined
   private sections_: Section[] = []
   private sectionList_: string[] = []
-  private section_: string = ''
+  private section_: string = ""
   private estimateSeparateStart_: boolean = false
   private estimateSeparateEnd_: boolean = false
-  private note_: string = ''
+  private note_: string = ""
   private noteDialog_: boolean = false
 
-  @Emit('changeTaskDateChangeEvent')
+  @Emit("changeTaskDateChangeEvent")
   // tslint:disable-next-line:no-empty
   public changeDate(task: Task): void {}
 
-  @Emit('start-edit-task-name-event')
+  @Emit("start-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   public startEditTaskNameEvent(): void {}
 
-  @Emit('end-edit-task-name-event')
+  @Emit("end-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   public endEditTaskNameEvent(): void {}
 
-  @Emit('endRepeatEditEvent')
+  @Emit("endRepeatEditEvent")
   // tslint:disable-next-line:no-empty
   public endEdit(task: Task): void {}
 
@@ -206,7 +206,7 @@ export default class RepeatEdit extends Vue {
       this.repeat_.estimateSeparateEnd = this.estimateSeparateEnd_
       this.repeat_.note = this.note_
       FirestoreUtil.saveRepeat(
-        this.$store.getters['taskList/user'].uid,
+        this.$store.getters["taskList/user"].uid,
         this.repeat_,
         this.oldRepeat_,
       )
@@ -214,17 +214,17 @@ export default class RepeatEdit extends Vue {
     } else {
       // 曜日の指定を全て外したらリピートを削除する
       FirestoreUtil.saveRepeat(
-        this.$store.getters['taskList/user'].uid,
+        this.$store.getters["taskList/user"].uid,
         undefined,
         this.oldRepeat_,
       )
-      this.task_.repeatId = ''
+      this.task_.repeatId = ""
     }
 
     // 旧repeat idのタスクを削除
     if (this.oldRepeat_ !== undefined) {
       FirestoreUtil.deleteRepeatTaskById(
-        this.$store.getters['taskList/user'].uid,
+        this.$store.getters["taskList/user"].uid,
         this.oldRepeat_.id,
         this.oldRepeat_.from,
       )
@@ -239,23 +239,23 @@ export default class RepeatEdit extends Vue {
   }
 
   public created(): void {
-    this.sections_ = this.$store.getters['section/sections']
+    this.sections_ = this.$store.getters["section/sections"]
     this.sectionList_ = []
     for (const section of this.sections_) {
       this.sectionList_.push(DateUtil.get4digitTime(section.startTime))
     }
 
     const self: RepeatEdit = this
-    if (this.task_.repeatId === '') {
+    if (this.task_.repeatId === "") {
       this.setNewRepeat()
       this.setMember()
     } else {
       // リピートが設定されているタスクであればリピート設定を読み込み
       FirestoreUtil.loadRepeat(
-        this.$store.getters['taskList/user'].uid,
+        this.$store.getters["taskList/user"].uid,
         this.task_.repeatId)
         .then((repeat: Repeat): void => {
-          if (repeat.id === '') {
+          if (repeat.id === "") {
             // タスクに設定されているリピートが存在しない(リンクが外れて浮いている)場合も、今のタスクから情報セットする
             this.setNewRepeat()
           } else {
@@ -266,7 +266,7 @@ export default class RepeatEdit extends Vue {
         })
         .catch((error) => {
           // tslint:disable-next-line:no-console
-          console.error('Repeat load error!', error)
+          console.error("Repeat load error!", error)
         })
     }
   }

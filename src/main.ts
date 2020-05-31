@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from '@/store/Store'
-import './registerServiceWorker'
-import vuetify from './plugins/vuetify'
-import * as firebase from 'firebase/app'
-import 'firebase/performance'
-import 'firebase/auth'
-import 'firebase/firestore'
-import { RouteRecord } from 'vue-router'
+import Vue from "vue"
+import App from "./App.vue"
+import router from "./router"
+import store from "@/store/Store"
+import "./registerServiceWorker"
+import vuetify from "./plugins/vuetify"
+import * as firebase from "firebase/app"
+import "firebase/performance"
+import "firebase/auth"
+import "firebase/firestore"
+import { RouteRecord } from "vue-router"
 
 Vue.config.productionTip = false
 
@@ -35,7 +35,7 @@ new Vue({
   store,
   vuetify,
   render: (h) => h(App),
-}).$mount('#app')
+}).$mount("#app")
 
 router.beforeEach((to, from, next) => {
   // isPublic でない場合(=認証が必要な場合)、かつ、ログインしていない場合
@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
       if (user) {
         next()
       } else {
-        next({ path: '/login', query: { redirect: to.fullPath } })
+        next({ path: "/login", query: { redirect: to.fullPath } })
       }
     })
   } else {
