@@ -119,12 +119,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator'
-import Task from '../lib/Task'
-import TaskController from '../lib/TaskController'
-import Util from '../util/Util'
-import DateUtil from '../util/DateUtil'
-import Section from '@/lib/Section'
+import { Component, Vue, Prop, Emit, Watch } from "vue-property-decorator"
+import Task from "../lib/Task"
+import TaskController from "../lib/TaskController"
+import Util from "../util/Util"
+import DateUtil from "../util/DateUtil"
+import Section from "@/lib/Section"
 
 @Component
 export default class TaskEdit extends Vue {
@@ -132,10 +132,10 @@ export default class TaskEdit extends Vue {
   @Prop() public task_!: Task
 
   private menu_: boolean = false
-  private startTime_: string = ''
-  private endTime_: string = ''
-  private estimateTime_: string = ''
-  private section_: string = ''
+  private startTime_: string = ""
+  private endTime_: string = ""
+  private estimateTime_: string = ""
+  private section_: string = ""
   private sortNo_: number = 999
   private sections_: Section[] = []
   private sectionList_: string[] = []
@@ -146,23 +146,23 @@ export default class TaskEdit extends Vue {
   private editTask_!: Task
   private keyDownCode_: number = 0
 
-  @Emit('endEditEvent')
+  @Emit("endEditEvent")
   // tslint:disable-next-line:no-empty
   private endEdit(task: Task): void {
     Util.assertIsDefined(task)
   }
 
   // このコンポーネントだけ足してもダメ。親TaskRow側でもイベントをうけて親のTaskListMainに返す必要がある
-  @Emit('start-edit-task-name-event')
+  @Emit("start-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   private startEditTaskName(): void {}
 
-  @Emit('end-edit-task-name-event')
+  @Emit("end-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   private endEditTaskName(): void {}
 
   // セクションが非同期で読み込まれるので読み込まれて変動したタイミングでリストを作るようにした
-  @Watch('sections_')
+  @Watch("sections_")
   private onLoadSection() {
     // セクションリスト作成
     this.sectionList_ = []
@@ -173,15 +173,15 @@ export default class TaskEdit extends Vue {
 
   private save(): void {
     // Vuetifyでxボタンを押すとnullになるみたい…
-    if (this.startTime_ != undefined && this.startTime_.trim() !== '') {
+    if (this.startTime_ != undefined && this.startTime_.trim() !== "") {
       this.editTask_.startTime = DateUtil.getDateObject(
-        this.$store.getters['taskList/targetDate'],
+        this.$store.getters["taskList/targetDate"],
         this.startTime_,
       )
 
-      if (this.endTime_ != undefined && this.endTime_.trim() !== '') {
+      if (this.endTime_ != undefined && this.endTime_.trim() !== "") {
         this.editTask_.endTime = DateUtil.getDateObject(
-          this.$store.getters['taskList/targetDate'],
+          this.$store.getters["taskList/targetDate"],
           this.endTime_,
         )
         // 終了時間が入っていたら停止する
@@ -199,7 +199,7 @@ export default class TaskEdit extends Vue {
     }
 
     this.editTask_.date = DateUtil.calcTaskDate(
-      this.$store.getters['taskList/targetDate'],
+      this.$store.getters["taskList/targetDate"],
       DateUtil.getDateByTimeString(this.section_),
     )
 
@@ -248,22 +248,22 @@ export default class TaskEdit extends Vue {
     this.estimateSeparateStart_ = this.task_.estimateSeparateStart
     this.estimateSeparateEnd_ = this.task_.estimateSeparateEnd
 
-    this.sections_ = this.$store.getters['section/sections']
+    this.sections_ = this.$store.getters["section/sections"]
   }
 
   // 算出プロパティーでオブジェクトを返すと属性を展開してくれる
   get layoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
     switch (this.$vuetify.breakpoint.name) {
-      case 'xs':
+      case "xs":
         return { row: true }
-      case 'sm':
+      case "sm":
         return { row: true }
-      case 'md':
+      case "md":
         return { row: true }
-      case 'lg':
+      case "lg":
         return { row: true }
-      case 'xl':
+      case "xl":
         return { row: true }
       default:
         return { row: true }

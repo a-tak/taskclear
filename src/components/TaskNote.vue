@@ -14,9 +14,9 @@
 }</style>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
-import Task from '@/lib/Task'
-import Note from '@/components/Note.vue'
+import { Component, Vue, Prop, Emit } from "vue-property-decorator"
+import Task from "@/lib/Task"
+import Note from "@/components/Note.vue"
 
 @Component({
   components: {
@@ -32,19 +32,19 @@ export default class TaskNote extends Vue {
     return text
   }
 
-  @Emit('endEditEvent')
+  @Emit("endEditEvent")
   // tslint:disable-next-line:no-empty
   private endEdit(task: Task): void {}
 
-  @Emit('start-edit-task-name-event')
+  @Emit("start-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   private startEditTaskName(): void {}
 
-  @Emit('end-edit-task-name-event')
+  @Emit("end-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   private endEditTaskName(): void {}
 
-  @Emit('close-dialog-event')
+  @Emit("close-dialog-event")
   // tslint:disable-next-line:no-empty
   private closeDialog(): void {}
 

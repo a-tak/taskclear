@@ -1,7 +1,7 @@
-import { mount, Wrapper, shallowMount, createLocalVue } from '@vue/test-utils'
-import Vue from 'vue'
-import Vuex from 'vuex'
-import Vuetify from 'vuetify'
+import { mount, Wrapper, shallowMount, createLocalVue } from "@vue/test-utils"
+import Vue from "vue"
+import Vuex from "vuex"
+import Vuetify from "vuetify"
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -11,7 +11,7 @@ Vue.use(Vuetify)
 // → TypeError: Cannot read property 'split' of undefined
 //
 // https://tech.fusic.co.jp/web/vue-component-testing-with-vuex/
-describe('NewTask.vue', () => {
+describe("NewTask.vue", () => {
   // let wrapper: Wrapper<NewTask>;
   // let addStub: () => {};
   // let store;
@@ -45,7 +45,7 @@ describe('NewTask.vue', () => {
   //   addStub = jest.fn();
   // });
 
-  it('登録ボタン押せているか確認', () => {
+  it("登録ボタン押せているか確認", () => {
     // // メソッドをスタブに置き換え
     // wrapper.setMethods( { addTask: addStub});
     // // ボタンを押す
@@ -55,7 +55,7 @@ describe('NewTask.vue', () => {
     // expect(addStub).toHaveBeenCalled();
   })
 
-  it('登録イベント発生確認', () => {
+  it("登録イベント発生確認", () => {
     // //    wrapper.vm.$emit('addedEvent');
     //     const btn = wrapper.find('#newtask-add');
     //     btn.trigger('click');

@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid'
+import { v4 as uuid } from "uuid"
 
 /**
  * タスクを表すクラス
@@ -35,16 +35,16 @@ export default class Task {
 
   constructor(date: Date, title: string) {
     this.id_ = date.getFullYear() +
-               (date.getMonth() + 1).toString().padStart(2, '0') +
-               date.getDate().toString().padStart(2, '0') +
-               '_' + uuid()
+               (date.getMonth() + 1).toString().padStart(2, "0") +
+               date.getDate().toString().padStart(2, "0") +
+               "_" + uuid()
     this.date_ = new Date(date)
     this.title_ = title
     this.isDoing_ = false
     this.startTime_ = undefined
     this.endTime_ = undefined
     this.estimateTime_ = 0
-    this.repeatId_ = ''
+    this.repeatId_ = ""
     this.sortNo_ = 999
     this.oldSortno_ = 999
     this.isDeleted_ = false
@@ -55,7 +55,7 @@ export default class Task {
     this.estimateSeparateEnd_ = false
     this.createTime_ = new Date()
     this.updateTime_ = this.createTime_
-    this.note_ = ''
+    this.note_ = ""
     this.isProcessing_ = false
   }
 
@@ -219,7 +219,7 @@ export default class Task {
     let estimate: number = this.estimateTime - this.actualTime
     if (estimate < 0) { estimate = 0 }
     newTask.estimateTime = estimate
-    newTask.repeatId = ''
+    newTask.repeatId = ""
     // 次の行にコピーしたものは表示
     newTask.sortNo = this.sortNo_
     // ソート直前に更新されるのでどうでもいいが一応コピー

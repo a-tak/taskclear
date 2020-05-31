@@ -1,6 +1,6 @@
-import firebase, { firestore } from 'firebase'
-import Section from '@/lib/Section'
-import fsUtil from '@/util/FirestoreUtil'
+import firebase, { firestore } from "firebase"
+import Section from "@/lib/Section"
+import fsUtil from "@/util/FirestoreUtil"
 
 /**
  * セクションのFirebase操作を担うクラス
@@ -40,11 +40,11 @@ export default class SectionConnector {
           if (firedoc != undefined) {
             section = this.convertClass(firedoc)
             // データ変更時に呼び出す関数群
-            if (change.type === 'added') {
+            if (change.type === "added") {
               addedFunc(section)
-            } else if (change.type === 'modified') {
+            } else if (change.type === "modified") {
               modifiedFunc(section)
-            } else if (change.type === 'removed') {
+            } else if (change.type === "removed") {
               removedFunc(section)
             }
           }
@@ -83,13 +83,13 @@ export default class SectionConnector {
   public async set(uid: string, section: Section): Promise<void> {
     // 保存時にTaskオブジェクトのupdateTimeも更新
     section.updateTime = new Date()
-    firebase.firestore().collection('users').doc(uid)
-      .collection('sections').doc(section.id).set(this.converLiteral(section))
+    firebase.firestore().collection("users").doc(uid)
+      .collection("sections").doc(section.id).set(this.converLiteral(section))
   }
   public async delete(uid: string, section: Section): Promise<void> {
     try {
-      await firebase.firestore().collection('users').doc(uid)
-        .collection('sections').doc(section.id).delete()
+      await firebase.firestore().collection("users").doc(uid)
+        .collection("sections").doc(section.id).delete()
     } catch (error) {
       // tslint:disable-next-line:no-console
       console.error(`Delete Section error! Section id=${section.id}`, error)
@@ -98,10 +98,10 @@ export default class SectionConnector {
 
   private getQuery(uid: string): firestore.Query {
     return firestore()
-      .collection('users')
+      .collection("users")
       .doc(uid)
-      .collection('sections')
-      .orderBy('startTime', 'asc')
+      .collection("sections")
+      .orderBy("startTime", "asc")
   }
 
   private converLiteral(section: Section): object {

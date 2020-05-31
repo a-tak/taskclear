@@ -46,7 +46,7 @@
 }</style>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
+import { Component, Vue, Prop, Emit } from "vue-property-decorator"
 
 @Component
 export default class Note extends Vue {
@@ -67,21 +67,21 @@ export default class Note extends Vue {
   }
 
   private isEdit_: boolean = false
-  private editNote_: string = ''
+  private editNote_: string = ""
 
-  @Emit('endEditEvent')
+  @Emit("endEditEvent")
   // tslint:disable-next-line:no-empty
   private endEdit(note: string): void {}
 
-  @Emit('start-edit-task-name-event')
+  @Emit("start-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   private startEditTaskName(): void {}
 
-  @Emit('end-edit-task-name-event')
+  @Emit("end-edit-task-name-event")
   // tslint:disable-next-line:no-empty
   private endEditTaskName(): void {}
 
-  @Emit('close-dialog-event')
+  @Emit("close-dialog-event")
   // tslint:disable-next-line:no-empty
   private closeDialog(): void {}
 

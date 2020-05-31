@@ -44,9 +44,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator'
-import Section from '@/lib/Section'
-import DateUtil from '@/util/DateUtil'
+import { Component, Vue, Prop, Emit } from "vue-property-decorator"
+import Section from "@/lib/Section"
+import DateUtil from "@/util/DateUtil"
 
 @Component
 export default class SectionRow extends Vue {
@@ -54,16 +54,16 @@ export default class SectionRow extends Vue {
   @Prop() public section_!: Section
   @Prop() public index_!: number
 
-  private startTime_: string = ''
+  private startTime_: string = ""
 
-  @Emit('clickDeleteButtomEvent')
+  @Emit("clickDeleteButtomEvent")
   // tslint:disable-next-line:no-empty
   public deleteSection(section: Section): void {}
-  @Emit('changeEvent')
+  @Emit("changeEvent")
   // tslint:disable-next-line:no-empty
   public changeSection(section: Section): void {}
 
-  @Emit('setFirstSectionEvent')
+  @Emit("setFirstSectionEvent")
   // tslint:disable-next-line:no-empty
   private setFirtstSection(section: Section): void {}
 
@@ -72,7 +72,7 @@ export default class SectionRow extends Vue {
   }
 
   private changeStartTime(): void {
-    if (this.startTime_.trim() !== '' ) {
+    if (this.startTime_.trim() !== "" ) {
       // getDateObjectがbaseDateを求めるのでややこしいことになってる
       let baseDate: Date = new Date()
       const sectionDate: Date | undefined = this.section_.startTime
@@ -88,11 +88,11 @@ export default class SectionRow extends Vue {
   get layoutAttributes(): {} {
       // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
       switch (this.$vuetify.breakpoint.name) {
-          case 'xs': return {column: true}
-          case 'sm': return {column: true}
-          case 'md': return {row: true}
-          case 'lg': return {row: true}
-          case 'xl': return {row: true}
+          case "xs": return {column: true}
+          case "sm": return {column: true}
+          case "md": return {row: true}
+          case "lg": return {row: true}
+          case "xl": return {row: true}
           default  : return {row: true}
       }
   }

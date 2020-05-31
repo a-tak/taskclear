@@ -1,7 +1,7 @@
-import Section from '@/lib/Section'
-import SectionConnector from '@/lib/SectionConnector'
-import Store from '@/store/Store'
-import DateUtil from '@/util/DateUtil'
+import Section from "@/lib/Section"
+import SectionConnector from "@/lib/SectionConnector"
+import Store from "@/store/Store"
+import DateUtil from "@/util/DateUtil"
 
 const con: SectionConnector = new SectionConnector()
 
@@ -69,21 +69,21 @@ export default {
         // 厳密にやると今の時間で追加するので最後尾に来るとは限らない
         // 普通のオペレーションだと追加後に時間を設定し直すので、その時に正しい日付が設定されるはず
         // それか末尾に来るような時間をデフォルトでセットするかだな
-        commit('add', section)
+        commit("add", section)
       }
       const modifiedFunc: ((section: Section) => void) = (section: Section) => {
         // ソートするので一旦削除して追加するやり方でいく
-        commit('delete', section)
-        commit('add', section)
-        commit('sort')
+        commit("delete", section)
+        commit("add", section)
+        commit("sort")
       }
       const removedFunc: ((section: Section) => void) = (section: Section) => {
-        commit('delete', section)
+        commit("delete", section)
       }
 
-      commit('clear')
+      commit("clear")
       // リスナースタート
-      con.startListener(Store.getters['taskList/user'].uid, addedFunc, modifiedFunc, removedFunc)
+      con.startListener(Store.getters["taskList/user"].uid, addedFunc, modifiedFunc, removedFunc)
     },
     stopListner({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
       con.stopListener()
@@ -94,20 +94,20 @@ export default {
      * 中でuidを使っているのでuidが読み込まれていることが前提
      */
     async load({ commit }: {commit: (arg1: string, arg2?: Section) => void }) {
-      const sections: Section[] = await con.load(Store.getters['taskList/user'].uid)
-      commit('clear')
+      const sections: Section[] = await con.load(Store.getters["taskList/user"].uid)
+      commit("clear")
       for (const section of sections) {
-        commit('add', section)
+        commit("add", section)
       }
     },
     // { commit }はオブジェクトを分割代入でうけとる引数の書き方
     // TypeScriptの型指定として「: {commit: (arg1: string, arg2: Section) => void }」という関数型の定義をしてしないとコンパイルできない😢
     set({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
       // Firestoreに書き込み
-      con.set(Store.getters['taskList/user'].uid, section)
+      con.set(Store.getters["taskList/user"].uid, section)
     },
     async delete({ commit }: {commit: (arg1: string, arg2: Section) => void }, section: Section) {
-      await con.delete(Store.getters['taskList/user'].uid, section)
+      await con.delete(Store.getters["taskList/user"].uid, section)
     },
     setFirst({ dispatch, commit, state }: {dispatch: (arg1: string, arg2: Section) => void ,
                                            commit: (arg1: string, arg2: Section) => void ,
@@ -115,7 +115,7 @@ export default {
              firstSection: Section) {
       // 一日の区切りとなるセクションは日付をリセット
       firstSection.startTime = DateUtil.clearDate(firstSection.startTime)
-      dispatch('set', firstSection)
+      dispatch("set", firstSection)
 
       for (const section of state.list) {
         // 日付部分は一旦クリアする
@@ -124,7 +124,7 @@ export default {
           // 一日の区切りのセクションより前の時間であれば次の日のセクションであると見なす
           section.startTime.setDate(2)
         }
-        dispatch('set', section)
+        dispatch("set", section)
       }
     },
   },

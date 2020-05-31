@@ -1,12 +1,12 @@
-import { Wrapper, mount, createLocalVue } from '@vue/test-utils'
-import TaskListMain from '@/components/TaskListMain.vue'
-import Vue from 'vue'
-import Vuetify from 'vuetify'
+import { Wrapper, mount, createLocalVue } from "@vue/test-utils"
+import TaskListMain from "@/components/TaskListMain.vue"
+import Vue from "vue"
+import Vuetify from "vuetify"
 
 Vue.use(Vuetify)
 Vue.config.silent = true
 
-describe('TaskListMain.vueテスト', () => {
+describe("TaskListMain.vueテスト", () => {
 
   // let wrapper: Wrapper<TaskListMain>
   // let clickStub: () => {}
@@ -22,7 +22,7 @@ describe('TaskListMain.vueテスト', () => {
   //   clickStub = jest.fn()
   // })
 
-  it('helpクリック', () => {
+  it("helpクリック", () => {
   //   wrapper.setMethods( { help: clickStub})
   //   const moreIcon = wrapper.find('#more')
   //   moreIcon.trigger('click')

@@ -29,12 +29,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator'
-import TaskController from '@/lib/TaskController'
-import FirestoreUtil from '@/util/FirestoreUtil'
-import firebase from 'firebase'
-import Estimate from '@/lib/Estimate'
-import DateUtil from '../util/DateUtil'
+import { Component, Vue, Prop, Emit, Watch } from "vue-property-decorator"
+import TaskController from "@/lib/TaskController"
+import FirestoreUtil from "@/util/FirestoreUtil"
+import firebase from "firebase"
+import Estimate from "@/lib/Estimate"
+import DateUtil from "../util/DateUtil"
 
 @Component
 export default class EstimateList extends Vue {
@@ -43,7 +43,7 @@ export default class EstimateList extends Vue {
   // ()で関数を表し=>でvoid戻り値。それらを()で括って[]で配列と定義
   private unsubscribes_: Array<() => void> = []
 
-  @Watch('targetDate')
+  @Watch("targetDate")
   public onValueChange(newValue: string, oldValue: string): void {
     // 日付が変えられたときにリッスンを破棄
     this.stopListen()
@@ -54,7 +54,7 @@ export default class EstimateList extends Vue {
    * タスクリストの現在の日付が変わった事を検知するためのプロパティ
    */
   get targetDate(): Date {
-    return this.$store.getters['taskList/targetDate']
+    return this.$store.getters["taskList/targetDate"]
   }
 
   get estimates1(): Estimate[] {
@@ -73,13 +73,13 @@ export default class EstimateList extends Vue {
     for (let n = 0; n <= 6; n++) {
       // 一日ずつ日付を進めてデータを取得
       const targetDate: Date = new Date(
-        this.$store.getters['taskList/targetDate'],
+        this.$store.getters["taskList/targetDate"],
       )
       targetDate.setDate(targetDate.getDate() + n)
 
       // Promiseを配列に溜めておく
       fsdsPromises[n] = FirestoreUtil.loadTasks(
-        this.$store.getters['taskList/user'].uid,
+        this.$store.getters["taskList/user"].uid,
         targetDate,
       )
 
@@ -91,7 +91,7 @@ export default class EstimateList extends Vue {
         })
         .catch((error: Error) => {
           // tslint:disable-next-line:no-console
-          console.log('Error getting document:', error)
+          console.log("Error getting document:", error)
         })
     }
 
@@ -116,14 +116,14 @@ export default class EstimateList extends Vue {
       for (let n = 0; n <= 6; n++) {
         // 一日ずつ日付を進めてデータを取得
         const targetDate: Date = new Date(
-          this.$store.getters['taskList/targetDate'],
+          this.$store.getters["taskList/targetDate"],
         )
         targetDate.setDate(targetDate.getDate() + n)
 
         // リッスン破棄のために戻り値を配列で保存
         this.unsubscribes_.push(
           FirestoreUtil.getQuery(
-            this.$store.getters['taskList/user'].uid,
+            this.$store.getters["taskList/user"].uid,
             targetDate,
           ).onSnapshot((query) => {
             query.forEach((doc) => {
@@ -133,7 +133,7 @@ export default class EstimateList extends Vue {
                 | undefined = doc.data()
               if (firedoc !== undefined) {
                 FirestoreUtil.loadTasks(
-                  this.$store.getters['taskList/user'].uid,
+                  this.$store.getters["taskList/user"].uid,
                   targetDate,
                 ).then((taskCtrl: TaskController) => {
                   const estimate = this.createEstimate(taskCtrl, targetDate)
@@ -159,7 +159,7 @@ export default class EstimateList extends Vue {
   public createEstimate(tc: TaskController, targetDate: Date): Estimate {
     const estimate = new Estimate()
     estimate.date = targetDate
-    const weekday: string[] = ['日', '月', '火', '水', '木', '金', '土']
+    const weekday: string[] = ["日", "月", "火", "水", "木", "金", "土"]
     estimate.dayLabel = weekday[targetDate.getDay()]
     estimate.estimateTime = DateUtil.getTimeString(tc.getEstimateTime())
 
@@ -168,7 +168,7 @@ export default class EstimateList extends Vue {
 
   private created(): void {
     firebase.auth().onAuthStateChanged(async (user: firebase.User | null) => {
-      this.$store.commit('taskList/setUser', user)
+      this.$store.commit("taskList/setUser", user)
       // セクション読み込み
       // await this.$store.dispatch('section/load')
       this.display()

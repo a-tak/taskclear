@@ -1,18 +1,18 @@
-import firebase, { firestore } from 'firebase'
+import firebase, { firestore } from "firebase"
 
 export default class Migration {
   public static async run(uid: string): Promise<void> {
-    if (uid === '') {
+    if (uid === "") {
       // tslint:disable-next-line:no-console
-      console.error('uid is empty')
-      throw new Error('uid is empty!')
+      console.error("uid is empty")
+      throw new Error("uid is empty!")
     }
     const doc = await firebase
       .firestore()
-      .collection('users')
+      .collection("users")
       .doc(uid)
-      .collection('version')
-      .doc('task-is-deleted-flag')
+      .collection("version")
+      .doc("task-is-deleted-flag")
       .get()
     const data: firestore.DocumentData | undefined = doc.data()
     if (data === undefined) {
@@ -33,9 +33,9 @@ export default class Migration {
     const querySnapshot: firestore.QuerySnapshot =
       await firebase
         .firestore()
-        .collection('users')
+        .collection("users")
         .doc(uid)
-        .collection('tasks')
+        .collection("tasks")
         .get()
 
     let count = 0
@@ -48,7 +48,7 @@ export default class Migration {
             await batch.commit()
           } catch (e) {
             // tslint:disable-next-line:no-console
-            console.error('is Deleted Flag Write Error!', e)
+            console.error("is Deleted Flag Write Error!", e)
           }
           batch = firestore().batch()
           // カウンターリセット
@@ -63,21 +63,21 @@ export default class Migration {
         await batch.commit()
       } catch (e) {
         // tslint:disable-next-line:no-console
-        console.error('is Deleted Flag Write Last Error!', e)
+        console.error("is Deleted Flag Write Last Error!", e)
       }
     }
     // DBバージョン情報書き込み
     try {
       await firebase
         .firestore()
-        .collection('users')
+        .collection("users")
         .doc(uid)
-        .collection('version')
-        .doc('task-is-deleted-flag')
+        .collection("version")
+        .doc("task-is-deleted-flag")
         .set({ done: true })
     } catch (e) {
       // tslint:disable-next-line:no-console
-      console.error('DB Version Write Error!', e)
+      console.error("DB Version Write Error!", e)
     }
   }
 }

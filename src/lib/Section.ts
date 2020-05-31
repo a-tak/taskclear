@@ -1,5 +1,5 @@
-import { v4 as uuid} from 'uuid'
-import DateUtil from '@/util/DateUtil'
+import { v4 as uuid} from "uuid"
+import DateUtil from "@/util/DateUtil"
 
 export default class Section {
 
@@ -14,7 +14,7 @@ export default class Section {
    * startTimeはundefined状態を許容しないようにした為初期値を入れた
    */
   constructor() {
-    this.title_ = ''
+    this.title_ = ""
     this.startTime_ = DateUtil.clearDate(new Date())
     this.id_ = uuid()
     this.updateTime_ = new Date()

@@ -1,4 +1,4 @@
-import { firestore } from 'firebase'
+import { firestore } from "firebase"
 
 export default interface ITask {
   id: string
