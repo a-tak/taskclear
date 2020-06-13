@@ -496,13 +496,13 @@ export default class TaskListMain extends Vue {
     let offsetValue: number = 0
     switch (this.$vuetify.breakpoint.name) {
       case "xs":
-        offsetValue = 320
+        offsetValue = 410
         break
       case "sm":
-        offsetValue = 270
+        offsetValue = 370
         break
       default  :
-        offsetValue = 185
+        offsetValue = 230
     }
     this.$nextTick(() => {
         this.$vuetify.goTo("#next-task", {
