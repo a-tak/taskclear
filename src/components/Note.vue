@@ -3,20 +3,7 @@
     <v-flex>
       <v-card>
         <v-card-title class="titlewhite--text primary">メモ</v-card-title>
-        <v-layout v-if="!isEdit_" ma-3>
-          <v-flex>
-            <v-card-text>
-              <div class="wrap body-1 text-left">
-                {{ note }}
-              </div>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn icon @click="isEdit_=true"><v-icon color="accent">edit</v-icon></v-btn>
-              <v-btn icon @click="closeDialog()" ><v-icon color="accent">close</v-icon></v-btn>
-            </v-card-actions>
-          </v-flex>
-        </v-layout>
-        <v-layout v-if="isEdit_" ma-3>
+        <v-layout ma-3>
           <v-flex>
             <v-textarea
               label="メモ"
@@ -58,15 +45,6 @@ export default class Note extends Vue {
     return text
   }
 
-  private get isEdit(): boolean {
-    return this.isEdit_
-  }
-
-  private set isEdit(value: boolean) {
-    this.isEdit_ = value
-  }
-
-  private isEdit_: boolean = false
   private editNote_: string = ""
 
   @Emit("endEditEvent")
@@ -93,16 +71,14 @@ export default class Note extends Vue {
   private save(): void {
     // 編集終了イベント発生
     this.endEdit(this.editNote_)
-    // 次の編集に備える
-    this.isEdit_ = false
     this.endEditTaskName()
+    this.closeDialog()
   }
 
   private cancel(): void {
     // 元に戻す
     this.editNote_ = this.note_
-    this.isEdit_ = false
-    this.endEditTaskName()
+    this.closeDialog()
   }
 }
 </script>
