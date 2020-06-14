@@ -8,7 +8,7 @@
   * データを消す場合がありますのであくまでお試しで
   * メールや登録したデータは管理者は見えてしまいますので、ほんとあくまでお試しで
 * ヘルプ作成しました
-  * https://github.com/a-tak/taskclear/tree/master/help/README.md
+  * https://a-tak.github.io/taskclear/
 
 ## リリースノート (以後のリリースノートはGithubの「リリース」の中に記載していく)
 * 2019-08-12 ver. 0.11.0
