@@ -1,9 +1,7 @@
 <template>
   <div id="main">
     <div class="fixed-header">
-      <Header
-        v-on:clickjumpToNextTaskButtomEvent="jumpToNextTask()"
-      ></Header>
+      <Header v-on:clickjumpToNextTaskButtomEvent="jumpToNextTask()"></Header>
       <div id="day-and-estimate">
         <v-layout v-bind="topRowLayoutAttributes" fill-height>
           <v-flex>
@@ -30,7 +28,7 @@
                   v-model="targetDate"
                   @input="menu2 = false"
                   locale="jp"
-                  :day-format="date => new Date(date).getDate()"
+                  :day-format="(date) => new Date(date).getDate()"
                 ></v-date-picker>
               </v-menu>
             </v-card>
@@ -41,14 +39,29 @@
         </v-layout>
       </div>
     </div>
-      <v-tooltip top>
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" fab dark color="accent" fixed floating bottom right @click="addTask()">
+    <v-tooltip top>
+      <template v-slot:activator="{ on }">
+        <div class="btns d-flex flex-column">
+          <v-progress-circular
+            v-if="saving_"
+            indeterminate
+            color="accent"
+            class="ma-2"
+          ></v-progress-circular>
+          <v-btn
+            v-on="on"
+            fab
+            dark
+            color="accent"
+            @click="addTask()"
+            class="ma-2"
+          >
             <v-icon dark>add</v-icon>
           </v-btn>
-          </template>
-        <span>Aキーでもタスク追加できます</span>
-      </v-tooltip>
+        </div>
+      </template>
+      <span>Aキーでもタスク追加できます</span>
+    </v-tooltip>
     <div id="list" v-bind="listClass">
       <v-slide-y-transition class="py-0" group>
         <TaskRow
@@ -80,11 +93,7 @@
       :multi-line="multiLine"
     >
       {{ snackbarText }}
-      <v-btn
-        color="primary"
-        text
-        @click="undoTask()"
-      >
+      <v-btn color="primary" text @click="undoTask()">
         元に戻す
       </v-btn>
     </v-snackbar>
@@ -106,9 +115,15 @@
 .listPc {
   padding-top: 100px;
 }
+.btns {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 100;
+}
 </style>
 
-<script lang='ts'>
+<script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator"
 import firebase, { firestore } from "firebase"
 import NewTask from "@/components/NewTask.vue"
@@ -137,7 +152,6 @@ import Util from "@/util/Util"
   },
 })
 export default class TaskListMain extends Vue {
-
   public get snackbarDisplay(): boolean {
     return this.snackbarDisplay_
   }
@@ -197,24 +211,36 @@ export default class TaskListMain extends Vue {
   get listClass(): {} {
     // 画面サイズによってツールバーとのマージンを変更
     switch (this.$vuetify.breakpoint.name) {
-        case "xs": return {class: "listSp"}
-        case "sm": return {class: "listSp"}
-        case "md": return {class: "listPc"}
-        case "lg": return {class: "listPc"}
-        case "xl": return {class: "listPc"}
-        default  : return {class: "listPc"}
+      case "xs":
+        return { class: "listSp" }
+      case "sm":
+        return { class: "listSp" }
+      case "md":
+        return { class: "listPc" }
+      case "lg":
+        return { class: "listPc" }
+      case "xl":
+        return { class: "listPc" }
+      default:
+        return { class: "listPc" }
     }
   }
 
   get multiLine(): boolean {
     // 画面サイズによってツールバーとのマージンを変更
     switch (this.$vuetify.breakpoint.name) {
-        case "xs": return true
-        case "sm": return false
-        case "md": return false
-        case "lg": return false
-        case "xl": return false
-        default  : return false
+      case "xs":
+        return true
+      case "sm":
+        return false
+      case "md":
+        return false
+      case "lg":
+        return false
+      case "xl":
+        return false
+      default:
+        return false
     }
   }
 
@@ -223,6 +249,7 @@ export default class TaskListMain extends Vue {
   private deletedTask_: Task | undefined = undefined
   private addingTask_: boolean = false
   private menu2_: boolean = false
+  private saving_: boolean = false
 
   // 日付を変更したのを監視してタスクを読み込み直し
   @Watch("targetDate")
@@ -237,14 +264,14 @@ export default class TaskListMain extends Vue {
     // 当日分のリピートタスクを作る
     const rc: RepeatCreator = new RepeatCreator(
       this.$store.getters["taskList/user"].uid,
-      this.$store.getters["taskList/targetDate"],
+      this.$store.getters["taskList/targetDate"]
     )
     await rc.creaetRepeat(1)
 
     // 今日のデータを読み込み(同期的に)
     const tc: TaskController = await FirestoreUtil.loadTasks(
       self.$store.getters["taskList/user"].uid,
-      self.$store.getters["taskList/targetDate"],
+      self.$store.getters["taskList/targetDate"]
     )
     tc.sort()
 
@@ -254,8 +281,7 @@ export default class TaskListMain extends Vue {
     this.jumpToNextTask()
 
     this.reCreateRepeatTask()
-
-}
+  }
 
   private async reCreateRepeatTask(): Promise<void> {
     // 非同期で明日以降1週間分のデータを作る
@@ -263,7 +289,7 @@ export default class TaskListMain extends Vue {
     d.setDate(d.getDate() + 1)
     const rc2: RepeatCreator = new RepeatCreator(
       this.$store.getters["taskList/user"].uid,
-      d,
+      d
     )
     try {
       rc2.creaetRepeat(6)
@@ -277,7 +303,7 @@ export default class TaskListMain extends Vue {
     this.$store.commit("taskList/deleteTask", task)
     FirestoreUtil.logicalDeleteTask(
       this.$store.getters["taskList/user"].uid,
-      task,
+      task
     )
     // 元に戻したときに保存されないので各種フラグ直しておく
     task.needSave = true
@@ -346,10 +372,16 @@ export default class TaskListMain extends Vue {
   }
 
   private save(): void {
-    FirestoreUtil.saveTasks(
-      this.$store.getters["taskList/user"].uid,
-      this.$store.getters["taskList/taskCtrl"],
-    )
+    this.saving_ = true
+    this.$nextTick(() => {
+      FirestoreUtil.saveTasks(
+        this.$store.getters["taskList/user"].uid,
+        this.$store.getters["taskList/taskCtrl"]
+      )
+      this.$nextTick(() => {
+        this.saving_ = false
+      })
+    })
   }
 
   private startEditTaskName() {
@@ -392,7 +424,7 @@ export default class TaskListMain extends Vue {
     // 変更先の日付のdocを取ってくる
     FirestoreUtil.loadTasks(
       this.$store.getters["taskList/user"].uid,
-      task.date,
+      task.date
     ).then((tc: TaskController) => {
       // タスクを追加してsave
       task.needSave = true
@@ -501,16 +533,16 @@ export default class TaskListMain extends Vue {
       case "sm":
         offsetValue = 370
         break
-      default  :
+      default:
         offsetValue = 230
     }
     this.$nextTick(() => {
-        this.$vuetify.goTo("#next-task", {
-          duration: 350,
-          easing: "easeInOutCubic",
-          offset: offsetValue,
-        })
+      this.$vuetify.goTo("#next-task", {
+        duration: 350,
+        easing: "easeInOutCubic",
+        offset: offsetValue,
       })
+    })
   }
   private jumpToTop(): void {
     this.$nextTick(() => {
@@ -522,4 +554,3 @@ export default class TaskListMain extends Vue {
   }
 }
 </script>
-
