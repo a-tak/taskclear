@@ -1,88 +1,130 @@
-import { Wrapper, mount } from "@vue/test-utils"
-import TaskEdit from "@/components/TaskEdit.vue"
 import Vue from "vue"
 import Vuetify from "vuetify"
+
+import TaskEdit from "@/components/TaskEdit.vue"
 import Task from "@/lib/Task"
 import Store from "@/store/Store"
 
+import { mount, createLocalVue, Wrapper, MountOptions } from "@vue/test-utils"
+
 Vue.use(Vuetify)
+const localVue = createLocalVue()
+
 
 describe("TaskEdit.vue", () => {
-
+  let vuetify: typeof Vuetify
 
   const task: Task = new Task(new Date("2018-12-06 10:12:43"), "テストタスク")
-  let wrapper: Wrapper<TaskEdit>
-  let cancelStub: () => {}
 
   beforeEach(() => {
-    wrapper = mount(TaskEdit, {
+    vuetify = new Vuetify({
+      breakpoint: {
+        mobileBreakpoint: "md"
+      }
+    })
+  })
+
+  it("タイトルでescキーでキャンセルしてキャンセルイベントが発生するか?", () => {
+    const wrapper = mount(TaskEdit, {
+      localVue,
+      vuetify,
       store: Store,
       propsData: {
         task_: task,
       },
     })
-
-    cancelStub = jest.fn()
-
-  })
-
-  it("イベント発生確認", () => {
-    wrapper.vm.$emit("endEditEvent")
-    expect(wrapper.emitted().endEditEvent).toBeTruthy()
-  })
-
-  it("キャンセル押下確認", () => {
-    wrapper.setMethods( { cancel: cancelStub})
-    const cancelBtn = wrapper.find("#task-edit-cancelbtn-" + task.id)
-    cancelBtn.trigger("click")
-    expect(cancelStub).toHaveBeenCalled()
-  })
-
-  it("escでキャンセル タイトル", () => {
-    wrapper.setMethods( { cancel: cancelStub})
     const txtField = wrapper.find("#task-edit-title-field-" + task.id)
     txtField.trigger("keyup.esc")
-    expect(cancelStub).toHaveBeenCalled()
+    expect(wrapper.emitted("endEditEvent")).toBeTruthy()
+    expect(wrapper.emitted("end-edit-task-name-event")).toBeTruthy()
   })
 
   it("開始時間のINPUTフィールドがあるか?", () => {
+    const wrapper = mount(TaskEdit, {
+      localVue,
+      vuetify,
+      store: Store,
+      propsData: {
+        task_: task,
+      },
+    })
     const txtField = wrapper.find("#task-edit-start-field-" + task.id)
     expect(txtField.element.tagName).toBe("INPUT")
   })
 
-  it("escでキャンセル 開始時間", () => {
-    wrapper.setMethods( { cancel: cancelStub})
+  it("開始時間でescキーでキャンセルしてキャンセルイベントが発生するか?", () => {
+    const wrapper = mount(TaskEdit, {
+      localVue,
+      vuetify,
+      store: Store,
+      propsData: {
+        task_: task,
+      },
+    })
     const txtField = wrapper.find("#task-edit-start-field-" + task.id)
     txtField.trigger("keyup.esc")
-    expect(cancelStub).toHaveBeenCalled()
+    expect(wrapper.emitted("endEditEvent")).toBeTruthy()
+    expect(wrapper.emitted("end-edit-task-name-event")).toBeTruthy()
   })
 
-  it("escでキャンセル 終了時間", () => {
-    wrapper.setMethods( { cancel: cancelStub})
+  it("終了時間でescキーでキャンセルしてキャンセルイベントが発生するか?", () => {
+    const wrapper = mount(TaskEdit, {
+      localVue,
+      vuetify,
+      store: Store,
+      propsData: {
+        task_: task,
+      },
+    })
     const txtField = wrapper.find("#task-edit-end-field-" + task.id)
     txtField.trigger("keyup.esc")
-    expect(cancelStub).toHaveBeenCalled()
+    expect(wrapper.emitted("endEditEvent")).toBeTruthy()
+    expect(wrapper.emitted("end-edit-task-name-event")).toBeTruthy()
   })
 
-  it("escでキャンセル 見積時間", () => {
-    wrapper.setMethods( { cancel: cancelStub})
+  it("見積時間でescキーでキャンセルしてキャンセルイベントが発生するか?", () => {
+    const wrapper = mount(TaskEdit, {
+      localVue,
+      vuetify,
+      store: Store,
+      propsData: {
+        task_: task,
+      },
+    })
     const txtField = wrapper.find("#task-edit-estimate-field-" + task.id)
     txtField.trigger("keyup.esc")
-    expect(cancelStub).toHaveBeenCalled()
+    expect(wrapper.emitted("endEditEvent")).toBeTruthy()
+    expect(wrapper.emitted("end-edit-task-name-event")).toBeTruthy()
   })
 
-  it("escでキャンセル 予定時間帯", () => {
-    wrapper.setMethods( { cancel: cancelStub})
+  it("予定時間帯でescキーでキャンセルしてキャンセルイベントが発生するか?", () => {
+    const wrapper = mount(TaskEdit, {
+      localVue,
+      vuetify,
+      store: Store,
+      propsData: {
+        task_: task,
+      },
+    })
     const txtField = wrapper.find("#task-edit-section-field-" + task.id)
     txtField.trigger("keyup.esc")
-    expect(cancelStub).toHaveBeenCalled()
+    expect(wrapper.emitted("endEditEvent")).toBeTruthy()
+    expect(wrapper.emitted("end-edit-task-name-event")).toBeTruthy()
   })
 
-  it("escでキャンセル ソート順", () => {
-    wrapper.setMethods( { cancel: cancelStub})
+  it("ソート順でescキーでキャンセルしてキャンセルイベントが発生するか?", () => {
+    const wrapper = mount(TaskEdit, {
+      localVue,
+      vuetify,
+      store: Store,
+      propsData: {
+        task_: task,
+      },
+    })
     const txtField = wrapper.find("#task-edit-sortno-field-" + task.id)
     txtField.trigger("keyup.esc")
-    expect(cancelStub).toHaveBeenCalled()
+    expect(wrapper.emitted("endEditEvent")).toBeTruthy()
+    expect(wrapper.emitted("end-edit-task-name-event")).toBeTruthy()
   })
 
 })
