@@ -4,7 +4,7 @@ import Vuetify from "vuetify"
 import SectionRow from "@/components/SectionRow.vue"
 import Section from "@/lib/Section"
 
-import { mount, createLocalVue } from "@vue/test-utils"
+import { mount, createLocalVue, Wrapper, MountOptions } from "@vue/test-utils"
 
 Vue.use(Vuetify)
 const localVue = createLocalVue()
@@ -23,20 +23,15 @@ describe("SectionRow.vue", () => {
         mobileBreakpoint: "md"
       }
     })
-    // wrapper = mount(SectionRow, {
-    //   mocks: {
-    //     $vuetify: { breakpoint: {} },
-    //   },
-    //   propsData: {
-    //     section_: section,
-    //   },
-    // })
   })
 
   it("propsが渡るか?", () => {
     const wrapper = mount(SectionRow, {
       localVue,
       vuetify,
+      propsData: {
+        section_: section,
+      }
     })
     expect(wrapper.props().section_.title).toBe(section.title)
   })
@@ -45,14 +40,11 @@ describe("SectionRow.vue", () => {
     const wrapper = mount(SectionRow, {
       localVue,
       vuetify,
+      propsData: {
+        section_: section,
+      }
     })
     const titleField = wrapper.find("#section-title-field-" + section.id)
     expect(titleField.element.tagName).toBe("INPUT")
   })
-
-  // 今はvue-test-utilsの問題でうまくバインドされないらしい…
-  // it('渡したsectionのタイトルが表示されるか?', () => {
-  //   const titleField = wrapper.find('#section-title-field-' + section.id);
-  //   expect(titleField.html()).toMatch(section.title);
-  // });
 })
