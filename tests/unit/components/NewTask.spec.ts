@@ -1,64 +1,75 @@
-import { mount, Wrapper, shallowMount, createLocalVue } from "@vue/test-utils"
 import Vue from "vue"
-import Vuex from "vuex"
 import Vuetify from "vuetify"
+import Vuex from "vuex"
 
+import NewTask from "@/components/TaskEdit.vue"
+import TaskListStore from "@/store/TaskListStore"
+
+import {
+  mount,
+  createLocalVue,
+  Wrapper,
+  MountOptions,
+  ThisTypedMountOptions,
+} from "@vue/test-utils"
+
+Vue.use(Vuetify)
 const localVue = createLocalVue()
 localVue.use(Vuex)
-Vue.use(Vuetify)
 
 // ストアが含まれているからだろうがテストが通らない
 // → TypeError: Cannot read property 'split' of undefined
 //
 // https://tech.fusic.co.jp/web/vue-component-testing-with-vuex/
+
+
 describe("NewTask.vue", () => {
-  // let wrapper: Wrapper<NewTask>;
-  // let addStub: () => {};
-  // let store;
-  // let tsMutations;
+//   let vuetify: typeof Vuetify
+//   let state: {}
+//   let actions: {}
 
-  // beforeEach(() => {
-  //   tsMutations = {
-  //     addTask: jest.fn(),
-  //   };
-  //   store = new Vuex.Store({
-  //     modules: {
-  //       taskList: {
-  //         state: {
-  //           targetDate: new Date(),
-  //           user: {
-  //             uid: 'test',
-  //           },
-  //           taskCtrl: new TaskController(),
-  //         },
-  //         mutations: tsMutations,
-  //       },
-  //     },
-  //   });
-  //   wrapper = mount(NewTask, {
-  //     mocks: {
-  //       $vuetify: { breakpoint: {} },
-  //     },
-  //     store,
-  //     localVue,
-  //   });
-  //   addStub = jest.fn();
-  // });
+//   state = {
+//     taskCtrl: undefined,
+//     user: undefined,
+//     targetDate: new Date(),
 
-  it("登録ボタン押せているか確認", () => {
-    // // メソッドをスタブに置き換え
-    // wrapper.setMethods( { addTask: addStub});
-    // // ボタンを押す
-    // const addBtn = wrapper.find('#newtask-add');
-    // addBtn.trigger('click');
-    // // 判定
-    // expect(addStub).toHaveBeenCalled();
-  })
+//   }
+//   actions = {
+//     addTask: jest.fn()
+//   }
 
-  it("登録イベント発生確認", () => {
-    // //    wrapper.vm.$emit('addedEvent');
-    //     const btn = wrapper.find('#newtask-add');
-    //     btn.trigger('click');
-    //     expect(wrapper.emitted().addedEvent).toBeTruthy();
-  })
+//   const store = new Vuex.Store({
+//     modules: {
+//       taskList: {
+//         state,
+//         actions,
+//         getters: TaskListStore.getters
+//       }
+//     }
+//   })
+  
+//   const mountFunction = (options: object) => {
+//     return mount(NewTask, {
+//       localVue,
+//       vuetify,
+//       store: store,
+//       ...options,
+//     })
+//   }
+
+//   beforeEach(() => {
+//     vuetify = new Vuetify({
+//       breakpoint: {
+//         mobileBreakpoint: "md",
+//       },
+//     })
+//   })
+
+//   it("登録イベント発生確認", () => {
+//     const wrapper = mountFunction({})
+//         const btn = wrapper.find('#newtask-add');
+//         btn.trigger('click');
+//     expect(wrapper.emitted("addedEvent")).toBeTruthy()
+
+//   })
 })
