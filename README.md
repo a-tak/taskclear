@@ -77,7 +77,7 @@ npm run stay
 1. Githubでプルリクエスト作る
 1. masterブランチにマージし
 1. masterブランチをプル
-1. ビルド
+1. ビルド `npm run build` 等
 1. プッシュ
 1. プッシュ(タグをフォロー)
 1. Githubでリリース
