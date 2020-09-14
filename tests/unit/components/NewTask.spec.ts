@@ -1,64 +1,85 @@
-import { mount, Wrapper, shallowMount, createLocalVue } from "@vue/test-utils"
 import Vue from "vue"
-import Vuex from "vuex"
 import Vuetify from "vuetify"
+import Vuex, { ActionTree, mapGetters } from "vuex"
 
+import NewTask from "@/components/NewTask.vue"
+
+import {
+  mount,
+  createLocalVue,
+  Wrapper,
+  MountOptions,
+  ThisTypedMountOptions,
+} from "@vue/test-utils"
+
+Vue.use(Vuetify)
 const localVue = createLocalVue()
 localVue.use(Vuex)
-Vue.use(Vuetify)
 
-// ストアが含まれているからだろうがテストが通らない
-// → TypeError: Cannot read property 'split' of undefined
-//
-// https://tech.fusic.co.jp/web/vue-component-testing-with-vuex/
+jest.mock("@/util/FirestoreUtil")
+
 describe("NewTask.vue", () => {
-  // let wrapper: Wrapper<NewTask>;
-  // let addStub: () => {};
-  // let store;
-  // let tsMutations;
+  let vuetify: typeof Vuetify
+  let state: {}
+  let actions: ActionTree<any, unknown>
+  let getters: {}
+  let mutations: {}
 
-  // beforeEach(() => {
-  //   tsMutations = {
-  //     addTask: jest.fn(),
-  //   };
-  //   store = new Vuex.Store({
-  //     modules: {
-  //       taskList: {
-  //         state: {
-  //           targetDate: new Date(),
-  //           user: {
-  //             uid: 'test',
-  //           },
-  //           taskCtrl: new TaskController(),
-  //         },
-  //         mutations: tsMutations,
-  //       },
-  //     },
-  //   });
-  //   wrapper = mount(NewTask, {
-  //     mocks: {
-  //       $vuetify: { breakpoint: {} },
-  //     },
-  //     store,
-  //     localVue,
-  //   });
-  //   addStub = jest.fn();
-  // });
+  state = {}
 
-  it("登録ボタン押せているか確認", () => {
-    // // メソッドをスタブに置き換え
-    // wrapper.setMethods( { addTask: addStub});
-    // // ボタンを押す
-    // const addBtn = wrapper.find('#newtask-add');
-    // addBtn.trigger('click');
-    // // 判定
-    // expect(addStub).toHaveBeenCalled();
+  actions = {}
+
+  mutations = {
+    addTask: jest.fn()
+  }
+
+  getters = {
+    user: () => {
+      return { uid: "test002" }
+    },
+  }
+
+  const store = new Vuex.Store({
+    modules: {
+      taskList: {
+        namespaced: true,
+        state,
+        actions,
+        getters,
+        mutations,
+      },
+    },
   })
 
-  it("登録イベント発生確認", () => {
-    // //    wrapper.vm.$emit('addedEvent');
-    //     const btn = wrapper.find('#newtask-add');
-    //     btn.trigger('click');
-    //     expect(wrapper.emitted().addedEvent).toBeTruthy();
+  const mountFunction = (options: object) => {
+    return mount(NewTask, {
+      localVue,
+      vuetify,
+      store: store,
+      ...options,
+    })
+  }
+
+  beforeEach(() => {
+    vuetify = new Vuetify({
+      breakpoint: {
+        mobileBreakpoint: "md",
+      },
+    })
+  })
+
+  it("タスク名未入力の場合は登録イベント発生しない", () => {
+    const wrapper = mountFunction({})
+    const btn = wrapper.find("#newtask-add")
+    btn.trigger("click")
+    expect(wrapper.emitted("addedEvent")).toBeFalsy()
+  })
+  it("タスク名入力済みの場合は登録イベント発生する", () => {
+    const wrapper = mountFunction({})
+    const txt = wrapper.find("#newtask-taskname")
+    txt.setValue("テスト入力")
+    const btn = wrapper.find("#newtask-add")
+    btn.trigger("click")
+    expect(wrapper.emitted("addedEvent")).toBeTruthy()
   })
 })
