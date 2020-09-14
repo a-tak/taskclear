@@ -7,6 +7,7 @@
             <v-layout v-bind="layoutAttributes" align-center justify-space-between fill-height pr-4>
               <v-flex ma-3 xs6 sm6 md7 lg8>
                 <v-text-field
+                  id="newtask-taskname"
                   placeholder="新しいタスクを追加"
                   single-line
                   outline
@@ -35,8 +36,6 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from "vue-property-decorator"
-import firebase, { firestore } from "firebase"
-import uuid from "uuid"
 import FirestoreUtil from "../util/FirestoreUtil"
 import ITask from "../lib/ITask"
 import Task from "../lib/Task"
