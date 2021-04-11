@@ -1,4 +1,4 @@
-import firebase, { firestore } from "firebase"
+import firebase from "firebase/app"
 import TaskController from "../lib/TaskController"
 import Task from "@/lib/Task"
 import Repeat from "@/lib/Repeat"
@@ -46,15 +46,15 @@ export default class FirestoreUtil {
     const repeats: Repeat[] = []
 
     const { from } = DateUtil.getDateFromToTime(date)
-    const query: firestore.QuerySnapshot = await firebase
+    const query: firebase.firestore.QuerySnapshot = await firebase
       .firestore()
       .collection("users")
       .doc(uid)
       .collection("repeats")
-      .where("from", "<=", firestore.Timestamp.fromDate(from))
+      .where("from", "<=", firebase.firestore.Timestamp.fromDate(from))
       .get()
 
-    query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
+    query.forEach((doc: firebase.firestore.QueryDocumentSnapshot): void => {
       if (doc !== undefined) {
         const data: firebase.firestore.DocumentData | undefined = doc.data()
         repeats.push(this.converToRepeat(data))
@@ -70,9 +70,9 @@ export default class FirestoreUtil {
   public static async loadTasks(uid: string, date: Date): Promise<TaskController> {
     const tc = new TaskController()
 
-    const query: firestore.QuerySnapshot = await this.getQuery(uid, date).get()
+    const query: firebase.firestore.QuerySnapshot = await this.getQuery(uid, date).get()
 
-    query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
+    query.forEach((doc: firebase.firestore.QueryDocumentSnapshot): void => {
       if (doc !== undefined) {
         const data: firebase.firestore.DocumentData | undefined = doc.data()
         tc.tasks.push(this.converToTask(data))
@@ -81,7 +81,7 @@ export default class FirestoreUtil {
     return tc
   }
 
-  public static getQuery(uid: string, date: Date): firestore.Query {
+  public static getQuery(uid: string, date: Date): firebase.firestore.Query {
     const { from, to } = DateUtil.getDateFromToTime(date)
 
     return firebase
@@ -89,8 +89,8 @@ export default class FirestoreUtil {
       .collection("users")
       .doc(uid)
       .collection("tasks")
-      .where("date", ">=", firestore.Timestamp.fromDate(from))
-      .where("date", "<", firestore.Timestamp.fromDate(to))
+      .where("date", ">=", firebase.firestore.Timestamp.fromDate(from))
+      .where("date", "<", firebase.firestore.Timestamp.fromDate(to))
       .where("isDeleted", "==", false)
   }
 
@@ -102,9 +102,9 @@ export default class FirestoreUtil {
   public static async loadTasksIncluedDeleted(uid: string, date: Date): Promise<TaskController> {
     const tc = new TaskController()
 
-    const query: firestore.QuerySnapshot = await this.getDeletedQuery(uid, date).get()
+    const query: firebase.firestore.QuerySnapshot = await this.getDeletedQuery(uid, date).get()
 
-    query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
+    query.forEach((doc: firebase.firestore.QueryDocumentSnapshot): void => {
       if (doc !== undefined) {
         const data: firebase.firestore.DocumentData | undefined = doc.data()
         tc.tasks.push(this.converToTask(data))
@@ -158,18 +158,18 @@ export default class FirestoreUtil {
    */
   public static async deleteRepeatTaskById(uid: string, repeatId: string, dateFrom: Date): Promise<void> {
 
-    const batch: firestore.WriteBatch = firestore().batch()
+    const batch: firebase.firestore.WriteBatch = firebase.firestore().batch()
 
     const { from } = DateUtil.getDateFromToTime(dateFrom)
 
     try {
       const snapshot = await firebase.firestore().collection("users").doc(uid)
         .collection("tasks")
-        .where("date", ">=", firestore.Timestamp.fromDate(from))
+        .where("date", ">=", firebase.firestore.Timestamp.fromDate(from))
         .where("repeatId", "==", repeatId)
         .get()
 
-      snapshot.forEach((doc: firestore.QueryDocumentSnapshot): void => {
+      snapshot.forEach((doc: firebase.firestore.QueryDocumentSnapshot): void => {
         if (doc !== undefined) {
           // 念のために開始していないものだけを削除
           if (doc.data().startTime == undefined) {
@@ -198,12 +198,12 @@ export default class FirestoreUtil {
    * @param oldRepeat 古いリピート設定
    */
   public static saveRepeat(uid: string, repeat: Repeat | undefined, oldRepeat: Repeat | undefined): void {
-    const batch: firestore.WriteBatch = firestore().batch()
+    const batch: firebase.firestore.WriteBatch = firebase.firestore().batch()
 
     let newId: string = "Non New Rpeat"
     if (repeat !== undefined) {
       newId = repeat.id
-      const newRef: firestore.DocumentReference = firebase.firestore()
+      const newRef: firebase.firestore.DocumentReference = firebase.firestore()
         .collection("users").doc(uid)
         .collection("repeats").doc(repeat.id)
       batch.set(newRef, this.getRepeatLiteral(repeat))
@@ -212,7 +212,7 @@ export default class FirestoreUtil {
     let oldId: string = "Non Old Repeat"
     if (oldRepeat !== undefined) {
       oldId = oldRepeat.id
-      const oldRef: firestore.DocumentReference = firebase.firestore()
+      const oldRef: firebase.firestore.DocumentReference = firebase.firestore()
         .collection("users").doc(uid)
         .collection("repeats").doc(oldRepeat.id)
       batch.delete(oldRef)
@@ -244,7 +244,7 @@ export default class FirestoreUtil {
       .get()
 
     let repeat: Repeat = new Repeat()
-    const data: firestore.DocumentData | undefined = doc.data()
+    const data: firebase.firestore.DocumentData | undefined = doc.data()
     try {
       repeat = this.converToRepeat(data)
     } catch (error) {
@@ -259,7 +259,7 @@ export default class FirestoreUtil {
    * FirestoreからUndefinedを取得した場合はUndefinedで返す(つまり空も許容)
    * @param date 日付オブジェクト
    */
-  public static toDateUndefinable(date: firestore.Timestamp | undefined): Date | undefined {
+  public static toDateUndefinable(date: firebase.firestore.Timestamp | undefined): Date | undefined {
     if (date == undefined) {
       return undefined
     } else {
@@ -274,7 +274,7 @@ export default class FirestoreUtil {
    * 逆にUndefineの時に特殊処理をしたければtoDateUndefinableを使って戻り値によって適切に処理を行う
    * @param date 日付オブジェクト
    */
-  public static toDate(date: firestore.Timestamp | undefined): Date {
+  public static toDate(date: firebase.firestore.Timestamp | undefined): Date {
     if (date == undefined) {
       return new Date()
     } else {
@@ -287,7 +287,7 @@ export default class FirestoreUtil {
    * @param uid ユーザーid
    * @param date 取込対象日付
    */
-  private static getDeletedQuery(uid: string, date: Date): firestore.Query {
+  private static getDeletedQuery(uid: string, date: Date): firebase.firestore.Query {
     // とりあえず今は一日の区切りを0時としてfrom,toを作る
     // 新たにnewしてセットしないと参照が書き換わるだけでendがおかしくなる
     const { from, to } = DateUtil.getDateFromToTime(date)
@@ -297,8 +297,8 @@ export default class FirestoreUtil {
       .collection("users")
       .doc(uid)
       .collection("tasks")
-      .where("date", ">=", firestore.Timestamp.fromDate(from))
-      .where("date", "<", firestore.Timestamp.fromDate(to))
+      .where("date", ">=", firebase.firestore.Timestamp.fromDate(from))
+      .where("date", "<", firebase.firestore.Timestamp.fromDate(to))
   }
 
   /**
@@ -308,7 +308,7 @@ export default class FirestoreUtil {
   private static getTaskLiteral(task: Task): ITask {
     const literal: ITask = {
       id: task.id,
-      date: firestore.Timestamp.fromDate(task.date),
+      date: firebase.firestore.Timestamp.fromDate(task.date),
       title: task.title,
       isDoing: task.isDoing,
       // tslint:disable-next-line:no-null-keyword
@@ -322,18 +322,18 @@ export default class FirestoreUtil {
       isDeleted: task.isDeleted,
       estimateSeparateStart: task.estimateSeparateStart,
       estimateSeparateEnd: task.estimateSeparateEnd,
-      createTime: firestore.Timestamp.fromDate(task.createTime),
-      updateTime: firestore.Timestamp.fromDate(task.updateTime),
+      createTime: firebase.firestore.Timestamp.fromDate(task.createTime),
+      updateTime: firebase.firestore.Timestamp.fromDate(task.updateTime),
       note: task.note,
     }
     if (task.startTime != undefined) {
-      literal.startTime = firestore.Timestamp.fromDate(task.startTime)
+      literal.startTime = firebase.firestore.Timestamp.fromDate(task.startTime)
     } else {
       // tslint:disable-next-line:no-null-keyword
       literal.startTime = null
     }
     if (task.endTime != undefined) {
-      literal.endTime = firestore.Timestamp.fromDate(task.endTime)
+      literal.endTime = firebase.firestore.Timestamp.fromDate(task.endTime)
     } else {
       // tslint:disable-next-line:no-null-keyword
       literal.endTime = null
@@ -373,7 +373,7 @@ export default class FirestoreUtil {
     }
   }
 
-  private static converToTask(data: firestore.DocumentData): Task {
+  private static converToTask(data: firebase.firestore.DocumentData): Task {
     const task = new Task(data.date.toDate(), data.title)
     task.id = data.id
     task.startTime = this.toDateUndefinable(data.startTime)
@@ -397,7 +397,7 @@ export default class FirestoreUtil {
    * 注意 Firestoreから情報が取得できていない場合は、idが空のオブジェクトを返す
    * @param data
    */
-  private static converToRepeat(data: firestore.DocumentData | undefined): Repeat {
+  private static converToRepeat(data: firebase.firestore.DocumentData | undefined): Repeat {
     const repeat: Repeat = new Repeat()
     if (data !== undefined) {
       repeat.id = this.toString(data.id)

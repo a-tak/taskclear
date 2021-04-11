@@ -1,4 +1,4 @@
-FROM node:13.13.0
+FROM node:14.16.1
 
 RUN apt-get update \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
