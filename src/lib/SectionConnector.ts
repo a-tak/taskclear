@@ -1,4 +1,4 @@
-import firebase, { firestore } from "firebase"
+import firebase from "firebase/app"
 import Section from "@/lib/Section"
 import fsUtil from "@/util/FirestoreUtil"
 
@@ -34,7 +34,7 @@ export default class SectionConnector {
     // データ検索
     this.unscribe_ = this.getQuery(uid)
       .onSnapshot((snapshot) => {
-        snapshot.docChanges().forEach((change: firestore.DocumentChange) => {
+        snapshot.docChanges().forEach((change: firebase.firestore.DocumentChange) => {
           let section: Section
           const firedoc: firebase.firestore.DocumentData | undefined = change.doc.data()
           if (firedoc != undefined) {
@@ -70,8 +70,8 @@ export default class SectionConnector {
    */
   public async load(uid: string): Promise<Section[]> {
     const sections: Section[] = []
-    const query: firestore.QuerySnapshot = await this.getQuery(uid).get()
-    query.forEach((doc: firestore.QueryDocumentSnapshot): void => {
+    const query: firebase.firestore.QuerySnapshot = await this.getQuery(uid).get()
+    query.forEach((doc: firebase.firestore.QueryDocumentSnapshot): void => {
       if (doc !== undefined) {
         const data: firebase.firestore.DocumentData | undefined = doc.data()
         sections.push(this.convertClass(data))
@@ -96,8 +96,8 @@ export default class SectionConnector {
     }
   }
 
-  private getQuery(uid: string): firestore.Query {
-    return firestore()
+  private getQuery(uid: string): firebase.firestore.Query {
+    return firebase.firestore()
       .collection("users")
       .doc(uid)
       .collection("sections")
@@ -114,7 +114,7 @@ export default class SectionConnector {
     }
   }
 
-  private convertClass(doc: firestore.DocumentData): Section {
+  private convertClass(doc: firebase.firestore.DocumentData): Section {
     const section = new Section()
     section.id = doc.id
     section.title = doc.title
