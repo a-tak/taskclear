@@ -10,6 +10,10 @@
 * ヘルプ作成しました
   * https://a-tak.github.io/taskclear/
 
+## Remote-Container環境で開発する場合
+
+postCreateCommand.sh.sampleをpostCreateCommand.shにリネームしてgitコミットのユーザー名を記載するとコンテナリビルド時に自動で設定される。
+
 ## リリースノート (以後のリリースノートはGithubの「リリース」の中に記載していく)
 * 2019-08-12 ver. 0.11.0
   * Vuetify2.0導入に伴ってUIを修正
