@@ -5,9 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "stay": "vue-cli-service build",
-    "build": "npm version patch && vue-cli-service build",
-    "minor": "npm version minor && vue-cli-service build",
-    "major": "npm version major && vue-cli-service build",
+    "build": "yarn version --patch && vue-cli-service build",
+    "minor": "yarn version --minor && vue-cli-service build",
+    "major": "yarn version --major && vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
