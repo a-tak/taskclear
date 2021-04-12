@@ -125,7 +125,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator"
-import firebase, { firestore } from "firebase"
+import firebase from "firebase/app"
 import NewTask from "@/components/NewTask.vue"
 import TaskRow from "@/components/TaskRow.vue"
 import EstimateList from "@/components/EstimateList.vue"
@@ -372,16 +372,16 @@ export default class TaskListMain extends Vue {
   }
 
   private save(): void {
-    this.saving_ = true
-    this.$nextTick(() => {
-      FirestoreUtil.saveTasks(
-        this.$store.getters["taskList/user"].uid,
-        this.$store.getters["taskList/taskCtrl"]
-      )
-      this.$nextTick(() => {
-        this.saving_ = false
-      })
-    })
+    // this.saving_ = true
+    // this.$nextTick(() => {
+    //   FirestoreUtil.saveTasks(
+    //     this.$store.getters["taskList/user"].uid,
+    //     this.$store.getters["taskList/taskCtrl"]
+    //   )
+    //   this.$nextTick(() => {
+    //     this.saving_ = false
+    //   })
+    // })
   }
 
   private startEditTaskName() {

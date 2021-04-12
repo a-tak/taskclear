@@ -346,7 +346,7 @@ export default class FirestoreUtil {
    * undefinedの場合は空文字を返す マイグレーション用
    * @param value
    */
-  private static toString(value: string | undefined): string {
+  public static toString(value: string | undefined): string {
     if (value === undefined) {
       // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
       return ""
@@ -355,7 +355,7 @@ export default class FirestoreUtil {
     }
   }
 
-  private static toNumber(value: string | undefined): number {
+  public static toNumber(value: string | undefined): number {
     if (value === undefined) {
       // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
       return 0
@@ -364,7 +364,7 @@ export default class FirestoreUtil {
     }
   }
 
-  private static toBoolean(value: boolean | undefined): boolean {
+  public static toBoolean(value: boolean | undefined): boolean {
     if (value === undefined) {
       // ここにひっかかるということはキー名を間違っているか、古いデータで項目がない
       return false
