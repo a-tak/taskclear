@@ -1,5 +1,6 @@
 import Task from "@/lib/Task"
 import TaskController from "@/lib/TaskController"
+import firebase from "firebase/app"
 
 export interface State {
   taskCtrl: TaskController

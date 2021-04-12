@@ -10,7 +10,7 @@ Vue.use(Vuetify)
 const localVue = createLocalVue()
 
 describe("SectionRow.vue", () => {
-  let vuetify: typeof Vuetify
+  let vuetify: Vuetify
 
   const time: string = "8:00"
   const section = new Section()

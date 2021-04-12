@@ -1,12 +1,12 @@
-import { firestore } from "firebase"
+import firebase from "firebase/app"
 
 export default interface ITask {
   id: string
-  date: firestore.Timestamp
+  date: firebase.firestore.Timestamp
   title: string
   isDoing: boolean
-  startTime: firestore.Timestamp | null
-  endTime: firestore.Timestamp | null
+  startTime: firebase.firestore.Timestamp | null
+  endTime: firebase.firestore.Timestamp | null
   actualTime: number
   estimateTime: number
   repeatId: string
@@ -14,7 +14,7 @@ export default interface ITask {
   isDeleted: boolean
   estimateSeparateStart: boolean
   estimateSeparateEnd: boolean
-  createTime: firestore.Timestamp
-  updateTime: firestore.Timestamp
+  createTime: firebase.firestore.Timestamp
+  updateTime: firebase.firestore.Timestamp
   note: string
 }
