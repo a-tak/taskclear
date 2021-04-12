@@ -40,36 +40,36 @@ postCreateCommand.sh.sampleをpostCreateCommand.shにリネームしてgitコミ
 
 ## Project setup
 ```
-npm install
+yarn install
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+yarn serve
 ```
 
 ###  ステージングビルド
 ```
-npm run staging
+yarn staging
 ```
 
 ### パッチレベル修正
 ```
-npm run build
+yarn build
 ```
 
 ### マイナーバージョンアップ
 ```
-npm run minor
+yarn minor
 ```
 
 ###  メジャーバージョンアップ
 ```
-npm run major
+yarn major
 ```
 ### ビルドのみ(バージョン上げない)
 ```
-npm run stay
+yarn stay
 ```
 
 ### リリース
@@ -81,7 +81,7 @@ npm run stay
 1. Githubでプルリクエスト作る
 1. masterブランチにマージし
 1. masterブランチをプル
-1. ビルド `npm run build` 等
+1. ビルド `yarn build` 等
 1. プッシュ
 1. プッシュ(タグをフォロー)
 1. Githubでリリース
@@ -94,19 +94,19 @@ npm run stay
 1. ブランチ作成
 1. マイナーバージョンアップ適用
     ```
-    npm update
+    yarn update
     ```
 1. 一旦コミット
 2. メジャーアップデートが残るので確認して一つずつ適用
     ```
-    npm outdate
-    npm install パッケージ名@latest
+    yarn outdate
+    yarn add パッケージ名@latest
     ```
 3. 動作確認して問題なければコミット & プッシュ
 
 ### なぜかビルドが失敗する場合
 
-```node_modules```を一旦削除して```npm install```を実行
+```node_modules```を一旦削除して```yarn install```を実行
 
 ### リリース(手動)
 
@@ -117,20 +117,20 @@ firebase deploy
 
 ### Run your tests
 ```
-npm run test
+yarn test
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+yarn lint
 ```
 
 ### Run your end-to-end tests
 ```
-npm run test:e2e
+yarn test:e2e
 ```
 
 ### Run your unit tests
 ```
-npm run test:unit
+yarn test:unit
 ```
