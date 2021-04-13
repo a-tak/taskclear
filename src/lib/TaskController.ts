@@ -68,13 +68,6 @@ export default class TaskController {
     for (const [index, item] of this.tasks_.entries()) {
       item.sortNo = index + 1
     }
-
-    // セーブ対象を選定
-    for (const task of this.tasks_) {
-      if (task.sortNo !== task.oldSortno) {
-        task.needSave = true
-      }
-    }
   }
 
   /**

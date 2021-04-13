@@ -25,7 +25,6 @@ export default class Task {
   private oldSortno_: number
   private isDeleted_: boolean
   private isNext_: boolean
-  private needSave_: boolean
   private estimateSeparateStart_: boolean
   private estimateSeparateEnd_: boolean
   private createTime_: Date
@@ -49,8 +48,6 @@ export default class Task {
     this.oldSortno_ = 999
     this.isDeleted_ = false
     this.isNext_ = false
-    // フラグセット忘れで保存されないのを多少防ぐためにtrueで
-    this.needSave_ = true
     this.estimateSeparateStart_ = false
     this.estimateSeparateEnd_ = false
     this.createTime_ = new Date()
@@ -163,17 +160,6 @@ export default class Task {
   }
 
   /**
-   * 保存が必要かどうかの判断に使用するフラグ
-   * trueが付いているTaskのみ保存する
-   */
-  public get needSave(): boolean {
-    return this.needSave_
-  }
-  public set needSave(value: boolean) {
-    this.needSave_ = value
-  }
-
-  /**
    * 一日の見積時間を計算開始するタスク
    * このフラグがtrueになっているタスク以降のタスク見積時間を計上する
    */
@@ -228,8 +214,6 @@ export default class Task {
     newTask.isDeleted = false
     // ソートにより自動設定されるので仮にfalseを指定
     newTask.isNext = false
-    // 新規に作成されるタスクなのでSave対象にする
-    newTask.needSave = true
     newTask.estimateSeparateStart = this.estimateSeparateStart
     // 区切りタスクを開始したがイレギュラーで前の作業に戻ることを想定して元タスクのフラグをコピーする
     newTask.estimateSeparateEnd = this.estimateSeparateEnd
@@ -266,7 +250,6 @@ export default class Task {
     newTask.oldSortno = this.oldSortno_
     newTask.isDeleted = this.isDeleted_
     newTask.isNext = this.isNext_
-    newTask.needSave = this.needSave_
     newTask.estimateSeparateStart = this.estimateSeparateStart_
     newTask.estimateSeparateEnd = this.estimateSeparateEnd_
     newTask.createTime = new Date(this.createTime_)

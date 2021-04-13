@@ -7,44 +7,6 @@ import DateUtil from "./DateUtil"
 
 export default class FirestoreUtil {
   /**
-   * タスクを保存する
-   * 内部でタスクの保存が終わったらneedSaveフラグをクリアして返しているので注意
-   * @param uid ユーザーid
-   * @param taskctrl 保存対象のtaskが入ったtaskController
-   */
-  public static saveTasks(uid: string, taskctrl: TaskController): void {
-    const promises: Array<Promise<void>> = []
-
-    const processStartTime: number = Date.now()
-    for (const task of taskctrl.tasks) {
-      if (task.needSave === true) {
-        promises.push(this.setTask(uid, task))
-      }
-    }
-
-    Promise.all(promises)
-      .then((): void => {
-        // 保存が成功したら要セーブフラグをクリア
-        for (const task of taskctrl.tasks) {
-          task.needSave = false
-        }
-        // tslint:disable-next-line:no-console
-        console.log(
-          `セーブ件数 ${promises.length} 件 / Save time ${Date.now() -
-            processStartTime} ms `,
-        )
-      })
-      .catch((error: Error): void => {
-        // tslint:disable-next-line:no-console
-        console.error(
-          `Save Error! セーブ件数 ${promises.length} 件 / ${Date.now() -
-            processStartTime} ms `,
-          error,
-        )
-      })
-  }
-
-  /**
    * 指定日以降のリピート設定を取得する
    * @param uid uid
    * @param date 対象日付
@@ -441,7 +403,6 @@ export default class FirestoreUtil {
     task.repeatId = this.toString(data.repeatId)
     task.sortNo = this.toNumber(data.sortNo)
     task.isDeleted = this.toBoolean(data.isDeleted)
-    task.needSave = false
     task.estimateSeparateStart = this.toBoolean(data.estimateSeparateStart)
     task.estimateSeparateEnd = this.toBoolean(data.estimateSeparateEnd)
     task.createTime = this.toDate(data.createTime)

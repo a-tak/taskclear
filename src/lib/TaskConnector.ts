@@ -2,6 +2,7 @@ import firebase from "firebase/app"
 import Task from "@/lib/Task"
 import fsUtil from "@/util/FirestoreUtil"
 import DateUtil from "@/util/DateUtil"
+import ITask from "@/lib/ITask"
 
 /**
  * セクションのFirebase操作を担うクラス
@@ -69,30 +70,30 @@ export default class TaskConnector {
     }
   }
 
-  public async set(uid: string, section: Task): Promise<void> {
+  public async set(uid: string, task: Task): Promise<void> {
     // 保存時にTaskオブジェクトのupdateTimeも更新
-    section.updateTime = new Date()
+    task.updateTime = new Date()
     firebase
       .firestore()
       .collection("users")
       .doc(uid)
-      .collection("sections")
-      .doc(section.id)
-      .set(this.converLiteral(section))
+      .collection("tasks")
+      .doc(task.id)
+      .set(this.converLiteral(task))
   }
-  public async delete(uid: string, section: Task): Promise<void> {
-    try {
-      await firebase
-        .firestore()
-        .collection("users")
-        .doc(uid)
-        .collection("sections")
-        .doc(section.id)
-        .delete()
-    } catch (error) {
-      // tslint:disable-next-line:no-console
-      console.error(`Delete Section error! Section id=${section.id}`, error)
-    }
+
+  public async delete(uid: string, task: Task): Promise<void> {
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .collection("tasks")
+      .doc(task.id)
+      .delete()
+      .catch((error: Error) => {
+        // tslint:disable-next-line:no-console
+        console.error(`Delete Task error! task id=${task.id}`, error)
+      })
   }
 
   private getQuery(uid: string, date: Date): firebase.firestore.Query {
@@ -108,14 +109,41 @@ export default class TaskConnector {
       .where("isDeleted", "==", false)
   }
 
-  private converLiteral(section: Task): object {
-    return {
-      id: section.id,
-      title: section.title,
-      startTime: section.startTime,
-      createTime: section.createTime,
-      updateTime: section.updateTime,
+  private converLiteral(task: Task): object {
+    const literal: ITask = {
+      id: task.id,
+      date: firebase.firestore.Timestamp.fromDate(task.date),
+      title: task.title,
+      isDoing: task.isDoing,
+      // tslint:disable-next-line:no-null-keyword
+      startTime: null,
+      // tslint:disable-next-line:no-null-keyword
+      endTime: null,
+      estimateTime: task.estimateTime,
+      actualTime: task.actualTime,
+      repeatId: task.repeatId,
+      sortNo: task.sortNo,
+      isDeleted: task.isDeleted,
+      estimateSeparateStart: task.estimateSeparateStart,
+      estimateSeparateEnd: task.estimateSeparateEnd,
+      createTime: firebase.firestore.Timestamp.fromDate(task.createTime),
+      updateTime: firebase.firestore.Timestamp.fromDate(task.updateTime),
+      note: task.note,
     }
+    if (task.startTime != undefined) {
+      literal.startTime = firebase.firestore.Timestamp.fromDate(task.startTime)
+    } else {
+      // tslint:disable-next-line:no-null-keyword
+      literal.startTime = null
+    }
+    if (task.endTime != undefined) {
+      literal.endTime = firebase.firestore.Timestamp.fromDate(task.endTime)
+    } else {
+      // tslint:disable-next-line:no-null-keyword
+      literal.endTime = null
+    }
+
+    return literal
   }
 
   private convertClass(data: firebase.firestore.DocumentData): Task {
@@ -128,7 +156,6 @@ export default class TaskConnector {
     task.repeatId = fsUtil.toString(data.repeatId)
     task.sortNo = fsUtil.toNumber(data.sortNo)
     task.isDeleted = fsUtil.toBoolean(data.isDeleted)
-    task.needSave = false
     task.estimateSeparateStart = fsUtil.toBoolean(data.estimateSeparateStart)
     task.estimateSeparateEnd = fsUtil.toBoolean(data.estimateSeparateEnd)
     task.createTime = fsUtil.toDate(data.createTime)

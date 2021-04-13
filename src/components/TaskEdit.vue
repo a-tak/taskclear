@@ -212,7 +212,6 @@ export default class TaskEdit extends Vue {
     this.editTask_.estimateSeparateStart = this.estimateSeparateStart_
     this.editTask_.estimateSeparateEnd = this.estimateSeparateEnd_
     this.editTask_.sortNo = this.sortNo_
-    this.editTask_.needSave = true
 
     // 編集終了イベント発生
     Util.assertIsDefined(this.editTask_)

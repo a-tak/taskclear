@@ -36,8 +36,6 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from "vue-property-decorator"
-import FirestoreUtil from "../util/FirestoreUtil"
-import ITask from "../lib/ITask"
 import Task from "../lib/Task"
 import DateUtil from "@/util/DateUtil"
 
@@ -57,11 +55,7 @@ export default class NewTask extends Vue {
     const now = DateUtil.clearDate(new Date())
     const date = DateUtil.getDateObjectByDate(d, now)
     const task: Task = new Task(date, this.inputvalue_)
-    this.$store.commit("taskList/addTask", task)
-
-    FirestoreUtil.saveTasks(
-      this.$store.getters["taskList/user"].uid,
-      this.$store.getters["taskList/taskCtrl"])
+    this.$store.dispatch("taskList/set", task)
 
     this.inputvalue_ = ""
 
