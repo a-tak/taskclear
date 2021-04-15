@@ -368,11 +368,13 @@ export default class TaskListMain extends Vue {
   private endEditTaskName() {
     this.entryShortcut()
   }
+
   private endEditTask(task: Task, index: number) {
     Util.assertIsDefined(index)
     Util.assertIsDefined(task)
 
     this.$set(this.tasks, index, task)
+    this.$store.dispatch("taskList/set", task)
     this.$store.getters["taskList/taskCtrl"].sort()
     this.reCreateRepeatTask()
   }

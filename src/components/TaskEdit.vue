@@ -223,6 +223,7 @@ export default class TaskEdit extends Vue {
 
     // 編集終了イベント発生
     Util.assertIsDefined(this.backupedTask_)
+    // TODO: 編集キャンセルした場合もSAVEと同じイベントが走っていて無駄に保存されている
     this.endEdit(this.backupedTask_)
     this.endEditTaskName()
   }
