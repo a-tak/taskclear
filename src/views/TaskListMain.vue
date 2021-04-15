@@ -3,8 +3,8 @@
     <div class="fixed-header">
       <Header v-on:clickjumpToNextTaskButtomEvent="jumpToNextTask()"></Header>
       <div id="day-and-estimate">
-        <v-layout v-bind="topRowLayoutAttributes" fill-height>
-          <v-flex>
+        <v-row class="mt-1">
+          <v-col cols="12" sm="12" md="6" lg="6" xf="6">
             <v-card class="elevation-5">
               <v-menu
                 :close-on-content-click="false"
@@ -32,11 +32,11 @@
                 ></v-date-picker>
               </v-menu>
             </v-card>
-          </v-flex>
-          <v-flex class="elevation-5">
+          </v-col>
+          <v-col cols="12" sm="12" md="6" lg="6" xf="6"  class="elevation-5">
             <EstimateList></EstimateList>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </div>
     </div>
     <v-tooltip top>
@@ -110,7 +110,7 @@
   z-index: 100;
 }
 .listSp {
-  padding-top: 180px;
+  padding-top: 200px;
 }
 .listPc {
   padding-top: 100px;
