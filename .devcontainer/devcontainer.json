@@ -33,7 +33,8 @@
 		"ms-azuretools.vscode-docker",
 		"dbaeumer.vscode-eslint",
 		"toba.vsfire",
-		"msjsdiag.debugger-for-chrome"
+		"msjsdiag.debugger-for-chrome",
+		"wayou.vscode-todo-highlight"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
