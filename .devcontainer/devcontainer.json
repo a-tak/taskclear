@@ -48,7 +48,7 @@
 	// "shutdownAction": "none",
 
 	// Uncomment the next line to run commands after the container is created - for example installing curl.
-	"postCreateCommand": "/bin/bash postCreateCommand.sh && yarn install && yarn add global @vue/cli",
+	"postCreateCommand": "/bin/bash postCreateCommand.sh && yarn install && yarn global add @vue/cli",
 
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
