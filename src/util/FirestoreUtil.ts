@@ -369,7 +369,6 @@ export default class FirestoreUtil {
       estimateTime: task.estimateTime,
       actualTime: task.actualTime,
       repeatId: task.repeatId,
-      sortNo: task.sortNo,
       isDeleted: task.isDeleted,
       estimateSeparateStart: task.estimateSeparateStart,
       estimateSeparateEnd: task.estimateSeparateEnd,
@@ -401,7 +400,6 @@ export default class FirestoreUtil {
     task.estimateTime = data.estimateTime
     task.isDoing = data.isDoing
     task.repeatId = this.toString(data.repeatId)
-    task.sortNo = this.toNumber(data.sortNo)
     task.isDeleted = this.toBoolean(data.isDeleted)
     task.estimateSeparateStart = this.toBoolean(data.estimateSeparateStart)
     task.estimateSeparateEnd = this.toBoolean(data.estimateSeparateEnd)

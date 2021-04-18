@@ -122,7 +122,6 @@ export default class TaskConnector {
       estimateTime: task.estimateTime,
       actualTime: task.actualTime,
       repeatId: task.repeatId,
-      sortNo: task.sortNo,
       isDeleted: task.isDeleted,
       estimateSeparateStart: task.estimateSeparateStart,
       estimateSeparateEnd: task.estimateSeparateEnd,
@@ -154,7 +153,6 @@ export default class TaskConnector {
     task.estimateTime = data.estimateTime
     task.isDoing = data.isDoing
     task.repeatId = fsUtil.toString(data.repeatId)
-    task.sortNo = fsUtil.toNumber(data.sortNo)
     task.isDeleted = fsUtil.toBoolean(data.isDeleted)
     task.estimateSeparateStart = fsUtil.toBoolean(data.estimateSeparateStart)
     task.estimateSeparateEnd = fsUtil.toBoolean(data.estimateSeparateEnd)

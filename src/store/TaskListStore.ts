@@ -69,6 +69,7 @@ export default {
         // 普通のオペレーションだと追加後に時間を設定し直すので、その時に正しい日付が設定されるはず
         // それか末尾に来るような時間をデフォルトでセットするかだな
         commit("addTask", task)
+        commit("sortTask")
       }
       const modifiedFunc: (task: Task) => void = (task: Task) => {
         // ソートするので一旦削除して追加するやり方でいく

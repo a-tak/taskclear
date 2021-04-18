@@ -232,7 +232,6 @@ export default class TaskEdit extends Vue {
 
     this.editTask_.estimateSeparateStart = this.estimateSeparateStart_
     this.editTask_.estimateSeparateEnd = this.estimateSeparateEnd_
-    this.editTask_.sortNo = this.sortNo_
 
     // 編集終了イベント発生
     Util.assertIsDefined(this.editTask_)
@@ -265,7 +264,6 @@ export default class TaskEdit extends Vue {
       this.estimateTime_ = this.task_.estimateTime.toString()
     }
     this.section_ = DateUtil.get4digitTime(this.task_.date)
-    this.sortNo_ = this.task_.sortNo
     this.estimateSeparateStart_ = this.task_.estimateSeparateStart
     this.estimateSeparateEnd_ = this.task_.estimateSeparateEnd
 
