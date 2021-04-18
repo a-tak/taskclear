@@ -34,7 +34,8 @@
 		"dbaeumer.vscode-eslint",
 		"toba.vsfire",
 		"msjsdiag.debugger-for-chrome",
-		"wayou.vscode-todo-highlight"
+		"wayou.vscode-todo-highlight",
+		"formulahendry.auto-rename-tag"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

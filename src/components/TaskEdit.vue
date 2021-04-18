@@ -1,11 +1,11 @@
 <template>
   <v-container grid-list-md text-xs-center pa-1>
-    <v-layout row wrap>
-      <v-flex text-left>
+    <v-row row wrap>
+      <v-col text-left>
         <v-card>
           <v-card-title class="title teal lighten-3 white--text">タスク編集</v-card-title>
-          <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
-            <v-flex ma-2 grow>
+          <v-row v-bind="layoutAttributes" fill-height align-center justify-space-between>
+            <v-col ma-2 grow>
               <span>タスク名</span>
               <v-text-field
                 v-bind:id="'task-edit-title-field-' + editTask_.id"
@@ -20,16 +20,16 @@
                 @keyup.enter="keyUp()"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-            <v-flex shrink>
+            </v-col>
+            <v-col shrink>
               <v-checkbox hide-details v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
-            </v-flex>
-            <v-flex shrink>
+            </v-col>
+            <v-col shrink>
               <v-checkbox hide-details v-model="estimateSeparateEnd_" label="見積の区切りのタスクにする"></v-checkbox>
-            </v-flex>
-          </v-layout>
-          <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
-            <v-flex ma-2>
+            </v-col>
+          </v-row>
+          <v-row v-bind="layoutAttributes" fill-height align-center justify-center>
+            <v-col ma-2>
               <span>開始時間</span>
               <v-text-field
                 v-bind:id="'task-edit-start-field-' + editTask_.id"
@@ -43,8 +43,8 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-            <v-flex ma-2>
+            </v-col>
+            <v-col ma-2>
               <span>終了時間</span>
               <v-text-field
                 v-bind:id="'task-edit-end-field-' + editTask_.id"
@@ -59,8 +59,8 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-            <v-flex ma-2>
+            </v-col>
+            <v-col ma-2>
               <span>見積時間(分)</span>
               <v-text-field
                 v-bind:id="'task-edit-estimate-field-' + editTask_.id"
@@ -75,8 +75,8 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-            <v-flex ma-2>
+            </v-col>
+            <v-col ma-2>
               <span>予定時間帯</span>
               <v-combobox
                 :id="'task-edit-section-field-' + editTask_.id"
@@ -91,8 +91,8 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-combobox>
-            </v-flex>
-            <v-flex ma-2>
+            </v-col>
+            <v-col ma-2>
               <span>ソート順</span>
               <v-text-field
                 v-bind:id="'task-edit-sortno-field-' + editTask_.id"
@@ -106,15 +106,15 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-          </v-layout>
-          <v-layout row fill-height align-end justify-end pa-0>
+            </v-col>
+          </v-row>
+          <v-row row fill-height align-end justify-end pa-0>
             <v-btn class="ma-3 accent" min-width="120" @click.stop="save">保存</v-btn>
             <v-btn class="ma-3" min-width="120" v-bind:id="'task-edit-cancelbtn-' + editTask_.id" @click.stop="cancel">キャンセル</v-btn>
-          </v-layout>
+          </v-row>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
