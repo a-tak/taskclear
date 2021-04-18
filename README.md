@@ -85,7 +85,9 @@ yarn stay
 1. プッシュ
 1. プッシュ(タグをフォロー)
 1. Githubでリリース
-    * code > releases にさきほどプッシュしたタグがあるので、タグ名クリックしてEdit tagからPublish release
+    * code > xx tags にさきほどプッシュしたタグがあるので、タグの3点ドットから `Create release`
+    * 内容を記載してPublish release
+1. 自動的にGitHub ActionsでFirebaseにリリースされる
 
 ### セキュリティーアップデート手順
 
