@@ -2,7 +2,7 @@
   <div id="estimate-list">
     <v-card class="pt-0 mt-0">
       <v-row align="start">
-        <v-col cols="6" sm="6" md="6" lg="6" xf="6">
+        <v-col cols="6" sm="6" md="6" lg="6" xl="6">
           <v-row
             class="ml-3"
             v-for="(estimate, index) in estimates1"
@@ -18,7 +18,7 @@
             </div>
           </v-row>
         </v-col>
-        <v-col cols="6" sm="6" md="6" lg="6" xf="6">
+        <v-col cols="6" sm="6" md="6" lg="6" xl="6">
           <v-row
             class="ml-3"
             v-for="estimate in estimates2"

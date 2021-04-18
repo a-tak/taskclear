@@ -4,7 +4,7 @@
       <Header v-on:clickjumpToNextTaskButtomEvent="jumpToNextTask()"></Header>
       <div id="day-and-estimate">
         <v-row class="mt-1">
-          <v-col cols="12" sm="12" md="6" lg="6" xf="6">
+          <v-col cols="12" sm="12" md="6" lg="6" xl="6">
             <v-card class="elevation-5">
               <v-menu
                 :close-on-content-click="false"
@@ -33,7 +33,7 @@
               </v-menu>
             </v-card>
           </v-col>
-          <v-col cols="12" sm="12" md="6" lg="6" xf="6" class="elevation-5">
+          <v-col cols="12" sm="12" md="6" lg="6" xl="6" class="elevation-5">
             <EstimateList></EstimateList>
           </v-col>
         </v-row>
