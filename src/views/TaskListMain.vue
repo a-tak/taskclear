@@ -3,8 +3,8 @@
     <div class="fixed-header">
       <Header v-on:clickjumpToNextTaskButtomEvent="jumpToNextTask()"></Header>
       <div id="day-and-estimate">
-        <v-layout v-bind="topRowLayoutAttributes" fill-height>
-          <v-flex>
+        <v-row class="mt-1">
+          <v-col cols="12" sm="12" md="6" lg="6" xl="6">
             <v-card class="elevation-5">
               <v-menu
                 :close-on-content-click="false"
@@ -28,15 +28,15 @@
                   v-model="targetDate"
                   @input="menu2 = false"
                   locale="jp"
-                  :day-format="(date) => new Date(date).getDate()"
+                  :day-format="date => new Date(date).getDate()"
                 ></v-date-picker>
               </v-menu>
             </v-card>
-          </v-flex>
-          <v-flex class="elevation-5">
+          </v-col>
+          <v-col cols="12" sm="12" md="6" lg="6" xl="6" class="elevation-5">
             <EstimateList></EstimateList>
-          </v-flex>
-        </v-layout>
+          </v-col>
+        </v-row>
       </div>
     </div>
     <v-tooltip top>
@@ -110,7 +110,7 @@
   z-index: 100;
 }
 .listSp {
-  padding-top: 180px;
+  padding-top: 200px;
 }
 .listPc {
   padding-top: 100px;
@@ -125,7 +125,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator"
-import firebase, { firestore } from "firebase"
+import firebase from "firebase/app"
 import NewTask from "@/components/NewTask.vue"
 import TaskRow from "@/components/TaskRow.vue"
 import EstimateList from "@/components/EstimateList.vue"
@@ -255,6 +255,7 @@ export default class TaskListMain extends Vue {
   @Watch("targetDate")
   private onValueChange(newValue: string, oldValue: string): void {
     this.deletedTask_ = undefined
+    this.$store.dispatch("taskList/stopListner")
     this.loadTasks()
   }
 
@@ -264,18 +265,12 @@ export default class TaskListMain extends Vue {
     // 当日分のリピートタスクを作る
     const rc: RepeatCreator = new RepeatCreator(
       this.$store.getters["taskList/user"].uid,
-      this.$store.getters["taskList/targetDate"]
+      this.$store.getters["taskList/targetDate"],
     )
     await rc.creaetRepeat(1)
 
-    // 今日のデータを読み込み(同期的に)
-    const tc: TaskController = await FirestoreUtil.loadTasks(
-      self.$store.getters["taskList/user"].uid,
-      self.$store.getters["taskList/targetDate"]
-    )
-    tc.sort()
-
-    self.$store.commit("taskList/setTaskCtrl", tc)
+    // 今日のデータを読み込み(同期的に) TODO:同期的に出来てないけどいけるか?
+    this.$store.dispatch("taskList/startListner")
 
     // 実行中タスクにジャンプ
     this.jumpToNextTask()
@@ -289,7 +284,7 @@ export default class TaskListMain extends Vue {
     d.setDate(d.getDate() + 1)
     const rc2: RepeatCreator = new RepeatCreator(
       this.$store.getters["taskList/user"].uid,
-      d
+      d,
     )
     try {
       rc2.creaetRepeat(6)
@@ -299,16 +294,17 @@ export default class TaskListMain extends Vue {
     }
   }
 
+  /**
+   * タスクの論理削除
+   */
   private deleteTask(task: Task): void {
-    this.$store.commit("taskList/deleteTask", task)
-    FirestoreUtil.logicalDeleteTask(
-      this.$store.getters["taskList/user"].uid,
-      task
-    )
-    // 元に戻したときに保存されないので各種フラグ直しておく
-    task.needSave = true
+    task.isDeleted = true
+    this.$store.dispatch("taskList/set", task)
+
+    // 元に戻したときの為にフラグ直しておく
     task.isDeleted = false
     this.deletedTask_ = task
+
     // 元に戻すボタン表示
     // タイムアウトリセットするため一度消す
     this.snackbarDisplay_ = false
@@ -324,9 +320,8 @@ export default class TaskListMain extends Vue {
       return
     }
     this.snackbarDisplay_ = false
-    this.$store.commit("taskList/addTask", this.deletedTask_)
+    this.$store.dispatch("taskList/set", this.deletedTask_)
     this.$store.commit("taskList/sortTask")
-    this.save()
     this.deletedTask_ = undefined
   }
 
@@ -334,18 +329,18 @@ export default class TaskListMain extends Vue {
     const newTask: Task = task.createPauseTask()
     newTask.startTime = undefined
     newTask.endTime = undefined
-    this.$store.commit("taskList/addTask", newTask)
+    this.$store.dispatch("taskList/set", newTask)
     this.$store.commit("taskList/sortTask")
-    this.save()
   }
 
   private startTask(task: Task): void {
     // 開始しているタスクがあれば中断処理する
     for (const otherTask of this.tasks) {
       if (otherTask.isDoing === true) {
-        this.tasks.push(otherTask.createPauseTask())
+        this.$store.dispatch("taskList/set", otherTask.createPauseTask())
         otherTask.title = otherTask.title + "(中断)"
         this.changeStopTask(otherTask)
+        this.$store.dispatch("taskList/set", otherTask)
       }
     }
 
@@ -355,32 +350,17 @@ export default class TaskListMain extends Vue {
       newTask.isDoing = true
       newTask.startTime = new Date()
       newTask.endTime = undefined
-      this.$store.commit("taskList/addTask", newTask)
+      this.$store.dispatch("taskList/set", newTask)
     } else {
-      task.needSave = true
       task.isDoing = true
       task.startTime = new Date()
     }
 
     this.$store.commit("taskList/sortTask")
 
-    this.save()
-
     this.$nextTick(() => {
       task.isProcessing = false
-    })
-  }
-
-  private save(): void {
-    this.saving_ = true
-    this.$nextTick(() => {
-      FirestoreUtil.saveTasks(
-        this.$store.getters["taskList/user"].uid,
-        this.$store.getters["taskList/taskCtrl"]
-      )
-      this.$nextTick(() => {
-        this.saving_ = false
-      })
+      this.$store.dispatch("taskList/set", task)
     })
   }
 
@@ -390,14 +370,14 @@ export default class TaskListMain extends Vue {
   private endEditTaskName() {
     this.entryShortcut()
   }
+
   private endEditTask(task: Task, index: number) {
     Util.assertIsDefined(index)
     Util.assertIsDefined(task)
 
     this.$set(this.tasks, index, task)
+    this.$store.dispatch("taskList/set", task)
     this.$store.getters["taskList/taskCtrl"].sort()
-    // needSaveフラグは子コンポーネントで保存したときのみ設定しているのでここでは設定しない
-    this.save()
     this.reCreateRepeatTask()
   }
 
@@ -420,20 +400,7 @@ export default class TaskListMain extends Vue {
     if (DateUtil.getDateString(task.date) === this.targetDate) {
       return
     }
-
-    // 変更先の日付のdocを取ってくる
-    FirestoreUtil.loadTasks(
-      this.$store.getters["taskList/user"].uid,
-      task.date
-    ).then((tc: TaskController) => {
-      // タスクを追加してsave
-      task.needSave = true
-      tc.tasks.push(task)
-      FirestoreUtil.saveTasks(this.$store.getters["taskList/user"].uid, tc)
-
-      // 今開いている日付のdocから削除
-      this.$store.commit("taskList/deleteTask", task)
-    })
+    this.$store.dispatch("taskList/set", task)
   }
 
   /**
@@ -456,9 +423,9 @@ export default class TaskListMain extends Vue {
 
   private stopTask(task: Task): void {
     this.changeStopTask(task)
-    this.save()
     this.$nextTick(() => {
       task.isProcessing = false
+      this.$store.dispatch("taskList/set", task)
     })
   }
 
@@ -466,13 +433,16 @@ export default class TaskListMain extends Vue {
    * タスクの状態を停止状態に変える(保存はしない)
    */
   private changeStopTask(task: Task): void {
-    task.needSave = true
     task.isDoing = false
     task.endTime = new Date()
   }
 
   private created(): void {
     this.initialLoad()
+  }
+
+  private destroyed(): void {
+    this.$store.dispatch("taskList/stopListner")
   }
 
   private initialLoad() {
@@ -528,7 +498,7 @@ export default class TaskListMain extends Vue {
     let offsetValue: number = 0
     switch (this.$vuetify.breakpoint.name) {
       case "xs":
-        offsetValue = 410
+        offsetValue = 420
         break
       case "sm":
         offsetValue = 370

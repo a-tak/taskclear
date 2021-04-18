@@ -5,7 +5,6 @@ import { v4 as uuid } from "uuid"
  * ここに項目を追加する場合はFirestoreUtilのconverToTaskにもエラーが出ないけど追加が必要
  */
 export default class Task {
-
   /**
    * タスククラスのコンストラクタ
    * idは自動生成する
@@ -21,11 +20,8 @@ export default class Task {
   private endTime_: Date | undefined
   private estimateTime_: number
   private repeatId_: string
-  private sortNo_: number
-  private oldSortno_: number
   private isDeleted_: boolean
   private isNext_: boolean
-  private needSave_: boolean
   private estimateSeparateStart_: boolean
   private estimateSeparateEnd_: boolean
   private createTime_: Date
@@ -34,10 +30,15 @@ export default class Task {
   private isProcessing_: boolean
 
   constructor(date: Date, title: string) {
-    this.id_ = date.getFullYear() +
-               (date.getMonth() + 1).toString().padStart(2, "0") +
-               date.getDate().toString().padStart(2, "0") +
-               "_" + uuid()
+    this.id_ =
+      date.getFullYear() +
+      (date.getMonth() + 1).toString().padStart(2, "0") +
+      date
+        .getDate()
+        .toString()
+        .padStart(2, "0") +
+      "_" +
+      uuid()
     this.date_ = new Date(date)
     this.title_ = title
     this.isDoing_ = false
@@ -45,12 +46,8 @@ export default class Task {
     this.endTime_ = undefined
     this.estimateTime_ = 0
     this.repeatId_ = ""
-    this.sortNo_ = 999
-    this.oldSortno_ = 999
     this.isDeleted_ = false
     this.isNext_ = false
-    // フラグセット忘れで保存されないのを多少防ぐためにtrueで
-    this.needSave_ = true
     this.estimateSeparateStart_ = false
     this.estimateSeparateEnd_ = false
     this.createTime_ = new Date()
@@ -59,18 +56,42 @@ export default class Task {
     this.isProcessing_ = false
   }
 
-  get id(): string { return this.id_ }
-  set id(value: string) { this.id_ = value }
-  get date(): Date { return this.date_ }
-  set date(value: Date) { this.date_ = value }
-  get title(): string { return this.title_ }
-  set title(value: string) { this.title_ = value }
-  get isDoing(): boolean { return this.isDoing_ }
-  set isDoing(value: boolean) { this.isDoing_ = value }
-  get startTime(): Date | undefined { return this.startTime_ }
-  set startTime(value: Date | undefined) { this.startTime_ = value }
-  get endTime(): Date | undefined { return this.endTime_ }
-  set endTime(value: Date | undefined) { this.endTime_ = value }
+  get id(): string {
+    return this.id_
+  }
+  set id(value: string) {
+    this.id_ = value
+  }
+  get date(): Date {
+    return this.date_
+  }
+  set date(value: Date) {
+    this.date_ = value
+  }
+  get title(): string {
+    return this.title_
+  }
+  set title(value: string) {
+    this.title_ = value
+  }
+  get isDoing(): boolean {
+    return this.isDoing_
+  }
+  set isDoing(value: boolean) {
+    this.isDoing_ = value
+  }
+  get startTime(): Date | undefined {
+    return this.startTime_
+  }
+  set startTime(value: Date | undefined) {
+    this.startTime_ = value
+  }
+  get endTime(): Date | undefined {
+    return this.endTime_
+  }
+  set endTime(value: Date | undefined) {
+    this.endTime_ = value
+  }
 
   public get note(): string {
     return this.note_
@@ -97,17 +118,27 @@ export default class Task {
   /**
    * 見積時間(分)
    */
-  get estimateTime(): number {return this.estimateTime_ }
-  set estimateTime(value: number) { this.estimateTime_ = value }
+  get estimateTime(): number {
+    return this.estimateTime_
+  }
+  set estimateTime(value: number) {
+    this.estimateTime_ = value
+  }
   /**
    * 実績時間(分)
    */
   get actualTime(): number {
-    if (this.startTime_ == undefined) { return 0 }
+    if (this.startTime_ == undefined) {
+      return 0
+    }
     // 終了時間が入っていないときは今の時間を使う
     let endTime: Date = new Date()
-    if (this.endTime_ != undefined) { endTime = this.endTime_ }
-    return Math.floor((endTime.getTime() - this.startTime_.getTime()) / 1000 / 60)
+    if (this.endTime_ != undefined) {
+      endTime = this.endTime_
+    }
+    return Math.floor(
+      (endTime.getTime() - this.startTime_.getTime()) / 1000 / 60,
+    )
   }
 
   /**
@@ -129,26 +160,6 @@ export default class Task {
   public set updateTime(value: Date) {
     this.updateTime_ = value
   }
-  /**
-   * ソート順
-   */
-  public get sortNo(): number {
-    return this.sortNo_
-  }
-  public set sortNo(value: number) {
-    this.sortNo_ = value
-  }
-
-  /**
-   * ソート前のソート順
-   * ソート順番が変更されたどうかの判断に使う
-   */
-  public get oldSortno(): number {
-    return this.oldSortno_
-  }
-  public set oldSortno(value: number) {
-    this.oldSortno_ = value
-  }
 
   /**
    * 次実行するタスクフラグ
@@ -160,17 +171,6 @@ export default class Task {
   }
   public set isNext(value: boolean) {
     this.isNext_ = value
-  }
-
-  /**
-   * 保存が必要かどうかの判断に使用するフラグ
-   * trueが付いているTaskのみ保存する
-   */
-  public get needSave(): boolean {
-    return this.needSave_
-  }
-  public set needSave(value: boolean) {
-    this.needSave_ = value
   }
 
   /**
@@ -217,19 +217,15 @@ export default class Task {
     newTask.startTime = undefined
     newTask.endTime = undefined
     let estimate: number = this.estimateTime - this.actualTime
-    if (estimate < 0) { estimate = 0 }
+    if (estimate < 0) {
+      estimate = 0
+    }
     newTask.estimateTime = estimate
     newTask.repeatId = ""
-    // 次の行にコピーしたものは表示
-    newTask.sortNo = this.sortNo_
-    // ソート直前に更新されるのでどうでもいいが一応コピー
-    newTask.oldSortno = this.oldSortno_
     // 削除したタスクの中断タスクが作られても意味がないはずなので、常にfalseにする
     newTask.isDeleted = false
     // ソートにより自動設定されるので仮にfalseを指定
     newTask.isNext = false
-    // 新規に作成されるタスクなのでSave対象にする
-    newTask.needSave = true
     newTask.estimateSeparateStart = this.estimateSeparateStart
     // 区切りタスクを開始したがイレギュラーで前の作業に戻ることを想定して元タスクのフラグをコピーする
     newTask.estimateSeparateEnd = this.estimateSeparateEnd
@@ -262,11 +258,8 @@ export default class Task {
     }
     newTask.estimateTime = this.estimateTime_
     newTask.repeatId = this.repeatId_
-    newTask.sortNo = this.sortNo_
-    newTask.oldSortno = this.oldSortno_
     newTask.isDeleted = this.isDeleted_
     newTask.isNext = this.isNext_
-    newTask.needSave = this.needSave_
     newTask.estimateSeparateStart = this.estimateSeparateStart_
     newTask.estimateSeparateEnd = this.estimateSeparateEnd_
     newTask.createTime = new Date(this.createTime_)
@@ -276,14 +269,5 @@ export default class Task {
     newTask.isProcessing = false
 
     return newTask
-
   }
-
-  /**
-   * 現在のソートNoを待避する
-   */
-  public backupSortNo(): void {
-    this.oldSortno_ = this.sortNo
-  }
-
 }

@@ -17,7 +17,7 @@ Vue.use(Vuetify)
 const localVue = createLocalVue()
 
 describe("TaskEdit.vue", () => {
-  let vuetify: typeof Vuetify
+  let vuetify: Vuetify
 
   const task: Task = new Task(new Date("2018-12-06 10:12:43"), "テストタスク")
 

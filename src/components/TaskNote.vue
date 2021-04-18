@@ -50,7 +50,6 @@ export default class TaskNote extends Vue {
 
   private endEditEvent(note: string) {
     this.task_.note = note
-    this.task_.needSave = true
     this.endEdit(this.task_)
   }
 }

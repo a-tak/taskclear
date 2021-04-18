@@ -19,7 +19,7 @@ localVue.use(Vuex)
 jest.mock("@/util/FirestoreUtil")
 
 describe("NewTask.vue", () => {
-  let vuetify: typeof Vuetify
+  let vuetify: Vuetify
   let state: {}
   let actions: ActionTree<any, unknown>
   let getters: {}
@@ -55,7 +55,7 @@ describe("NewTask.vue", () => {
     return mount(NewTask, {
       localVue,
       vuetify,
-      store: store,
+      store,
       ...options,
     })
   }

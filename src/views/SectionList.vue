@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator"
-import firebase, { firestore } from "firebase"
+import firebase from "firebase/app"
 import Header from "@/components/Header.vue"
 import Footer from "@/components/Footer.vue"
 import SectionRow from "@/components/SectionRow.vue"

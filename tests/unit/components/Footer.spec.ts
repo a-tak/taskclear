@@ -9,7 +9,7 @@ Vue.use(Vuetify)
 const localVue = createLocalVue()
 
 describe("SectionRow.vue", () => {
-  let vuetify: typeof Vuetify
+  let vuetify: Vuetify
 
   beforeEach(() => {
     vuetify = new Vuetify({

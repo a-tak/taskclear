@@ -1,29 +1,33 @@
 <template>
   <div id="estimate-list">
-    <v-card>
-      <v-layout row>
-        <v-flex>
-          <v-layout column>
-            <v-flex v-for="(estimate, index) in estimates1" :key="estimate.dateStr">
-              <div
-                v-if="index==0"
-                class="headline"
-              >{{ estimate.dateStr }} ({{ estimate.dayLabel }}) {{ estimate.estimateTime}}</div>
-              <div
-                v-else
-              >{{ estimate.dateStr }} ({{ estimate.dayLabel }}) {{ estimate.estimateTime}}</div>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-        <v-flex>
-          <v-layout column>
-            <v-flex
-              v-for="(estimate) in estimates2"
-              :key="estimate.dateStr"
-            >{{ estimate.dateStr }} ({{ estimate.dayLabel }}) {{ estimate.estimateTime}}</v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
+    <v-card class="pt-0 mt-0">
+      <v-row align="start">
+        <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+          <v-row
+            class="ml-3"
+            v-for="(estimate, index) in estimates1"
+            :key="estimate.dateStr"
+          >
+            <div v-if="index == 0" class="headline">
+              {{ estimate.dateStr }} ({{ estimate.dayLabel }})
+              {{ estimate.estimateTime }}
+            </div>
+            <div v-else>
+              {{ estimate.dateStr }} ({{ estimate.dayLabel }})
+              {{ estimate.estimateTime }}
+            </div>
+          </v-row>
+        </v-col>
+        <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+          <v-row
+            class="ml-3"
+            v-for="estimate in estimates2"
+            :key="estimate.dateStr"
+            >{{ estimate.dateStr }} ({{ estimate.dayLabel }})
+            {{ estimate.estimateTime }}</v-row
+          >
+        </v-col>
+      </v-row>
     </v-card>
   </div>
 </template>
@@ -100,17 +104,15 @@ export default class EstimateList extends Vue {
     // おそらく画面も変な順番に並んだ後、ソートされていてぎこちない動きになってるかも
     Promise.all(fsdsPromises).then((tc) => {
       // 全部データ取得したら一旦ソート
-      this.estimates_.sort(
-        (a: Estimate, b: Estimate): number => {
-          if (a.date == undefined) {
-            return 1
-          } else if (b.date == undefined) {
-            return -1
-          } else {
-            return a.date.getTime() - b.date.getTime()
-          }
-        },
-      )
+      this.estimates_.sort((a: Estimate, b: Estimate): number => {
+        if (a.date == undefined) {
+          return 1
+        } else if (b.date == undefined) {
+          return -1
+        } else {
+          return a.date.getTime() - b.date.getTime()
+        }
+      })
 
       // ドキュメントのリッスン
       for (let n = 0; n <= 6; n++) {
@@ -187,5 +189,4 @@ export default class EstimateList extends Vue {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

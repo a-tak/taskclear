@@ -1,11 +1,13 @@
 <template>
   <v-container grid-list-md text-xs-center pa-1>
-    <v-layout row wrap>
-      <v-flex text-left>
+    <v-row>
+      <v-col text-left>
         <v-card>
-          <v-card-title class="title teal lighten-3 white--text">タスク編集</v-card-title>
-          <v-layout v-bind="layoutAttributes" fill-height align-center justify-space-between>
-            <v-flex ma-2 grow>
+          <v-card-title class="title teal lighten-3 white--text"
+            >タスク編集</v-card-title
+          >
+          <v-row class="ma-2">
+            <v-col cols="12" sm="12" md="5" lg="5" xl="5">
               <span>タスク名</span>
               <v-text-field
                 v-bind:id="'task-edit-title-field-' + editTask_.id"
@@ -20,16 +22,24 @@
                 @keyup.enter="keyUp()"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-            <v-flex shrink>
-              <v-checkbox hide-details v-model="estimateSeparateStart_" label="見積開始のタスクにする"></v-checkbox>
-            </v-flex>
-            <v-flex shrink>
-              <v-checkbox hide-details v-model="estimateSeparateEnd_" label="見積の区切りのタスクにする"></v-checkbox>
-            </v-flex>
-          </v-layout>
-          <v-layout v-bind="layoutAttributes" fill-height align-center justify-center>
-            <v-flex ma-2>
+            </v-col>
+            <v-col cols="12" sm="12" md="3" lg="3" xl="3">
+              <v-checkbox
+                hide-details
+                v-model="estimateSeparateStart_"
+                label="見積開始のタスクにする"
+              ></v-checkbox>
+            </v-col>
+            <v-col cols="12" sm="12" md="3" lg="3" xl="3">
+              <v-checkbox
+                hide-details
+                v-model="estimateSeparateEnd_"
+                label="見積の区切りのタスクにする"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
+          <v-row class="ma-2">
+            <v-col cols="12" sm="12" md="3" lg="3" xl="3">
               <span>開始時間</span>
               <v-text-field
                 v-bind:id="'task-edit-start-field-' + editTask_.id"
@@ -43,8 +53,8 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-            <v-flex ma-2>
+            </v-col>
+            <v-col cols="12" sm="12" md="3" lg="3" xl="3">
               <span>終了時間</span>
               <v-text-field
                 v-bind:id="'task-edit-end-field-' + editTask_.id"
@@ -59,8 +69,8 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-            <v-flex ma-2>
+            </v-col>
+            <v-col cols="12" sm="12" md="3" lg="3" xl="3">
               <span>見積時間(分)</span>
               <v-text-field
                 v-bind:id="'task-edit-estimate-field-' + editTask_.id"
@@ -75,8 +85,8 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-            <v-flex ma-2>
+            </v-col>
+            <v-col cols="12" sm="12" md="3" lg="3" xl="3">
               <span>予定時間帯</span>
               <v-combobox
                 :id="'task-edit-section-field-' + editTask_.id"
@@ -91,8 +101,8 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-combobox>
-            </v-flex>
-            <v-flex ma-2>
+            </v-col>
+            <v-col cols="12" sm="12" md="3" lg="3" xl="3">
               <span>ソート順</span>
               <v-text-field
                 v-bind:id="'task-edit-sortno-field-' + editTask_.id"
@@ -106,15 +116,26 @@
                 @keyup.enter="save"
                 @keyup.esc="cancel()"
               ></v-text-field>
-            </v-flex>
-          </v-layout>
-          <v-layout row fill-height align-end justify-end pa-0>
-            <v-btn class="ma-3 accent" min-width="120" @click.stop="save">保存</v-btn>
-            <v-btn class="ma-3" min-width="120" v-bind:id="'task-edit-cancelbtn-' + editTask_.id" @click.stop="cancel">キャンセル</v-btn>
-          </v-layout>
+            </v-col>
+          </v-row>
+          <v-row class="ma-2" justify="center" justify-md="end">
+            <v-col cols="6" sm="6" md="2" lg="2" xl="2">
+              <v-btn class="accent" min-width="120" @click.stop="save"
+                >保存</v-btn
+              >
+            </v-col>
+            <v-col cols="6" sm="6" md="2" lg="2" xl="2">
+              <v-btn
+                min-width="120"
+                v-bind:id="'task-edit-cancelbtn-' + editTask_.id"
+                @click.stop="cancel"
+                >キャンセル</v-btn
+              >
+            </v-col>
+          </v-row>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -211,8 +232,6 @@ export default class TaskEdit extends Vue {
 
     this.editTask_.estimateSeparateStart = this.estimateSeparateStart_
     this.editTask_.estimateSeparateEnd = this.estimateSeparateEnd_
-    this.editTask_.sortNo = this.sortNo_
-    this.editTask_.needSave = true
 
     // 編集終了イベント発生
     Util.assertIsDefined(this.editTask_)
@@ -224,6 +243,7 @@ export default class TaskEdit extends Vue {
 
     // 編集終了イベント発生
     Util.assertIsDefined(this.backupedTask_)
+    // TODO: 編集キャンセルした場合もSAVEと同じイベントが走っていて無駄に保存されている
     this.endEdit(this.backupedTask_)
     this.endEditTaskName()
   }
@@ -244,30 +264,10 @@ export default class TaskEdit extends Vue {
       this.estimateTime_ = this.task_.estimateTime.toString()
     }
     this.section_ = DateUtil.get4digitTime(this.task_.date)
-    this.sortNo_ = this.task_.sortNo
     this.estimateSeparateStart_ = this.task_.estimateSeparateStart
     this.estimateSeparateEnd_ = this.task_.estimateSeparateEnd
 
     this.sections_ = this.$store.getters["section/sections"]
-  }
-
-  // 算出プロパティーでオブジェクトを返すと属性を展開してくれる
-  get layoutAttributes(): {} {
-    // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
-    switch (this.$vuetify.breakpoint.name) {
-      case "xs":
-        return { row: true }
-      case "sm":
-        return { row: true }
-      case "md":
-        return { row: true }
-      case "lg":
-        return { row: true }
-      case "xl":
-        return { row: true }
-      default:
-        return { row: true }
-    }
   }
 
   private keyDown(event: KeyboardEvent): void {
@@ -287,7 +287,4 @@ export default class TaskEdit extends Vue {
 }
 </script>
 
-<style scoped>
-</style>
-
-
+<style scoped></style>

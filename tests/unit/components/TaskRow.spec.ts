@@ -16,7 +16,7 @@ Vue.use(Vuetify)
 const localVue = createLocalVue()
 
 describe("TaskRow.vue", () => {
-  let vuetify: typeof Vuetify
+  let vuetify: Vuetify
 
   const mountFunction = (options: object) => {
     return mount(TaskRow, {

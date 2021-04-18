@@ -2,18 +2,19 @@ import Task from "./Task"
 
 // Taskオブジェクトを束ねるクラス
 export default class TaskController {
-
   private tasks_: Task[] = []
 
-  get tasks(): Task[] { return this.tasks_ }
-  set tasks(value: Task[]) { this.tasks_ = value }
+  get tasks(): Task[] {
+    return this.tasks_
+  }
+  set tasks(value: Task[]) {
+    this.tasks_ = value
+  }
 
   /**
    * タスクリストをソートする
    */
   public sort(): void {
-
-    this.backupSortNo()
 
     // 終了タスクと開始中タスクと開始前タスクをわける
     const doneTasks: Task[] = []
@@ -41,40 +42,25 @@ export default class TaskController {
         return a.startTime.getTime() - b.startTime.getTime()
       }
     })
-    // 開始前タスクはセクションとsortNoでソート
+    // 開始前タスクはセクションでソート
     // aよりbが後ろに並ぶべきならば負数を返すように実装すること
     beforeStartTasks.sort((a: Task, b: Task) => {
-      if (a.date.getTime() !== b.date.getTime()) {
-        return a.date.getTime() - b.date.getTime()
-      } else {
-        return a.sortNo - b.sortNo
-      }
+      return a.date.getTime() - b.date.getTime()
     })
 
     // 開始前タスクの中の一番目のタスクに「次のタスクフラグ」をつける
     if (beforeStartTasks.length > 0) {
       beforeStartTasks[0].isNext = true
-    // なければ実行中のタスクにフラグをつける
+      // なければ実行中のタスクにフラグをつける
     } else if (doingTask.length > 0) {
       doingTask[0].isNext = true
-    // それもなければ完了したタスクの一番最後のタスクにフラグをつける
+      // それもなければ完了したタスクの一番最後のタスクにフラグをつける
     } else if (doneTasks.length > 0) {
       doneTasks[doneTasks.length - 1].isNext = true
     }
 
     this.tasks_ = doneTasks.concat(doingTask).concat(beforeStartTasks)
 
-    // 番号を振り直す
-    for (const [index, item] of this.tasks_.entries()) {
-      item.sortNo = index + 1
-    }
-
-    // セーブ対象を選定
-    for (const task of this.tasks_) {
-      if (task.sortNo !== task.oldSortno) {
-        task.needSave = true
-      }
-    }
   }
 
   /**
@@ -179,9 +165,4 @@ export default class TaskController {
     return undefined
   }
 
-  private backupSortNo(): void {
-    for (const task of this.tasks_) {
-      task.backupSortNo()
-    }
-  }
 }
