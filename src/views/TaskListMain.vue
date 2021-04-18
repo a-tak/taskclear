@@ -495,7 +495,7 @@ export default class TaskListMain extends Vue {
     let offsetValue: number = 0
     switch (this.$vuetify.breakpoint.name) {
       case "xs":
-        offsetValue = 410
+        offsetValue = 420
         break
       case "sm":
         offsetValue = 370
