@@ -118,13 +118,13 @@
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row class="ma-2">
-            <v-col cols="6">
+          <v-row class="ma-2" justify="center" justify-md="end">
+            <v-col cols="6" sm="6" md="2" lg="2" xl="2">
               <v-btn class="accent" min-width="120" @click.stop="save"
                 >保存</v-btn
               >
             </v-col>
-            <v-col>
+            <v-col cols="6" sm="6" md="2" lg="2" xl="2">
               <v-btn
                 min-width="120"
                 v-bind:id="'task-edit-cancelbtn-' + editTask_.id"
