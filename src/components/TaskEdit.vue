@@ -102,21 +102,6 @@
                 @keyup.esc="cancel()"
               ></v-combobox>
             </v-col>
-            <v-col cols="12" sm="12" md="3" lg="3" xl="3">
-              <span>ソート順</span>
-              <v-text-field
-                v-bind:id="'task-edit-sortno-field-' + editTask_.id"
-                type="number"
-                placeholder="ソート順"
-                single-line
-                outline
-                mask="#####"
-                hint="ソート順を番号で入力"
-                v-model="sortNo_"
-                @keyup.enter="save"
-                @keyup.esc="cancel()"
-              ></v-text-field>
-            </v-col>
           </v-row>
           <v-row class="ma-2" justify="center" justify-md="end">
             <v-col cols="6" sm="6" md="2" lg="2" xl="2">
