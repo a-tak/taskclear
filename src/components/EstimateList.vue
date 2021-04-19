@@ -1,33 +1,33 @@
 <template>
   <div id="estimate-list">
-    <v-card class="pt-0 mt-0">
-      <v-row align="start">
-        <v-col cols="6" sm="6" md="6" lg="6" xl="6">
-          <v-row
-            class="ml-3"
-            v-for="(estimate, index) in estimates1"
-            :key="estimate.dateStr"
-          >
-            <div v-if="index == 0" class="headline">
-              {{ estimate.dateStr }} ({{ estimate.dayLabel }})
-              {{ estimate.estimateTime }}
-            </div>
-            <div v-else>
-              {{ estimate.dateStr }} ({{ estimate.dayLabel }})
-              {{ estimate.estimateTime }}
-            </div>
-          </v-row>
-        </v-col>
-        <v-col cols="6" sm="6" md="6" lg="6" xl="6">
-          <v-row
-            class="ml-3"
-            v-for="estimate in estimates2"
-            :key="estimate.dateStr"
-            >{{ estimate.dateStr }} ({{ estimate.dayLabel }})
-            {{ estimate.estimateTime }}</v-row
-          >
-        </v-col>
-      </v-row>
+    <v-card class="elevation-5">
+      <v-card-text>
+        <v-row>
+          <v-col cols="6" sm="6" md="6" lg="6" xl="6" class="pl-md-5">
+            <v-row
+              v-for="(estimate, index) in estimates1"
+              :key="estimate.dateStr"
+            >
+              <div v-if="index == 0" class="headline">
+                {{ estimate.dateStr }} ({{ estimate.dayLabel }})
+                {{ estimate.estimateTime }}
+              </div>
+              <div v-else>
+                {{ estimate.dateStr }} ({{ estimate.dayLabel }})
+                {{ estimate.estimateTime }}
+              </div>
+            </v-row>
+          </v-col>
+          <v-col cols="6" sm="6" md="6" lg="6" xl="6" class="pl-5">
+            <v-row
+              v-for="estimate in estimates2"
+              :key="estimate.dateStr"
+              >{{ estimate.dateStr }} ({{ estimate.dayLabel }})
+              {{ estimate.estimateTime }}</v-row
+            >
+          </v-col>
+        </v-row>
+      </v-card-text>
     </v-card>
   </div>
 </template>
