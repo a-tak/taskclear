@@ -21,11 +21,11 @@ const config = {
   appId: process.env.VUE_APP_APP_ID,
 }
 firebase.initializeApp(config)
-// firebase.firestore().enablePersistence()
-//   .catch((err) => {
-//     // tslint:disable-next-line: no-console
-//     console.error(err.code)
-//   })
+firebase.firestore().enablePersistence()
+  .catch((err) => {
+    // tslint:disable-next-line: no-console
+    console.error(err.code)
+  })
 const firestore = firebase.firestore()
 
 new Vue({
