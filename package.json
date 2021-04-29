@@ -39,7 +39,7 @@
     "eslint": "^7.24.0",
     "eslint-plugin-vuetify": "^1.0.0-beta.8",
     "material-design-icons-iconfont": "^6.1.0",
-    "sass": "1.32.8",
+    "sass": "^1.32.12",
     "sass-loader": "^10.1.1",
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.4",
