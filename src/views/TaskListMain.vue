@@ -81,7 +81,8 @@
       </v-slide-y-transition>
       <NewTask
         v-if="addingTask_"
-        v-on:addedEvent="addedTask"
+        v-on:addedEvent="addedTaskNormal"
+        v-on:addedCtrlPressedEvent="addedTaskCtrlPress"
         v-on:start-edit-task-name-event="startEditTaskName"
         v-on:end-edit-task-name-event="endEditTaskName"
       ></NewTask>
@@ -132,14 +133,10 @@ import EstimateList from "@/components/EstimateList.vue"
 import Header from "@/components/Header.vue"
 import Footer from "@/components/Footer.vue"
 import DateUtil from "@/util/DateUtil"
-import FirestoreUtil from "@/util/FirestoreUtil"
-import uuid from "uuid"
 import Task from "@/lib/Task"
 import TaskController from "@/lib/TaskController"
-import Repeat from "@/lib/Repeat"
 import RepeatCreator from "@/lib/RepeatCreator"
 import Migration from "@/util/Migration"
-import SectionConnector from "@/lib/SectionConnector"
 import Util from "@/util/Util"
 
 @Component({
@@ -391,7 +388,13 @@ export default class TaskListMain extends Vue {
     })
   }
 
-  private addedTask(): void {
+  private addedTaskNormal(task: Task): void {
+    this.addingTask_ = false
+    this.startTask(task)
+    this.jumpToNextTask()
+  }
+
+  private addedTaskCtrlPress(): void {
     this.addingTask_ = false
   }
 
