@@ -4,7 +4,13 @@
       <v-layout row align-center>
         <v-flex>
           <v-card>
-            <v-layout v-bind="layoutAttributes" align-center justify-space-between fill-height pr-4>
+            <v-layout
+              v-bind="layoutAttributes"
+              align-center
+              justify-space-between
+              fill-height
+              pr-4
+            >
               <v-flex ma-3 xs6 sm6 md7 lg8>
                 <v-text-field
                   id="newtask-taskname"
@@ -23,8 +29,17 @@
                 ></v-text-field>
               </v-flex>
               <v-flex>
-                <v-btn class="ma-3 accent" min-width="120" id="newtask-add" @click="addTask">追加</v-btn>
-                <v-btn class="ma-3" min-width="120" @click="cancel">キャンセル</v-btn>
+                <v-btn
+                  class="ma-3 accent"
+                  min-width="120"
+                  id="newtask-add"
+                  @click.ctrl="addTaskPressedCtrl"
+                  @click.exact="addTaskNormal"
+                  >追加</v-btn
+                >
+                <v-btn class="ma-3" min-width="120" @click="cancel"
+                  >キャンセル</v-btn
+                >
               </v-flex>
             </v-layout>
           </v-card>
@@ -45,9 +60,27 @@ export default class NewTask extends Vue {
 
   private keyDownCode_: number = 0
 
-  public addTask(): void {
+  public addTaskNormal(): void {
+    const task = this.addTask()
+    if (task != undefined) {
+      // イベント発生
+      this.addEnd(task)
+    }
+  }
+
+  public addTaskPressedCtrl(): void {
+    if (this.addTask() != undefined) {
+      // イベント発生
+      this.addEndCtrlPress()
+    }
+  }
+
+  /**
+   * キャンセル時はundefined応答
+   */
+  public addTask(): Task | undefined {
     if (this.inputvalue_.trim() === "") {
-      return
+      return undefined
     }
 
     // 現在リストで開いている日付で時間は今の時間を使ってタスクを作成する
@@ -58,14 +91,12 @@ export default class NewTask extends Vue {
     this.$store.dispatch("taskList/set", task)
 
     this.inputvalue_ = ""
-
-    // イベント発生
-    this.addEnd()
+    return task
   }
 
   public cancel(): void {
     // イベント発生
-    this.addEnd()
+    this.addEndCtrlPress()
     // 新しいVuetifyからblurイベントが発生しなくなったので強制発火
     this.endEditTaskName()
   }
@@ -80,7 +111,11 @@ export default class NewTask extends Vue {
 
   @Emit("addedEvent")
   // tslint:disable-next-line:no-empty
-  private addEnd(): void {}
+  private addEnd(task: Task): void {}
+
+  @Emit("addedCtrlPressedEvent")
+  // tslint:disable-next-line:no-empty
+  private addEndCtrlPress(): void {}
 
   private keyDown(event: KeyboardEvent): void {
     this.keyDownCode_ = event.keyCode
@@ -91,7 +126,7 @@ export default class NewTask extends Vue {
    */
   private keyUpEnter(): void {
     if (this.keyDownCode_ === 13) {
-      this.addTask()
+      this.addTaskNormal()
       // 新しいVuetifyからblurイベントが発生しなくなったので強制発火
       this.endEditTaskName()
       this.keyDownCode_ = 0
@@ -115,7 +150,6 @@ export default class NewTask extends Vue {
         return { row: true }
     }
   }
-
 }
 </script>
 
