@@ -101,7 +101,7 @@ yarn stay
 1. 一旦コミット
 2. メジャーアップデートが残るので確認して一つずつ適用
     ```
-    yarn outdate
+    yarn outdated
     yarn add パッケージ名@latest
     ```
 3. 動作確認して問題なければコミット & プッシュ
