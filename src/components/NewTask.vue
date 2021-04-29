@@ -22,7 +22,8 @@
                   clearable
                   hint="記載したらEnterか追加ボタン"
                   @keydown="keyDown($event)"
-                  @keyup.enter="keyUpEnter()"
+                  @keyup.enter.exact="keyUpEnter()"
+                  @keyup.enter.ctrl="keyUpEnterAndCtrl()"
                   @keyup.esc="cancel"
                   @focus="startEditTaskName()"
                   @blur="endEditTaskName()"
@@ -132,6 +133,16 @@ export default class NewTask extends Vue {
       this.keyDownCode_ = 0
     }
   }
+
+  private keyUpEnterAndCtrl(): void {
+    if (this.keyDownCode_ === 13) {
+      this.addTaskPressedCtrl()
+      // 新しいVuetifyからblurイベントが発生しなくなったので強制発火
+      this.endEditTaskName()
+      this.keyDownCode_ = 0
+    }
+  }
+
 
   private get layoutAttributes(): {} {
     // 画面サイズによって入力ボックスを横に並べるか縦に並べるか切り替える
